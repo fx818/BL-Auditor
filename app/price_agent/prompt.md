@@ -14,6 +14,16 @@ INPUT
 - Q3_Price      : {{ q3 }} ← per unit Q3 price (outlier filter only)
 - BL_card       : {{ BL_card }}
 
+Reference-Data Provenance:
+- Price Match     : {{ price_match }}
+    "exact"   = Median_Price and Q3_Price came from a real mcat_data row for this (Category, Unit)
+    "no_data" = no row matched; Median_Price/Q3_Price are ZEROS and CANNOT be used as anchors
+- Evidence Match  : {{ evidence_match }}
+    "exact"     = matched the same (Category, Unit, Slab) historical bucket
+    "unit_only" = aggregated across all slabs of this (Category, Unit)
+    "no_data"   = no historical buylead data for this (Category, Unit)
+- Evidence Count  : {{ evidence_count }}   (sample size behind the evidence aggregates above)
+
 ===========================================
 STEP 1 — NORMALIZE QTY & UNIT
 ===========================================
@@ -149,6 +159,14 @@ SCORING LOGIC
     High   → BL Usable + Median_Price present + Order_Value clearly parsed
     Medium → BL Weak OR unit required inference OR Order_Value partially parsed
     Low    → No BL data + unit ambiguous + Order_Value vague or missing
+
+DATA-PROVENANCE OVERRIDES on Verdict & Confidence:
+  - If Price Match == "no_data" → Median_Price and Q3_Price are zeros and have NO meaning.
+    You CANNOT compute a meaningful AI range from them. Set Price_Results = "Unverifiable",
+    Confidence = "Low", and explain in Price_Reason that no reference price data exists for this category-unit.
+  - If Evidence Match == "no_data" or "unit_only" → cap Confidence at "Medium" even if BL_card is Usable
+    (the broader market-evidence context is missing or aggregated across slabs).
+  - If Evidence Count < 3 → reduce Confidence by one level.
 
 ===========================================
 OUTPUT FORMAT (STRICT JSON ONLY)

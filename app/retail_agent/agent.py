@@ -57,44 +57,66 @@ def _parse_jsonish(raw: Any) -> Any:
     return parsed
 
 
-def _normalize_unit_from_qty(qty: str) -> str:
-    raw_unit = re.sub(r"[0-9]", "", qty or "").strip().lower()
-    if not raw_unit:
+_UNIT_SYNONYMS: Dict[str, str] = {
+    # Tonne family — mcat uses TONNE, not TON
+    "TON": "TONNE", "TONS": "TONNE", "TONE": "TONNE", "TONES": "TONNE",
+    "TONNES": "TONNE", "TONNE": "TONNE",
+    # Litre family
+    "LITER": "LITRE", "LITERS": "LITRE", "LITRES": "LITRE", "LITRE": "LITRE",
+    "LTR": "LITRE", "LTRS": "LITRE",
+    # Piece family
+    "PIECES": "PIECE", "PIECE": "PIECE", "PCS": "PIECE", "PC": "PIECE",
+    # Box family — fixes "Boxes" → "BOX"
+    "BOXES": "BOX", "BOX": "BOX",
+    # Bottle family
+    "BOTTLES": "BOTTLE", "BOTTLE": "BOTTLE",
+    # Kilogram family
+    "KILO": "KG", "KILOS": "KG", "KILOGRAM": "KG", "KILOGRAMS": "KG",
+    "KGS": "KG", "KG": "KG",
+    # Gram family — mcat uses GRAM, not G
+    "GRAM": "GRAM", "GRAMS": "GRAM", "GMS": "GRAM", "GM": "GRAM", "G": "GRAM",
+    # Bag, Jar, Set, Pack, Carton, Case, Pair, Roll
+    "BAGS": "BAG", "BAG": "BAG",
+    "JARS": "JAR", "JAR": "JAR",
+    "SETS": "SET", "SET": "SET",
+    "PACKS": "PACK", "PACK": "PACK",
+    "CARTONS": "CARTON", "CARTON": "CARTON",
+    "CASES": "CASE", "CASE": "CASE",
+    "PAIRS": "PAIR", "PAIR": "PAIR",
+    "ROLLS": "ROLL", "ROLL": "ROLL",
+    # Meter family
+    "METER": "METER", "METERS": "METER", "METRE": "METER", "METRES": "METER",
+}
+
+
+def _canonical_unit(value: Any) -> str:
+    """Map a unit string (BL qty or evidence-file column) to a canonical
+    uppercase form aligned with mcat's ``unit_display_name``.
+
+    Strips leading numeric prefix (e.g. "50 Piece" → "Piece") and applies a
+    synonym table for known typos/plurals. Multi-word phrases like "Carton
+    Of 100 Pieces" pass through uppercased verbatim so they can match mcat
+    entries such as "BOX OF 100 PIECES" if present.
+    """
+    raw = str(value or "").strip()
+    raw = re.sub(r"^\d+\s*", "", raw).strip()
+    if not raw:
         return ""
-    if "piece" in raw_unit:
-        return "PIECE"
-    if "bottle" in raw_unit:
-        return "BOTTLE"
-    if "kg" in raw_unit or "kilo" in raw_unit:
-        return "KG"
-    if "g" in raw_unit:
-        return "G"
-    if "ton" in raw_unit:
-        return "TON"
-    if "litre" in raw_unit or "liter" in raw_unit:
-        return "LITRE"
-    return raw_unit.upper()
+    upper = raw.upper()
+    if " " in upper:
+        return upper
+    return _UNIT_SYNONYMS.get(upper, upper)
+
+
+def _normalize_unit_from_qty(qty: str) -> str:
+    return _canonical_unit(qty)
 
 
 def _normalize_evidence_unit(raw_unit: Any) -> tuple[str, str]:
-    raw = (str(raw_unit or "")).strip().lower()
-    if not raw:
+    canonical = _canonical_unit(raw_unit)
+    if not canonical:
         return "no_unit", "No_Unit"
-    if "piece" in raw:
-        return "PIECE", "Piece"
-    if "bottle" in raw:
-        return "BOTTLE", "Bottle"
-    if "kg" in raw or "kilo" in raw:
-        return "KG", "Kg"
-    if "g" in raw:
-        return "G", "g"
-    if "ton" in raw:
-        return "TON", "Ton"
-    if "litre" in raw or "liter" in raw:
-        return "LITRE", "Litre"
-    if "box" in raw:
-        return "BOX", "Box"
-    return raw.upper(), raw[:1].upper() + raw[1:].lower()
+    return canonical, canonical
 
 
 def _normalize_mcat_unit(value: Any) -> str:
@@ -109,8 +131,8 @@ def _extract_qty(qty_str: Any) -> float | None:
 
 
 def _get_slab(qty: float | None) -> str:
-    if qty is None:
-        return ""
+    if qty is None or qty <= 0:
+        return "no_slab"
     if qty <= 10:
         return "1-10"
     if qty <= 25:
@@ -250,125 +272,152 @@ def _bl_detail_and_keys(source: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+_METRIC_FIELDS_FROM_EVIDENCE = (
+    ("bl_apprvd", "bl_apprvd"),
+    ("pur", "pur"),
+    ("pur_retailer", "pur_retailer"),
+    ("pur_wholesaler", "pur_wholesaler"),
+    ("retail_ni", "retail_ni"),
+    ("ni_retailer", "ret_ni_cnt_retailer"),
+    ("ni_wholesaler", "ret_ni_cnt_wholesaler"),
+)
+
+
+def _empty_evidence_metrics() -> Dict[str, Any]:
+    return {
+        "bl_apprvd": 0, "pur": 0, "pur_retailer": 0, "pur_wholesaler": 0,
+        "retail_ni": 0, "ni_retailer": 0, "ni_wholesaler": 0,
+        "bucket_count": 0,
+    }
+
+
 @lru_cache(maxsize=1)
-def _load_evidence_metrics() -> Dict[str, Dict[str, Any]]:
+def _load_evidence_metrics() -> tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+    """Build two evidence indexes from evidence_data.xlsx:
+       - by_slab:  key = f"{norm_unit}_{slab}" → aggregated metrics for that exact bucket
+       - by_unit:  key = f"{norm_unit}"        → metrics aggregated across all slabs for that (mcat,unit)
+    Each metrics dict includes ``bucket_count`` = number of source rows aggregated.
+    """
     wb = load_workbook(EVIDENCE_DATA_PATH, read_only=True, data_only=True)
     ws = wb.active
     rows = ws.iter_rows(values_only=True)
-    headers = [str(h or "") for h in next(rows)]
-    metrics_by_key: Dict[str, Dict[str, Any]] = {}
+    headers = list(next(rows))
 
-    for row_values in rows:
-        row = dict(zip(headers, row_values))
-        glcat_mcat_id = row.get("glcat_mcat_id") or "Unknown_ID"
-        glcat_mcat_name = row.get("glcat_mcat_name") or "Unknown"
-        raw_unit = row.get("eto_ofr_qty_unit") or ""
-        qty = _to_number(row.get("eto_ofr_qty"), 0)
+    def _first(name: str) -> int:
+        for i, h in enumerate(headers):
+            if h == name:
+                return i
+        return -1
+
+    mcat_id_idx = _first("glcat_mcat_id")
+    mcat_name_idx = _first("glcat_mcat_name")
+    qty_idx = _first("eto_ofr_qty")
+    qty_unit_idx = _first("eto_ofr_qty_unit")
+    field_idxs = {out: _first(src) for out, src in _METRIC_FIELDS_FROM_EVIDENCE}
+
+    by_slab: Dict[str, Dict[str, Any]] = {}
+    by_unit: Dict[str, Dict[str, Any]] = {}
+
+    for row in rows:
+        glcat_mcat_id = (row[mcat_id_idx] if mcat_id_idx >= 0 else None) or "Unknown_ID"
+        glcat_mcat_name = (row[mcat_name_idx] if mcat_name_idx >= 0 else None) or "Unknown"
+        raw_unit = (row[qty_unit_idx] if qty_unit_idx >= 0 else None) or ""
+        qty = _to_number(row[qty_idx] if qty_idx >= 0 else 0, 0)
 
         if qty <= 0 or not str(raw_unit).strip():
-            unit = "no_unit"
-            display_unit = "No_Unit"
-            slab = "no_slab"
+            unit, display_unit, slab = "no_unit", "No_Unit", "no_slab"
         else:
             unit, display_unit = _normalize_evidence_unit(raw_unit)
             slab = _get_slab(qty)
 
         mcat_id_text = str(int(glcat_mcat_id)) if isinstance(glcat_mcat_id, float) else str(glcat_mcat_id)
-        key = f"{mcat_id_text}_{unit}_{slab}"
-        if key not in metrics_by_key:
-            metrics_by_key[key] = {
-                "glcat_mcat_id": mcat_id_text,
-                "glcat_mcat_name": glcat_mcat_name,
-                "eto_ofr_qty_unit": unit,
-                "slab": slab,
-                "MCAT_Unit": f"{mcat_id_text}-{display_unit}",
-                "bl_apprvd": 0,
-                "pur": 0,
-                "pur_retailer": 0,
-                "pur_wholesaler": 0,
-                "retail_ni": 0,
-                "ni_retailer": 0,
-                "ni_wholesaler": 0,
-            }
+        norm_unit = _normalize_mcat_unit(f"{mcat_id_text}-{display_unit}")
+        slab_key = f"{norm_unit}_{slab}"
+        unit_key = norm_unit
 
-        metrics_by_key[key]["bl_apprvd"] += _to_number(row.get("bl_apprvd"))
-        metrics_by_key[key]["pur"] += _to_number(row.get("pur"))
-        metrics_by_key[key]["pur_retailer"] += _to_number(row.get("pur_retailer"))
-        metrics_by_key[key]["pur_wholesaler"] += _to_number(row.get("pur_wholesaler"))
-        metrics_by_key[key]["retail_ni"] += _to_number(row.get("retail_ni"))
-        metrics_by_key[key]["ni_retailer"] += _to_number(row.get("ret_ni_cnt_retailer"))
-        metrics_by_key[key]["ni_wholesaler"] += _to_number(row.get("ret_ni_cnt_wholesaler"))
+        if slab_key not in by_slab:
+            entry = _empty_evidence_metrics()
+            entry["glcat_mcat_id"] = mcat_id_text
+            entry["glcat_mcat_name"] = glcat_mcat_name
+            entry["eto_ofr_qty_unit"] = unit
+            entry["slab"] = slab
+            entry["MCAT_Unit"] = norm_unit
+            by_slab[slab_key] = entry
+
+        if unit_key not in by_unit:
+            entry = _empty_evidence_metrics()
+            entry["glcat_mcat_id"] = mcat_id_text
+            entry["glcat_mcat_name"] = glcat_mcat_name
+            entry["eto_ofr_qty_unit"] = unit
+            entry["MCAT_Unit"] = norm_unit
+            by_unit[unit_key] = entry
+
+        for out_field, idx in field_idxs.items():
+            if idx < 0:
+                continue
+            val = _to_number(row[idx])
+            by_slab[slab_key][out_field] += val
+            by_unit[unit_key][out_field] += val
+
+        by_slab[slab_key]["bucket_count"] += 1
+        by_unit[unit_key]["bucket_count"] += 1
 
     wb.close()
-    return {
-        f"{_normalize_mcat_unit(row['MCAT_Unit'])}_{row['slab']}": row
-        for row in metrics_by_key.values()
-    }
+    return by_slab, by_unit
 
 
-@lru_cache(maxsize=512)
-def _find_price_data(norm_unit: str) -> Dict[str, float]:
-    if not norm_unit:
-        return {"q1": 0, "median": 0, "q3": 0}
+@lru_cache(maxsize=1)
+def _load_price_index() -> Dict[str, Dict[str, float]]:
+    """Build map from canonical `{mcat_id}-{UNIT}` → q1/median/q3 once.
 
+    mcat_data.xlsx has duplicate 'median'/'q3' header names. This uses the
+    FIRST occurrence (positions 8, 9, 10 in current schema) to stay
+    deterministic if the duplicate columns ever diverge.
+    """
     wb = load_workbook(MCAT_DATA_PATH, read_only=True, data_only=True)
     ws = wb.active
     rows = ws.iter_rows(values_only=True)
-    headers = [str(h or "") for h in next(rows)]
+    headers = list(next(rows))
 
-    for row_values in rows:
-        row = dict(zip(headers, row_values))
-        mcat_id = row.get("fk_glcat_mcat_id")
-        unit = row.get("unit_display_name")
+    def _first(name: str) -> int:
+        for i, h in enumerate(headers):
+            if h == name:
+                return i
+        return -1
+
+    mcat_idx = _first("fk_glcat_mcat_id")
+    unit_idx = _first("unit_display_name")
+    q1_idx = _first("q1")
+    median_idx = _first("median")
+    q3_idx = _first("q3")
+
+    index: Dict[str, Dict[str, float]] = {}
+    if -1 in (mcat_idx, unit_idx, q1_idx, median_idx, q3_idx):
+        wb.close()
+        return index
+
+    for row in rows:
+        mcat_id = row[mcat_idx]
+        unit = row[unit_idx]
         if mcat_id in (None, "") or unit in (None, ""):
             continue
         mcat_id_text = str(int(mcat_id)) if isinstance(mcat_id, float) else str(mcat_id)
         key = _normalize_mcat_unit(f"{mcat_id_text}-{unit}")
-        if key == norm_unit:
-            wb.close()
-            return {
-                "q1": _to_number(row.get("q1")),
-                "median": _to_number(row.get("median")),
-                "q3": _to_number(row.get("q3")),
-            }
-
+        if key in index:
+            continue
+        index[key] = {
+            "q1": _to_number(row[q1_idx]),
+            "median": _to_number(row[median_idx]),
+            "q3": _to_number(row[q3_idx]),
+        }
     wb.close()
-    return {"q1": 0, "median": 0, "q3": 0}
+    return index
 
 
-def _merge_inputs(offer: Dict[str, Any]) -> Dict[str, Any]:
-    qty = _extract_qty(offer.get("Qty"))
-    slab = _get_slab(qty)
-    norm_unit = _normalize_mcat_unit(offer.get("MCAT_Unit"))
-
-    metrics = {
-        "bl_apprvd": 0,
-        "pur": 0,
-        "pur_retailer": 0,
-        "pur_wholesaler": 0,
-        "retail_ni": 0,
-        "ni_retailer": 0,
-        "ni_wholesaler": 0,
-    }
-    if slab:
-        metrics = _load_evidence_metrics().get(f"{norm_unit}_{slab}", metrics)
-
-    price = _find_price_data(norm_unit)
-
-    return {
-        **offer,
-        "Slab": slab,
-        "bl_apprvd": metrics["bl_apprvd"],
-        "pur": metrics["pur"],
-        "pur_retailer": metrics["pur_retailer"],
-        "pur_wholesaler": metrics["pur_wholesaler"],
-        "retail_ni": metrics["retail_ni"],
-        "ni_retailer": metrics["ni_retailer"],
-        "ni_wholesaler": metrics["ni_wholesaler"],
-        "q1": price["q1"],
-        "median": price["median"],
-        "q3": price["q3"],
-    }
+def _find_price_data(norm_unit: str) -> Dict[str, float] | None:
+    if not norm_unit:
+        return None
+    return _load_price_index().get(norm_unit)
 
 
 def _clean_classifier_output(raw: str) -> Dict[str, Any]:
@@ -401,19 +450,36 @@ async def _prepare_input(state: RetailState) -> RetailState:
     sub.append({"seq": 5, "node": "prepare_input", "fn": "_normalize_mcat_unit",
                 "input": {"value": offer.get("MCAT_Unit")}, "output": norm_unit})
 
-    _default_metrics: Dict[str, Any] = {
-        "bl_apprvd": 0, "pur": 0, "pur_retailer": 0, "pur_wholesaler": 0,
-        "retail_ni": 0, "ni_retailer": 0, "ni_wholesaler": 0,
-    }
-    metrics_key = f"{norm_unit}_{slab}" if slab else ""
-    metrics = _load_evidence_metrics().get(metrics_key, _default_metrics) if metrics_key else _default_metrics
+    # Evidence lookup with fallback chain:
+    # exact slab → unit-only cross-slab aggregate → no_data
+    by_slab, by_unit = _load_evidence_metrics()
+    metrics: Dict[str, Any] | None = None
+    evidence_match = "no_data"
+    slab_key = f"{norm_unit}_{slab}" if (norm_unit and slab and slab != "no_slab") else ""
+    if slab_key:
+        metrics = by_slab.get(slab_key)
+        if metrics is not None:
+            evidence_match = "exact"
+    if metrics is None and norm_unit:
+        metrics = by_unit.get(norm_unit)
+        if metrics is not None:
+            evidence_match = "unit_only"
+    if metrics is None:
+        metrics = _empty_evidence_metrics()
     sub.append({"seq": 6, "node": "prepare_input", "fn": "_load_evidence_metrics",
-                "input": {"lookup_key": metrics_key or "(empty — no slab)"},
-                "output": metrics})
+                "input": {"slab_key": slab_key or "(skipped)", "unit_key": norm_unit},
+                "output": {"match_level": evidence_match, "metrics": metrics}})
 
+    # Price lookup
     price = _find_price_data(norm_unit)
+    if price is None:
+        price = {"q1": 0, "median": 0, "q3": 0}
+        price_match = "no_data"
+    else:
+        price_match = "exact"
     sub.append({"seq": 7, "node": "prepare_input", "fn": "_find_price_data",
-                "input": {"norm_unit": norm_unit}, "output": price})
+                "input": {"norm_unit": norm_unit},
+                "output": {"match_level": price_match, "price": price}})
 
     agent_input: Dict[str, Any] = {
         **offer,
@@ -425,9 +491,12 @@ async def _prepare_input(state: RetailState) -> RetailState:
         "retail_ni": metrics["retail_ni"],
         "ni_retailer": metrics["ni_retailer"],
         "ni_wholesaler": metrics["ni_wholesaler"],
+        "evidence_count": metrics.get("bucket_count", 0),
+        "evidence_match": evidence_match,
         "q1": price["q1"],
         "median": price["median"],
         "q3": price["q3"],
+        "price_match": price_match,
     }
     sub.append({"seq": 8, "node": "prepare_input", "fn": "_merge_inputs[result]",
                 "input": {"offer_keys": list(offer.keys())}, "output": agent_input})
@@ -460,7 +529,9 @@ async def _classify(state: RetailState) -> RetailState:
     _msg_keys = [
         "Display_id", "MCAT", "MCAT_id", "MCAT_Unit", "Retail_Flag",
         "Qty", "Order_Value", "median", "Slab", "bl_apprvd", "pur",
-        "pur_retailer", "pur_wholesaler", "ni_retailer", "ni_wholesaler",
+        "pur_retailer", "pur_wholesaler", "retail_ni",
+        "ni_retailer", "ni_wholesaler",
+        "evidence_match", "evidence_count",
     ]
     user_text = "\n".join(f"{k}: {agent_input.get(k, '')}" for k in _msg_keys)
     sub.append({"seq": 3, "node": "classify", "fn": "build_user_message",

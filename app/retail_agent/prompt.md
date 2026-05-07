@@ -21,7 +21,15 @@ Marketplace Behavioral Signals (same Category + Qty Slab):
 - Wholesaler Purchases    : {{ pur_wholesaler }}
 - Retailer NI Feedback    : {{ ni_retailer }}
 - Wholesaler NI Feedback  : {{ ni_wholesaler }}
+- Retail NI (overall)     : {{ retail_ni }}
 - Overall BL Approvals    : {{ bl_apprvd }}
+
+Evidence Provenance (how the signals above were sourced):
+- Evidence Match Level    : {{ evidence_match }}
+    "exact"     = the numbers above are from the SAME (Category, Unit, Quantity Slab) bucket — strongest signal
+    "unit_only" = exact slab had no data; the numbers are aggregated across ALL slabs of this (Category, Unit) — weaker signal, treat as directional
+    "no_data"   = NO matching historical data was found for this (Category, Unit); ALL signal numbers above are zeros and carry NO information — DO NOT interpret zeros as a real "no purchases / no NI" signal
+- Evidence Sample Size    : {{ evidence_count }}   (number of historical BL rows aggregated)
 
 ===========================================
 GUARDRAIL — QUANTITY REQUIRED (HARD STOP)
@@ -160,6 +168,16 @@ Confidence:
   High   → Hard override triggered OR 3+ signals clearly aligned
   Medium → 2 signals aligned, 1 conflicting or missing
   Low    → Sparse data, ambiguous quantity, neutral category
+
+DATA-PROVENANCE OVERRIDES on Confidence:
+  - If Evidence Match Level == "no_data" → Confidence MUST be at most "Low".
+    All BL signal numbers (purchases, NI, approvals) are zeros by default and carry NO information.
+    Lean entirely on category nature + quantity context to classify, and reflect this uncertainty in Reason.
+  - If Evidence Match Level == "unit_only" → cap Confidence at "Medium".
+    The signals are real but were aggregated across all qty slabs (not the buyer's specific slab),
+    so they are directional, not bucket-specific.
+  - If Evidence Sample Size < 3 → reduce Confidence by one level
+    (a 1- or 2-row aggregate is too thin to weigh heavily even if it matches exactly).
 
 ===========================================
 OUTPUT FORMAT (STRICT JSON ONLY)
