@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">CSV Dashboard</div>
+      <h2 style="font-size:1.4rem;font-weight:800;">Previous Records</h2>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
+        Persistent data captured from the current audit dashboard view.
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="/" class="btn btn-outline btn-sm">Back Home</a>
+    </div>
+  </div>
+
+  <div class="card records-card">
+    <div class="card-header records-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">CSV</div>
+        <div>
+          <div class="card-title">Saved Audit Records</div>
+          <div class="card-subtitle">{{ rows|length }} record(s)</div>
+        </div>
+      </div>
+      <div class="records-toolbar">
+        <input
+          id="records-offer-filter"
+          class="form-control records-filter-input"
+          type="text"
+          placeholder="Search by offer id"
+        />
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          onclick="document.getElementById('records-offer-filter').value=''; document.getElementById('records-offer-filter').dispatchEvent(new Event('input'));"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+
+    {% if rows %}
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1rem;">
+      <div style="font-size:0.78rem;color:var(--text-muted);">
+        Scroll vertically through saved rows and horizontally for long reason columns.
+      </div>
+      <div id="records-count" style="font-size:0.78rem;color:var(--text-secondary);">
+        Showing {{ rows|length }} of {{ rows|length }}
+      </div>
+    </div>
+
+    <div class="records-table-wrap">
+      <table class="check-table records-table" id="records-table">
+        <thead>
+          <tr>
+            {% for key in rows[0].keys() %}
+            <th>{{ key.replace('_', ' ').title() }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr class="records-row" data-offer-id="{{ row.get('offer_id', '') }}">
+            {% for key, value in row.items() %}
+            <td
+              class="{% if key == 'offer_id' %}check-key records-offer-cell{% else %}check-reason{% endif %}"
+              data-column="{{ key }}"
+            >
+              {{ value or '-' }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div style="color:var(--text-muted);font-size:0.9rem;">No records saved yet.</div>
+    {% endif %}
+  </div>
+</div>
+<script>
+  (() => {
+    function applyRecordsFilter() {
+      const input = document.getElementById('records-offer-filter');
+      const rows = document.querySelectorAll('#records-table .records-row');
+      const count = document.getElementById('records-count');
+      if (!input || !rows.length) return;
+
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      rows.forEach((row) => {
+        const offerId = (row.getAttribute('data-offer-id') || '').trim().toLowerCase();
+        const matches = !query || offerId.includes(query);
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      if (count) count.textContent = `Showing ${visible} of ${rows.length}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('records-offer-filter');
+      if (input) input.addEventListener('input', applyRecordsFilter);
+      applyRecordsFilter();
+    });
+  })();
+</script>
+{% endblock %}

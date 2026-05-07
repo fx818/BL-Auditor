@@ -1,0 +1,158 @@
+<!-- TOKEN USAGE -->
+<div class="section-title">⚡ Token & Cost Usage</div>
+<div class="dashboard-grid grid-2" style="margin-bottom:1.5rem;">
+  {% set tu = data.get('token_use',{}) %}
+  {% set agent_usage = [
+    ('Photo Agent', tu.get('photo_agent_usage',{}), 'var(--accent-cyan)'),
+    ('Text Agent', tu.get('textual_agent_usage',{}), 'var(--accent-purple)'),
+    ('Category Agent', tu.get('category_agent_usage',{}), 'var(--accent-orange)'),
+    ('Cross-Modal Agent', tu.get('cross_modal_agent_usage',{}), 'var(--accent-green)'),
+    ('PII Agent', tu.get('pii_agent_usage',{}), 'var(--accent-red)'),
+    ('Specs Agent', tu.get('specs_agent_usage',{}), 'var(--accent-pink)'),
+  ] %}
+  {% set max_tokens = namespace(v=1) %}
+  {% for name, u, color in agent_usage %}
+    {% if u.get('total_tokens',0) > max_tokens.v %}{% set max_tokens.v = u.get('total_tokens',0) %}{% endif %}
+  {% endfor %}
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">⚡</div>
+      <div><div class="card-title">Token Usage by Agent</div></div>
+    </div>
+    {% for name, u, color in agent_usage %}
+    {% set total = u.get('total_tokens',0) %}
+    {% set pct = ((total / max_tokens.v) * 100)|int if max_tokens.v > 0 else 0 %}
+    <div class="token-bar">
+      <div class="token-bar-header">
+        <span class="token-bar-label">{{ name }}</span>
+        <span class="token-bar-value">{{ total }} tokens / ${{ '%.5f'|format(u.get('cost',0)) }}</span>
+      </div>
+      <div class="token-bar-track">
+        <div class="token-bar-fill" data-width="{{ pct }}" style="background:{{ color }};width:0%;"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">📊</div>
+      <div><div class="card-title">Response Times</div></div>
+    </div>
+    {% set timings = [
+      ('Photo Agent', tu.get('photo_agent_usage',{}).get('response_time',0)),
+      ('Text Agent', tu.get('textual_agent_usage',{}).get('response_time',0)),
+      ('Category Agent', tu.get('category_agent_usage',{}).get('response_time',0)),
+      ('Cross-Modal Agent', tu.get('cross_modal_agent_usage',{}).get('response_time',0)),
+      ('Condition Agent', tu.get('condition_agent_usage',{}).get('response_time',0)),
+      ('PII Agent', tu.get('pii_agent_usage',{}).get('response_time',0)),
+      ('Specs Agent', tu.get('specs_agent_usage',{}).get('response_time',0)),
+    ] %}
+    {% set max_t = namespace(v=0.001) %}
+    {% for n,t in timings %}{% if t > max_t.v %}{% set max_t.v = t %}{% endif %}{% endfor %}
+    {% for name, t in timings %}
+    {% set pct = ((t / max_t.v) * 100)|int if max_t.v > 0 else 0 %}
+    <div class="token-bar">
+      <div class="token-bar-header">
+        <span class="token-bar-label">{{ name }}</span>
+        <span class="token-bar-value">{{ t }}s</span>
+      </div>
+      <div class="token-bar-track">
+        <div class="token-bar-fill" data-width="{{ pct }}" style="background:var(--accent-blue);width:0%;"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- SUGGESTED MCATS -->
+<div class="section-title">🎯 Suggested MCats</div>
+<div class="dashboard-grid grid-auto" style="margin-bottom:1.5rem;">
+  {% for cat in data.get('suggested_mcat',[]) %}
+  <div class="cat-card rank-{{ cat.get('rank') }}">
+    <div class="rank-badge">{{ cat.get('rank','—') }}</div>
+    <div>
+      <div style="font-weight:600;font-size:0.88rem;">{{ cat.get('name','—') }}</div>
+      <div style="font-size:0.72rem;color:var(--text-muted);">ID: {{ cat.get('id','—') }} | {{ cat.get('type','—') }}</div>
+      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="verdict verdict-{{ cat.get('confidence','').lower() }}">{{ cat.get('confidence','—') }}</span>
+      </div>
+      {% if cat.get('reason') %}<div style="font-size:0.75rem;color:var(--text-secondary);margin-top:6px;">{{ cat.get('reason','') }}</div>{% endif %}
+    </div>
+  </div>
+  {% else %}<div style="color:var(--text-muted);font-size:0.85rem;">No suggested MCats.</div>
+  {% endfor %}
+</div>
+
+<!-- BASE SUGGESTION -->
+<div class="section-title">📊 Base Suggestion (Ensemble)</div>
+<div class="card" style="margin-bottom:1.5rem;">
+  <table class="check-table">
+    <tr><th>Rank</th><th>Category</th><th>Source</th><th>Verdict</th><th>Reason</th></tr>
+    {% for cat in data.get('base_suggestion',[]) %}
+    <tr>
+      <td><div class="rank-badge">{{ cat.get('rank','—') }}</div></td>
+      <td><b>{{ cat.get('category_name','—') }}</b><div style="font-size:0.72rem;color:var(--text-muted)">ID: {{ cat.get('category_id','') }}</div></td>
+      <td style="font-size:0.78rem;color:var(--text-muted);">{{ cat.get('source','—') }}</td>
+      <td><span class="verdict verdict-{{ cat.get('final_verdict','').replace(' ','_') }}">{{ cat.get('final_verdict','—') }}</span></td>
+      <td class="check-reason">{{ cat.get('reason','—') }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<!-- LOCATION / BIZTYPE -->
+{% set lb = data.get('location_flag',{}) %}
+<div class="section-title">📍 Location & Business Type</div>
+<div class="dashboard-grid grid-2" style="margin-bottom:1.5rem;">
+  {% for key in ['location','biztype'] %}
+  {% set ch = lb.get(key,{}) %}
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan);">{{ '📍' if key=='location' else '🏢' }}</div>
+      <div><div class="card-title">{{ key.title() }} Check</div></div>
+    </div>
+    <table class="check-table">
+      <tr><td class="check-key">Status</td><td><span class="verdict {% if not ch.get('status') %}verdict-pass{% else %}verdict-{{ ch.get('status','').replace(' ','_') }}{% endif %}">{{ ch.get('status','N/A') or 'N/A' }}</span></td></tr>
+      <tr><td class="check-key">Error Msg</td><td class="check-reason">{{ ch.get('error_msg','—') or '—' }}</td></tr>
+      <tr><td class="check-key">Tile Msg</td><td class="check-reason">{{ ch.get('tile_msg','—') or '—' }}</td></tr>
+    </table>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- RAW JSON -->
+<div class="accordion" style="margin-bottom:2rem;">
+  <div class="accordion-header">
+    <span>🗒️ Raw API Response JSON</span>
+    <span class="accordion-arrow">▼</span>
+  </div>
+  <div class="accordion-body">
+    <div class="json-viewer">{{ raw_json }}</div>
+  </div>
+</div>
+
+<!-- INPUT PAYLOAD -->
+<div class="accordion" style="margin-bottom:2rem;">
+  <div class="accordion-header">
+    <span>📤 Input Payload</span>
+    <span class="accordion-arrow">▼</span>
+  </div>
+  <div class="accordion-body">
+    <table class="check-table">
+      <tr><th>Field</th><th>Value</th></tr>
+      {% for k,v in payload.items() %}
+      {% if k not in ['mcat_pool','ISQ','secondary_mcats','item_desc'] %}
+      <tr>
+        <td class="check-key">{{ k }}</td>
+        <td style="font-size:0.82rem;word-break:break-all;">{{ v }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+</div><!-- end page-content -->
+{% endblock %}

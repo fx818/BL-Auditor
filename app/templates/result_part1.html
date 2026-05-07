@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+{% set am = data.get('auditmate_response', {}) %}
+{% set raw = data.get('auditor_1_2_raw_response', {}) %}
+{% set npm = data.get('new_primary_mapping', {}) %}
+{% set tu = data.get('token_use', {}) %}
+
+<div class="page-content">
+
+<!-- TOP BAR -->
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+  <div>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Audit Result</div>
+    <h2 style="font-size:1.4rem;font-weight:800;">{{ data.get('item_name','—') }}</h2>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
+      GLID: <b style="color:var(--text-secondary)">{{ data.get('glid','—') }}</b> &nbsp;|&nbsp;
+      PC Item: <b style="color:var(--text-secondary)">{{ data.get('pc_item_id','—') }}</b> &nbsp;|&nbsp;
+      {{ data.get('datetime','—') }}
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button onclick="goBack()" class="btn btn-outline btn-sm">← New Audit</button>
+    <button id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">📋 Copy JSON</button>
+  </div>
+</div>
+
+<!-- SUMMARY STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value" style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ data.get('response_time','—') }}s</div>
+    <div class="stat-label">Response Time</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent-green)">${{ '%.4f'|format(tu.get('total_cost',0)) }}</div>
+    <div class="stat-label">Total Cost</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent-cyan)">{{ tu.get('prompt_tokens',0) + tu.get('completion_tokens',0) }}</div>
+    <div class="stat-label">Total Tokens</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent-purple)">{{ data.get('mcat_pool',[])|length if data.get('mcat_pool') else '—' }}</div>
+    <div class="stat-label">Pool Categories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:{{ 'var(--accent-green)' if data.get('status')==200 else 'var(--accent-red)' }}">{{ data.get('status','—') }}</div>
+    <div class="stat-label">Status</div>
+  </div>
+</div>
+
+<!-- PRODUCT CARD + FINAL DECISION -->
+<div class="dashboard-grid grid-2" style="margin-bottom:1.25rem;">
+
+  <!-- BuyLead Product Card -->
+  <div class="product-card">
+    <div class="product-card-banner"></div>
+    <div class="product-card-body">
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <div class="product-img-wrap">
+          <img src="{{ data.get('img_url','') }}" alt="Product" onerror="this.src='https://via.placeholder.com/120x120/151c2c/3b82f6?text=No+Img'" />
+        </div>
+        <div class="product-info">
+          <div class="product-title">{{ data.get('item_name','—') }}</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">
+            <span class="verdict {% if data.get('pii_flag','')=='selected' %}verdict-pass{% else %}verdict-fail{% endif %}">
+              PII: {{ data.get('pii_flag','—') }}
+            </span>
+          </div>
+          <div class="product-meta">
+            <div class="meta-tag">💰 ₹<span>{{ data.get('price','—') }}</span>/{{ data.get('unit','—') }}</div>
+            <div class="meta-tag">🏷️ <span>{{ data.get('mcat_name','—') }}</span></div>
+            <div class="meta-tag">👤 <span>{{ data.get('modid','—') }}</span></div>
+            <div class="meta-tag">📋 <span>{{ data.get('screen_name','—') }}</span></div>
+            <div class="meta-tag">🔖 <span>{{ data.get('worker_name','—') }}</span></div>
+            <div class="meta-tag">🌐 <span>GLID {{ data.get('glid','—') }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final Decision -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">✅</div>
+      <div><div class="card-title">Final Audit Decision</div><div class="card-subtitle">Auditmate primary output</div></div>
+    </div>
+    <table class="check-table">
+      <tr>
+        <td class="check-key">Primary Mapping</td>
+        <td><b>{{ npm.get('name','—') }}</b> <span style="color:var(--text-muted);font-size:0.75rem;">(ID: {{ npm.get('id','—') }})</span></td>
+        <td><span class="verdict verdict-{{ npm.get('confidence','').lower() }}">{{ npm.get('confidence','—') }}</span></td>
+      </tr>
+      <tr>
+        <td class="check-key">Old Mapping</td>
+        <td colspan="2">{{ data.get('old_primary_mapping',{}).get('name','—') }} (ID: {{ data.get('old_primary_mapping',{}).get('id','—') }})</td>
+      </tr>
+      <tr>
+        <td class="check-key">Mapping Changed</td>
+        <td colspan="2">
+          {% if npm.get('id') == data.get('old_primary_mapping',{}).get('id') %}
+          <span class="verdict verdict-pass">No Change</span>
+          {% else %}
+          <span class="verdict verdict-warn">Changed</span>
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td class="check-key">PII Status</td>
+        <td colspan="2"><span class="verdict {% if am.get('PII')=='selected' %}verdict-pass{% else %}verdict-fail{% endif %}">{{ am.get('PII','—') }}</span></td>
+      </tr>
+      <tr>
+        <td class="check-key">Generic Category Flag</td>
+        <td colspan="2">{{ data.get('Generic_Category_Outlier_Flag','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">Service MCAT</td>
+        <td colspan="2">{{ data.get('Service_mcat','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">Mapping Honor Flag</td>
+        <td colspan="2">{{ am.get('mapping_honor_flag','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">No Category Found</td>
+        <td colspan="2">{{ data.get('no_category_found','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">Served from Cache</td>
+        <td colspan="2">{{ data.get('served_from_cache','—') }}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- CATEGORY POOL -->
+<div class="section-title">📦 Category Pool</div>
+<div class="dashboard-grid grid-auto" style="margin-bottom:1.5rem;">
+  {% set pool = raw.get('category_pool', []) %}
+  {% for cat in pool %}
+  {% set ranked = namespace(r=0, conf='') %}
+  {% for r in raw.get('category_agent_output',{}).get('data',{}).get('category_api_raw_response',{}).get('task_1',{}).get('c_rank_categories',[]) %}
+    {% if r.get('category_id')==cat.get('mcat_id') %}{% set ranked.r = r.get('rank',0) %}{% endif %}
+  {% endfor %}
+  {% for c in raw.get('category_agent_output',{}).get('data',{}).get('category_api_raw_response',{}).get('task_1',{}).get('b_assign_confidence_levels',[]) %}
+    {% if c.get('category_id')==cat.get('mcat_id') %}{% set ranked.conf = c.get('confidence_level','') %}{% endif %}
+  {% endfor %}
+  <div class="cat-card rank-{{ ranked.r }}">
+    <img class="cat-thumb" src="{{ cat.get('mcat_img_url','') }}" alt="{{ cat.get('mcat_name','') }}" onerror="this.style.display='none'" />
+    <div class="cat-info" style="flex:1;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+        {% if ranked.r %}<div class="rank-badge">{{ ranked.r }}</div>{% endif %}
+        <h4>{{ cat.get('mcat_name','—') }}</h4>
+      </div>
+      <p>ID: {{ cat.get('mcat_id','—') }}</p>
+      <p style="margin-top:3px;">{{ cat.get('mcat_source','—') }}</p>
+      {% if ranked.conf %}<div style="margin-top:6px;"><span class="verdict verdict-{{ ranked.conf.lower() }}">{{ ranked.conf }}</span></div>{% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div style="color:var(--text-muted);font-size:0.85rem;">No category pool data.</div>
+  {% endfor %}
+</div>

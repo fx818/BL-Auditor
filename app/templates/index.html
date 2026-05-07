@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div class="hero">
+    <h1>BL Auditor 2</h1>
+    <p>Enter a BuyLead offer id. The app will fetch the BuyLead response, build the audit payload, run the auditor API, and show the selected outlier checks.</p>
+  </div>
+
+  <form id="audit-form" class="form-card" autocomplete="off">
+    <div class="form-group">
+      <label class="form-label" for="offer-id-input">Offer ID</label>
+      <input
+        id="offer-id-input"
+        class="form-control"
+        name="offer_id"
+        type="text"
+        value="{{ sample_offer_id }}"
+        placeholder="142764424452"
+        inputmode="numeric"
+      />
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:0.5rem;">
+      <button type="submit" class="btn btn-primary" id="submit-btn">Run Audit</button>
+      <a href="/records" class="btn btn-outline btn-sm">See Previous Records</a>
+      <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('offer-id-input').value=''">Clear</button>
+      <span style="color:var(--text-muted);font-size:0.78rem;margin-left:auto;">
+        Flow: <code style="color:var(--accent-cyan)">Offer ID -> BuyLead API -> Payload -> Auditor API</code>
+      </span>
+    </div>
+  </form>
+
+  <div style="max-width:900px;margin:2rem auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;">
+    <div class="card" style="padding:1.25rem 1rem;">
+      <div style="font-weight:600;font-size:0.9rem;margin-bottom:6px;">Mapped Payload</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">
+        pc_item_id from offer id, item_name from ETO_OFR_TITLE, item_desc from ETO_OFR_DESC, mcat_name from PRIME_MCAT_NAME, mcat_id from MCAT_IDS, price from ETO_OFR_APPROX_ORDER_VALUE.
+      </div>
+    </div>
+    <div class="card" style="padding:1.25rem 1rem;">
+      <div style="font-weight:600;font-size:0.9rem;margin-bottom:6px;">Fixed Defaults</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">
+        All other payload fields stay on the current fixed values unless you change the mapping logic later.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" style="max-width:900px;margin:1.5rem auto 0;">
+    <div class="accordion-header">
+      <span>Current default payload template</span>
+      <span class="accordion-arrow">v</span>
+    </div>
+    <div class="accordion-body">
+      <div class="json-viewer">{{ default_payload }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

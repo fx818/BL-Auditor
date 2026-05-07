@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+{% set checks = [
+  ('Specs vs Category', data.get('specs_category_outlier', {})),
+  ('Title vs Category', data.get('title_category_outlier', {})),
+  ('Photo vs Category', data.get('photo_category_outlier', {})),
+] %}
+
+<div class="page-content">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Audit Result</div>
+      <h2 style="font-size:1.4rem;font-weight:800;">{{ data.get('item_name', payload.get('item_name', '-')) }}</h2>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
+        Offer ID: <b style="color:var(--text-secondary)">{{ offer_id }}</b> &nbsp;|&nbsp;
+        MCAT: <b style="color:var(--text-secondary)">{{ payload.get('mcat_name', '-') }}</b> &nbsp;|&nbsp;
+        Price: <b style="color:var(--text-secondary)">{{ payload.get('price', '-') }}</b>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" onclick="goBack()" class="btn btn-outline btn-sm">Back to Audit</button>
+      <button type="button" id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">Copy Audit JSON</button>
+    </div>
+  </div>
+
+  {% if csv_path %}
+  <div class="alert alert-info" style="margin-bottom:1.25rem;">
+    <span>Saved to CSV:</span>
+    <span>{{ csv_path }}</span>
+  </div>
+  {% endif %}
+
+  <div class="section-title">Category Checks</div>
+  <div class="dashboard-grid grid-3" style="margin-bottom:1.5rem;">
+    {% for label, verdict in checks %}
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(245,158,11,0.15);color:var(--accent-orange);">C</div>
+        <div><div class="card-title">{{ label }}</div></div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <span class="verdict verdict-{{ verdict.get('status', '').replace(' ', '_') }}">{{ verdict.get('status', '-') }}</span>
+      </div>
+      <div class="check-reason">{{ verdict.get('reason', '-') or '-' }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="dashboard-grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan);">PT</div>
+        <div><div class="card-title">Photo vs Title</div></div>
+      </div>
+      {% set pt = data.get('photo_title_verdict', {}) %}
+      <div style="margin-bottom:10px;">
+        <span class="verdict verdict-{{ pt.get('final_verdict', '').replace(' ', '_') }}">{{ pt.get('final_verdict', '-') }}</span>
+      </div>
+      <div class="check-reason">{{ data.get('photo_title_verdict_reason', '-') or '-' }}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(139,92,246,0.15);color:var(--accent-purple);">TS</div>
+        <div><div class="card-title">Title vs Specs</div></div>
+      </div>
+      {% set ts = data.get('title_spec_verdict', {}) %}
+      <div style="margin-bottom:10px;">
+        <span class="verdict verdict-{{ ts.get('final_verdict', '').replace(' ', '_') }}">{{ ts.get('final_verdict', '-') }}</span>
+      </div>
+      <div class="check-reason">{{ data.get('title_spec_verdict_reason', '-') or '-' }}</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">PR</div>
+      <div><div class="card-title">Price Flag</div></div>
+    </div>
+    {% set pf = data.get('price_flag', {}) %}
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:1rem;">
+      <div class="stat-card"><div class="stat-value" style="color:var(--accent-green);">{{ payload.get('price', '-') }}</div><div class="stat-label">Mapped Price</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:{{ 'var(--accent-green)' if 'not outlier' in pf.get('final_verdict', '').lower() else 'var(--accent-red)' }}">{{ pf.get('final_verdict', '-') }}</div><div class="stat-label">Verdict</div></div>
+    </div>
+    <div class="check-reason">{{ pf.get('reason', '-') or '-' }}</div>
+  </div>
+
+  <div class="accordion" style="margin-bottom:1rem;">
+    <div class="accordion-header">
+      <span>Audit payload sent</span>
+      <span class="accordion-arrow">v</span>
+    </div>
+    <div class="accordion-body">
+      <div class="json-viewer payload-json-viewer">{{ payload | tojson(indent=2) }}</div>
+    </div>
+  </div>
+
+  <div class="accordion" style="margin-bottom:1rem;">
+    <div class="accordion-header">
+      <span>BuyLead API response</span>
+      <span class="accordion-arrow">v</span>
+    </div>
+    <div class="accordion-body">
+      <div class="json-viewer buylead-json-viewer">{{ buylead_raw_json }}</div>
+    </div>
+  </div>
+
+  <div class="accordion" style="margin-bottom:2rem;">
+    <div class="accordion-header">
+      <span>Audit API raw response</span>
+      <span class="accordion-arrow">v</span>
+    </div>
+    <div class="accordion-body">
+      <div class="json-viewer audit-json-viewer">{{ raw_json }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

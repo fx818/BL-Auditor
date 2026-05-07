@@ -1,0 +1,189 @@
+  <!-- CROSS ENTITY AGENT -->
+  {% set xe = raw.get('cross_entity_result',{}).get('data',{}) %}
+  {% set xr = xe.get('cross_modal_api_raw_response',{}) %}
+  <div id="tab-crossentity" class="tab-panel">
+    <div class="dashboard-grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">🔀</div>
+          <div><div class="card-title">Cross-Entity Analysis</div>
+          <div class="card-subtitle">Model: {{ xe.get('model','—') }} | Time: {{ xe.get('response_time','—') }}s</div></div>
+        </div>
+        <div style="margin-bottom:1rem;padding:0.75rem;background:var(--bg-secondary);border-radius:var(--radius);border:1px solid var(--border);">
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">Primary Object (from photo)</div>
+          <div style="font-weight:600;">{{ xr.get('task_1',{}).get('primary_object','—') }}</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin:8px 0 4px;">OCR Text</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);">{{ xr.get('task_2',{}).get('ocr_text','—') }}</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin:8px 0 4px;">Search Query</div>
+          <div style="color:var(--accent-cyan);font-weight:600;">{{ xr.get('task_3',{}).get('product_search_query','—') }}</div>
+        </div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:6px;">CROSS-MODAL VERDICTS</div>
+        <table class="check-table">
+          <tr><th>Check</th><th>Status</th><th>Conf</th></tr>
+          {% for key, val in xr.get('task_4',{}).items() %}
+          <tr>
+            <td class="check-key">{{ key.replace('_',' ').title() }}</td>
+            <td><span class="verdict verdict-{{ val.get('status','').replace(' ','_') }}">{{ val.get('status','—') }}</span></td>
+            <td><span class="verdict verdict-{{ val.get('confidence','').lower() }}">{{ val.get('confidence','—') }}</span></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">🎯</div>
+          <div><div class="card-title">Category Alignment Checks</div></div>
+        </div>
+        <table class="check-table">
+          <tr><th>Check</th><th>Status</th><th>Reason</th></tr>
+          {% for key, val in xr.get('task_5',{}).items() %}
+          <tr>
+            <td class="check-key">{{ key.replace('_',' ').title() }}</td>
+            <td><span class="verdict verdict-{{ val.get('status','').replace(' ','_') }}">{{ val.get('status','—') }}</span></td>
+            <td class="check-reason">{{ val.get('reason','—') }}</td>
+          </tr>
+          {% endfor %}
+          {% set ca6 = xr.get('task_6',{}).get('core_alignment_check',{}) %}
+          <tr>
+            <td class="check-key">Core Alignment</td>
+            <td><span class="verdict verdict-{{ ca6.get('status','').replace(' ','_') }}">{{ ca6.get('status','—') }}</span></td>
+            <td class="check-reason">{{ ca6.get('reason','—') }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONDITION AGENT -->
+  {% set cond = raw.get('condition_agent_output',{}).get('data',{}) %}
+  <div id="tab-condition" class="tab-panel">
+    <div class="dashboard-grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(236,72,153,0.15);color:var(--accent-pink);">🧠</div>
+          <div><div class="card-title">Condition Agent</div><div class="card-subtitle">NEW / USED Detection</div></div>
+        </div>
+        {% set analysis = cond.get('analysis',{}) %}
+        <div style="text-align:center;padding:1.5rem 0;">
+          <div style="font-size:2.5rem;font-weight:800;background:var(--gradient-3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+            {{ analysis.get('detected_condition','—') }}
+          </div>
+          <div style="margin-top:8px;"><span class="verdict verdict-{{ analysis.get('confidence_score','').lower() }}">{{ analysis.get('confidence_score','—') }} Confidence</span></div>
+        </div>
+        {% set ev = analysis.get('supporting_evidence',{}) %}
+        <table class="check-table">
+          <tr><th>Evidence</th><th>Value</th></tr>
+          <tr><td class="check-key">Title Keywords</td><td>{{ ev.get('title_keywords','None') or 'None' }}</td></tr>
+          <tr><td class="check-key">Specs Keywords</td><td>{{ ev.get('specs_keywords','None') or 'None' }}</td></tr>
+          <tr><td class="check-key">Image Keywords</td><td>{{ ev.get('image_keywords','None') or 'None' }}</td></tr>
+          <tr><td class="check-key">Exclusion Applied</td><td>{{ ev.get('exclusion_applied','—') }}</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(236,72,153,0.15);color:var(--accent-pink);">📊</div>
+          <div><div class="card-title">Reranked Categories</div></div>
+        </div>
+        {% set rerank = cond.get('reranking',{}) %}
+        <div style="margin-bottom:10px;font-size:0.8rem;color:var(--text-muted);">
+          Reranking Applied: <b style="color:{{ 'var(--accent-orange)' if rerank.get('reranking_applied') else 'var(--text-primary)' }}">{{ rerank.get('reranking_applied','—') }}</b>
+          &nbsp;| Used Category Found: <b>{{ rerank.get('used_category_found','—') }}</b>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          {% for cat in rerank.get('final_ranked_categories',[]) %}
+          <div class="cat-card rank-{{ cat.get('rank') }}">
+            <div class="rank-badge">{{ cat.get('rank','—') }}</div>
+            <div>
+              <div style="font-weight:600;font-size:0.85rem;">{{ cat.get('name','—') }}</div>
+              <div style="font-size:0.72rem;color:var(--text-muted);">ID: {{ cat.get('id','—') }} | Type: {{ cat.get('type','—') }}</div>
+              <div style="margin-top:4px;"><span class="verdict verdict-{{ cat.get('confidence','').lower() }}">{{ cat.get('confidence','—') }}</span></div>
+              <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:4px;">{{ cat.get('reason','') }}</div>
+            </div>
+          </div>
+          {% else %}<div style="color:var(--text-muted);font-size:0.85rem;">No reranked categories.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PII AGENT -->
+  {% set pi = raw.get('pii_agent_output',{}).get('data',{}) %}
+  {% set pia = pi.get('pii_analysis',{}) %}
+  <div id="tab-pii" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(239,68,68,0.15);color:var(--accent-red);">🔒</div>
+        <div><div class="card-title">PII Detection Agent</div>
+        <div class="card-subtitle">Personal Identifiable Information Scan</div></div>
+      </div>
+      <div style="text-align:center;padding:1.25rem;">
+        {% set overall = pia.get('overall_status','') %}
+        <div style="font-size:1.8rem;font-weight:800;color:{{ 'var(--accent-green)' if overall=='APPROVED' else 'var(--accent-red)' }}">{{ overall or '—' }}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">{{ pi.get('pii_status',{}).get('reason','') or 'No PII issues detected' }}</div>
+      </div>
+      <table class="check-table">
+        <tr><th>PII Type</th><th>Status</th><th>Value</th></tr>
+        {% for field in ['phone_number','email_address','aadhaar_id','pan_card','upi_id'] %}
+        {% set fd = pia.get(field,{}) %}
+        <tr>
+          <td class="check-key">{{ field.replace('_',' ').title() }}</td>
+          <td><span class="verdict {% if fd.get('status','')=='Not Detected' %}verdict-pass{% else %}verdict-fail{% endif %}">{{ fd.get('status','—') }}</span></td>
+          <td style="color:var(--accent-red);font-size:0.82rem;">{{ fd.get('value','') or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <!-- SPECS AGENT -->
+  {% set sa = raw.get('specs_agent_output',{}).get('data',{}) %}
+  {% set sr = sa.get('specs_api_raw_response',{}) %}
+  <div id="tab-specs" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(245,158,11,0.15);color:var(--accent-orange);">📋</div>
+        <div><div class="card-title">Specs Agent</div>
+        <div class="card-subtitle">Status: {{ sa.get('status','—') }} | Model: {{ sa.get('model','—') }}</div></div>
+      </div>
+      {% if sa.get('status')=='skipped' %}
+      <div class="alert alert-info"><span>ℹ️</span><span>Specs agent was skipped — no product specifications provided.</span></div>
+      {% else %}
+      <table class="check-table">
+        <tr><th>Check</th><th>Status</th><th>Reason</th></tr>
+        <tr>
+          <td class="check-key">Spell Error in Specs</td>
+          <td><span class="verdict verdict-{{ sr.get('task_1',{}).get('spell_error',{}).get('status','').replace(' ','_') }}">{{ sr.get('task_1',{}).get('spell_error',{}).get('status','—') }}</span></td>
+          <td class="check-reason">{{ sr.get('task_1',{}).get('spell_error',{}).get('reason','—') }}</td>
+        </tr>
+        <tr>
+          <td class="check-key">Internal Contradiction</td>
+          <td><span class="verdict verdict-{{ sr.get('task_1',{}).get('internal_contradiction',{}).get('status','').replace(' ','_') }}">{{ sr.get('task_1',{}).get('internal_contradiction',{}).get('status','—') }}</span></td>
+          <td class="check-reason">{{ sr.get('task_1',{}).get('internal_contradiction',{}).get('reason','—') }}</td>
+        </tr>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- PRICE AGENT -->
+  {% set pf = data.get('price_flag',{}) %}
+  <div id="tab-price" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">💰</div>
+        <div><div class="card-title">Price & Unit Absurdity Check</div></div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:1rem;">
+        <div class="stat-card"><div class="stat-value" style="color:var(--accent-green);">₹{{ data.get('price','—') }}</div><div class="stat-label">Price</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--accent-cyan);">{{ data.get('unit','—') }}</div><div class="stat-label">Unit</div></div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:{{ 'var(--accent-green)' if 'not outlier' in pf.get('final_verdict','').lower() else 'var(--accent-red)' }}">{{ pf.get('final_verdict','—') }}</div>
+          <div class="stat-label">Verdict</div>
+        </div>
+      </div>
+      {% if pf.get('reason') %}<div class="check-reason" style="padding:0.75rem;background:var(--bg-secondary);border-radius:var(--radius);border:1px solid var(--border);">{{ pf.get('reason','') }}</div>{% endif %}
+    </div>
+  </div>
+
+</div><!-- end tab-container -->

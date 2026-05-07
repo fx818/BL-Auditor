@@ -1,0 +1,52 @@
+curl --location 'http://15.206.125.220/categorization_outlier' \
+--header 'Content-Type: application/json' \
+--data '{
+    "ISQ": [],
+    "approval_status": 10,
+    "custtype": "53",
+    "display_name": "",
+    "fk_mcat_type_id": "",
+    "glcat_mcat_image_display": 3,
+    "glid": 187147894,
+    "image_id": "-1",
+    "img_url": "http://5.imimg.com/data5/SELLER/Default/2026/5/604847883/PY/GN/RG/187147894/whatsapp-image-2025-12-27-at-7-09-34-pm.jpeg",
+    "item_desc": "indiamart\u003cbr /\u003e#sale\u0026nbsp;#electronics #components #electrical #spare parts #devices\u0026nbsp; #product #Ac\u0026amp;dc #control #micropythom\u0026nbsp; #bridge #diode #rectifire #relay #cable #connctor #mosfet #IGBT #panal#disply #meter #shunt #sensor #led\u0026nbsp; #axial fan\u0026nbsp; #transistor #plug #wire #induction cooker. #oven #inverter #welding #driver #pcb\u0026nbsp; #circuts #amplifire #film-capacitors #axial-capacitors #module#av #supply. #charger #resistor variable #cement #ceramic #cutting #sale #stock #available #wheel #abrasive #ptc #ntc #pptc#plc #power-socket\u0026nbsp; #switch #rocker #slide #toggle #power #switching\u0026nbsp; #transformer\u0026nbsp; #zener #tvs-diode #arduinu #diode#potentiometer #pcb #diy #engineering\u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;#active components #passive components #smd\u0026nbsp; #dip #fuse #vdr # sale\u0026nbsp; #superway #avr #MOV #x2 capacitors #y2 capacitors # #sockets #hall sensor # Arduino-project #tech #pcba #robotic #robot #smt #smd #dip #automation #coding #raspberry #programming #project # diy-project #gps #cable #wire #connctor #harness #jointer #thermal pipe #heatsink #soldring iron #solder #knob #socket #electronics #smps #industrialpowersupply #powersupply #3Dprintingpwersupply #technolongy #senciores #electrical #dcmoter #led #electronicengineering #robotics #robot #stemeducation #cricuitvoard #diyprojects #arduino #programming #coding #hardware #software #dcfan #microprocessor #microcontroler #usb #submersiblepump #automaticsanitizermachine #robotics#\u0026hellip;.\u0026nbsp; \u0026nbsp;dc-link-capacitor #facebook #electricbikecharging #electricvehicle #EV #electricmotors #viralvideos #trending2024\u003cbr /\u003e\u003cbr /\u003e#Automotion #sales #tech #delaer #uno #electronicscomponents #parts #avlaible\u0026nbsp;#stock #sales #arduino #rasberry #igbt #ic #capacitors #electrical #dealerelectronics #passivecomponents #activcimponents\u0026nbsp;#programing #diyproject #sensor #vfd #led #inductions\u0026nbsp; \u0026nbsp;#industries\u0026nbsp; #tecnology\u0026nbsp; #future\u0026nbsp; #microcontroler\u0026nbsp; #microprocecer\u0026nbsp; #diode\u0026nbsp; #electronicsstore #ev #electricalvhicle\u0026nbsp; #online #discount #fans #coolingfans\u0026nbsp;#instrumentfans #componentscloseup\u0026nbsp;#acfans\u0026nbsp; #dcfans #axialfans #Mcu\u0026nbsp;#high-quality\u0026nbsp; #widerange #panels\u0026nbsp;#machines #delhi #authorised-dealer#welding-machine\u0026nbsp; #inverter\u0026nbsp; #transistors\u0026nbsp; #compressor\u0026nbsp; #Evaluation-board\u0026nbsp; #inductor\u0026nbsp; #resistor #capacitor\u0026nbsp; #connector #panal\u0026nbsp; #transformer\u0026nbsp; #MCi\u0026nbsp; #relays\u0026nbsp; #rectifiers #ups\u0026nbsp; #audio #memory\u0026nbsp; #FETs\u0026nbsp; #mostubs #pcba\u0026nbsp; \u0026nbsp;#inverter\u0026nbsp; #optocouplers\u0026nbsp; #antenna #analogies\u0026nbsp; #SDRAs\u0026nbsp; #Microchip\u0026nbsp; \u0026nbsp;#module\u0026nbsp; #board #developmentboard #ideas #reuse\u0026nbsp; \u0026nbsp;#semiconductors #diveses #PMIc#electronictechnician\u0026nbsp; #electronicsengineer #quartz-crystal #digitalelectronics\u0026nbsp; #relays\u0026nbsp; #pcbrelays #sugarcuberelays #stabilizer#highquality #relaymodules #timers\u0026nbsp;#industrial-controls #wide-range #\u0026nbsp;#instrumentation #battery-charger#industrialelectroniccomponent #controllers#arcweldingmachine #migweldingmachine #tigwrldingmachine#plasmaweldingmachin#welding machine factory #welding #weld #welder #weldingmachine\u0026nbsp; #parts #spares #weldingtorch #welding-socket #mos .",
+    "item_name": "Terminal Block Wire Connectors",
+    "mcat_flag": "-1",
+    "mcat_id": "39596",
+    "mcat_name": "Terminal Block Connectors",
+    "mcat_pool": [
+        {
+            "mcat_id": "39596",
+            "mcat_img_url": "http://3.imimg.com/data3/TU/FN/GLADMIN-39596/terminal-block-connectors.jpg",
+            "mcat_name": "Terminal Block Connectors",
+            "mcat_source": "product_primary_mcat,alfa,solr,base-ensemble,mars"
+        },
+        {
+            "mcat_id": "39597",
+            "mcat_img_url": "http://3.imimg.com/data3/WE/EQ/GLADMIN-39597/terminal-blocks.jpg",
+            "mcat_name": "Terminal Blocks",
+            "mcat_source": "base-ensemble,mars,alfa"
+        },
+        {
+            "mcat_id": "20206",
+            "mcat_img_url": "http://3.imimg.com/data3/TK/MM/GLADMIN-20206/wiring-connector.jpg",
+            "mcat_name": "Wiring Connector",
+            "mcat_source": "alfa,base-ensemble"
+        },
+        {
+            "mcat_id": "39601",
+            "mcat_img_url": "http://5.imimg.com/data5/AX/ZR/FB/GLADMIN-68087/terminal-connector.jpg",
+            "mcat_name": "Terminal Connector",
+            "mcat_source": "mars,base-ensemble"
+        }
+    ],
+    "modid": "GLADMIN",
+    "pc_item_id": 326487619,
+    "price": 350,
+    "rejection_code": 0,
+    "screen_name": "live_product_approval",
+    "secondary_mcats": [],
+    "unit": "Piece",
+    "worker_name": "Product_Approval_Auditor_1.2"
+}'
