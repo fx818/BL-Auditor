@@ -61,8 +61,12 @@ function initAuditForm() {
       });
 
       if (!resp.ok) {
-        const err = await resp.json().catch(() => ({ detail: resp.statusText }));
-        throw new Error(err.detail || resp.statusText);
+        let detail = resp.statusText;
+        try {
+          const body = await resp.json();
+          detail = body.detail || detail;
+        } catch (_) {}
+        throw new Error(detail);
       }
 
       const html = await resp.text();
@@ -71,7 +75,7 @@ function initAuditForm() {
       document.close();
     } catch (err) {
       overlay?.classList.remove('active');
-      showError(`API Error: ${err.message}`);
+      showError(err.message);
     }
   });
 }
@@ -81,11 +85,26 @@ function showError(msg) {
   if (!el) {
     el = document.createElement('div');
     el.id = 'form-error';
-    el.className = 'alert alert-error';
-    document.getElementById('audit-form')?.prepend(el);
+    el.className = 'error-banner';
+    const form = document.getElementById('audit-form');
+    if (form) form.parentNode.insertBefore(el, form.nextSibling);
   }
-  el.innerHTML = `<span>Warning</span><span>${msg}</span>`;
+  el.innerHTML =
+    '<div class="error-banner-icon">!</div>' +
+    '<div class="error-banner-body">' +
+      '<div class="error-banner-title">Audit Failed</div>' +
+      '<div class="error-banner-msg">' + escapeHtml(msg) + '</div>' +
+    '</div>' +
+    '<button class="error-banner-close" onclick="this.parentNode.style.display=\'none\'">✕</button>';
   el.style.display = 'flex';
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function copyJson() {

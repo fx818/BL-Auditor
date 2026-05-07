@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">Diagnostics</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);">Audit Traces</h2>
+    </div>
+    <a href="/" class="btn btn-outline btn-sm">← Home</a>
+  </div>
+
+  {% if not traces %}
+  <div class="card" style="text-align:center;padding:2.5rem;color:var(--text-muted);">
+    No traces yet. Run an audit from the home page to generate one.
+  </div>
+  {% else %}
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:0.875rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:0.82rem;font-weight:600;color:var(--text-secondary);">{{ traces|length }} trace(s) — click a row to view details</span>
+      <input id="trace-filter" class="form-control" style="width:220px;padding:0.35rem 0.65rem;font-size:0.78rem;" placeholder="Search offer ID or item…" oninput="filterTraces(this.value)">
+    </div>
+    <table class="check-table" id="traces-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th>Offer ID</th>
+          <th>Item Name</th>
+          <th>MCAT</th>
+          <th>Started At</th>
+          <th>Duration</th>
+          <th>Steps</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in traces %}
+        <tr class="trace-row" style="cursor:pointer;" onclick="window.location='/traces/{{ t.trace_id }}'">
+          <td class="check-key" style="color:var(--accent-blue);font-weight:600;">{{ t.offer_id }}</td>
+          <td style="font-weight:500;color:var(--text-primary);max-width:220px;">{{ t.item_name or '—' }}</td>
+          <td style="color:var(--text-secondary);">{{ t.mcat_name or '—' }}</td>
+          <td style="color:var(--text-muted);font-size:0.75rem;white-space:nowrap;">{{ t.started_at }}</td>
+          <td style="color:var(--text-muted);font-size:0.75rem;white-space:nowrap;">
+            {% if t.duration_ms >= 1000 %}{{ "%.1f"|format(t.duration_ms / 1000) }}s{% else %}{{ t.duration_ms }}ms{% endif %}
+          </td>
+          <td style="color:var(--text-secondary);">{{ t.total_steps }}</td>
+          <td>
+            {% if t.has_error %}
+            <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(220,38,38,0.08);color:var(--accent-red);border:1px solid rgba(220,38,38,0.2);">Has Errors</span>
+            {% else %}
+            <span style="font-size:0.7rem;font-weight:600;padding:2px 8px;border-radius:10px;background:rgba(5,150,105,0.1);color:var(--accent-green);border:1px solid rgba(5,150,105,0.2);">Success</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+</div>
+<script>
+function filterTraces(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#traces-table .trace-row').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

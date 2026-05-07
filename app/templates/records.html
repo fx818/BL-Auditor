@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="page-content">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
     <div>
-      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">CSV Dashboard</div>
-      <h2 style="font-size:1.4rem;font-weight:800;">Previous Records</h2>
-      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
-        Persistent data captured from the current audit dashboard view.
-      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.4px;">CSV Dashboard</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);">Previous Records</h2>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <a href="/" class="btn btn-outline btn-sm">Back Home</a>
@@ -17,7 +14,7 @@
   <div class="card records-card">
     <div class="card-header records-header">
       <div style="display:flex;align-items:center;gap:10px;">
-        <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">CSV</div>
+        <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">CSV</div>
         <div>
           <div class="card-title">Saved Audit Records</div>
           <div class="card-subtitle">{{ rows|length }} record(s)</div>
@@ -55,7 +52,9 @@
         <thead>
           <tr>
             {% for key in rows[0].keys() %}
+            {% if not key.endswith('_raw_json') and not key.endswith('_json') %}
             <th>{{ key.replace('_', ' ').title() }}</th>
+            {% endif %}
             {% endfor %}
           </tr>
         </thead>
@@ -63,12 +62,14 @@
           {% for row in rows %}
           <tr class="records-row" data-offer-id="{{ row.get('offer_id', '') }}">
             {% for key, value in row.items() %}
+            {% if not key.endswith('_raw_json') and not key.endswith('_json') %}
             <td
               class="{% if key == 'offer_id' %}check-key records-offer-cell{% else %}check-reason{% endif %}"
               data-column="{{ key }}"
             >
               {{ value or '-' }}
             </td>
+            {% endif %}
             {% endfor %}
           </tr>
           {% endfor %}

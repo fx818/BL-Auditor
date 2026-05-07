@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">
+        Audit Trace
+      </div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);line-height:1.3;">
+        {{ trace.item_name or trace.offer_id }}
+      </h2>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span>ID: <b style="color:var(--text-secondary);">{{ trace.offer_id }}</b></span>
+        {% if trace.mcat_name %}<span>MCAT: <b style="color:var(--text-secondary);">{{ trace.mcat_name }}</b></span>{% endif %}
+        <span>Started: <b style="color:var(--text-secondary);">{{ trace.started_at_display }}</b></span>
+        <span>Total:
+          <b style="color:var(--text-secondary);">
+            {% if trace.duration_ms >= 1000 %}{{ "%.1f"|format(trace.duration_ms / 1000) }}s{% else %}{{ trace.duration_ms }}ms{% endif %}
+          </b>
+        </span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <a href="/traces" class="btn btn-outline btn-sm">← All Traces</a>
+      <a href="/" class="btn btn-outline btn-sm">Home</a>
+    </div>
+  </div>
+
+  {% if trace.has_error %}
+  <div class="alert alert-error" style="margin-bottom:0.875rem;">
+    One or more steps encountered errors — see highlighted steps below.
+  </div>
+  {% endif %}
+
+  <!-- Step Timeline -->
+  <div style="display:flex;flex-direction:column;gap:0.625rem;">
+    {% for step in trace.steps %}
+    {% set is_error = step.status == 'error' %}
+    <div style="border:1px solid {{ 'rgba(220,38,38,0.35)' if is_error else 'var(--border)' }};border-radius:10px;background:{{ 'rgba(220,38,38,0.03)' if is_error else 'var(--bg-card)' }};overflow:hidden;box-shadow:var(--shadow-sm);">
+
+      <!-- Step Header -->
+      <div style="display:flex;align-items:center;gap:10px;padding:0.7rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;cursor:pointer;"
+           onclick="toggleStep({{ loop.index }})">
+        <div style="width:24px;height:24px;border-radius:50%;background:{{ 'rgba(220,38,38,0.1)' if is_error else 'rgba(37,99,235,0.1)' }};color:{{ 'var(--accent-red)' if is_error else 'var(--accent-blue)' }};display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">
+          {{ step.step }}
+        </div>
+        <div style="font-weight:600;font-size:0.88rem;color:var(--text-primary);flex:1;">{{ step.name }}</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <!-- Type badge -->
+          <span style="font-size:0.68rem;font-weight:600;padding:2px 7px;border-radius:10px;
+            {% if step.type == 'api_call' %}background:rgba(8,145,178,0.1);color:var(--accent-cyan);border:1px solid rgba(8,145,178,0.2);
+            {% elif step.type == 'llm_agent' %}background:rgba(124,58,237,0.1);color:var(--accent-purple);border:1px solid rgba(124,58,237,0.2);
+            {% else %}background:rgba(71,85,105,0.1);color:var(--text-secondary);border:1px solid var(--border);{% endif %}">
+            {{ step.type | replace('_', ' ') | upper }}
+          </span>
+          <!-- Status badge -->
+          {% if is_error %}
+          <span style="font-size:0.68rem;font-weight:600;padding:2px 7px;border-radius:10px;background:rgba(220,38,38,0.08);color:var(--accent-red);border:1px solid rgba(220,38,38,0.2);">ERROR</span>
+          {% else %}
+          <span style="font-size:0.68rem;font-weight:600;padding:2px 7px;border-radius:10px;background:rgba(5,150,105,0.1);color:var(--accent-green);border:1px solid rgba(5,150,105,0.2);">OK</span>
+          {% endif %}
+          <!-- Duration -->
+          {% if step.duration_ms %}
+          <span style="font-size:0.72rem;color:var(--text-muted);min-width:48px;text-align:right;">
+            {% if step.duration_ms >= 1000 %}{{ "%.1f"|format(step.duration_ms / 1000) }}s{% else %}{{ step.duration_ms }}ms{% endif %}
+          </span>
+          {% endif %}
+          <span id="arrow-{{ loop.index }}" style="font-size:0.75rem;color:var(--text-muted);transition:transform 0.2s;display:inline-block;">▾</span>
+        </div>
+      </div>
+
+      <!-- Step Body -->
+      <div id="step-{{ loop.index }}" style="padding:0.875rem 1rem;display:flex;flex-direction:column;gap:0.5rem;">
+
+        {% if step.endpoint %}
+        <div>
+          <div class="step-section-label">Endpoint</div>
+          <code style="font-size:0.75rem;color:var(--accent-blue);word-break:break-all;">{{ step.endpoint }}</code>
+        </div>
+        {% endif %}
+
+        {% if step.error %}
+        <div>
+          <div class="step-section-label" style="color:var(--accent-red);">Error</div>
+          <div style="font-size:0.78rem;color:var(--accent-red);background:rgba(220,38,38,0.05);border:1px solid rgba(220,38,38,0.2);border-radius:6px;padding:0.625rem 0.75rem;font-family:monospace;white-space:pre-wrap;word-break:break-all;">{{ step.error }}</div>
+        </div>
+        {% endif %}
+
+        {% if step.input is defined and step.input is not none %}
+        <details>
+          <summary class="step-summary">Input</summary>
+          <div class="json-viewer" style="margin-top:6px;">{{ step.input | tojson(indent=2) }}</div>
+        </details>
+        {% endif %}
+
+        {% if step.output is defined and step.output is not none %}
+        <details>
+          <summary class="step-summary">Output / Response</summary>
+          <div class="json-viewer" style="margin-top:6px;">{{ step.output | tojson(indent=2) }}</div>
+        </details>
+        {% endif %}
+
+        {% if step.llm_messages and step.llm_messages.system %}
+        <details>
+          <summary class="step-summary">System Prompt</summary>
+          <pre class="json-viewer" style="margin-top:6px;white-space:pre-wrap;word-break:break-all;">{{ step.llm_messages.system }}</pre>
+        </details>
+        {% endif %}
+
+        {% if step.llm_messages and step.llm_messages.user %}
+        <details>
+          <summary class="step-summary">User Message</summary>
+          <pre class="json-viewer" style="margin-top:6px;white-space:pre-wrap;word-break:break-all;">{{ step.llm_messages.user }}</pre>
+        </details>
+        {% endif %}
+
+        {% if step.raw_output %}
+        <details>
+          <summary class="step-summary">Raw LLM Output</summary>
+          <pre class="json-viewer" style="margin-top:6px;white-space:pre-wrap;word-break:break-all;">{{ step.raw_output }}</pre>
+        </details>
+        {% endif %}
+
+        {% if step.parsed is defined and step.parsed is not none %}
+        <details open>
+          <summary class="step-summary">Parsed Result</summary>
+          <div class="json-viewer" style="margin-top:6px;">{{ step.parsed | tojson(indent=2) }}</div>
+        </details>
+        {% endif %}
+
+        {% if step.sub_steps %}
+        <details>
+          <summary class="step-summary">Function Trace ({{ step.sub_steps | length }} calls)</summary>
+          <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+            {% for ss in step.sub_steps %}
+            <div style="border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--bg-primary);">
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 10px;background:rgba(37,99,235,0.04);border-bottom:1px solid var(--border);flex-wrap:wrap;">
+                <span style="font-size:0.67rem;font-weight:700;color:var(--text-muted);min-width:20px;">{{ ss.seq }}</span>
+                <span style="font-size:0.7rem;font-weight:600;color:var(--accent-purple);font-family:monospace;">{{ ss.fn }}</span>
+                <span style="font-size:0.65rem;color:var(--text-muted);margin-left:auto;">node: {{ ss.node }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+                <div style="padding:6px 10px;border-right:1px solid var(--border);">
+                  <div style="font-size:0.63rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;">Input</div>
+                  <div class="json-viewer" style="font-size:0.72rem;max-height:180px;overflow-y:auto;">{{ ss.input | tojson(indent=2) }}</div>
+                </div>
+                <div style="padding:6px 10px;">
+                  <div style="font-size:0.63rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;">Output</div>
+                  <div class="json-viewer" style="font-size:0.72rem;max-height:180px;overflow-y:auto;">{{ ss.output | tojson(indent=2) }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<style>
+.step-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.step-summary {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 0;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.step-summary::before {
+  content: '▸';
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+details[open] .step-summary::before { transform: rotate(90deg); }
+.step-summary:hover { color: var(--text-primary); }
+details { border-top: 1px solid var(--border); padding-top: 0.375rem; }
+details:first-of-type { border-top: none; }
+</style>
+
+<script>
+function toggleStep(idx) {
+  const body = document.getElementById('step-' + idx);
+  const arrow = document.getElementById('arrow-' + idx);
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'flex' : 'none';
+  arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+// Collapse all steps by default, only errors expanded
+document.addEventListener('DOMContentLoaded', () => {
+  {% for step in trace.steps %}
+  {% if step.status != 'error' %}
+  toggleStep({{ loop.index }});
+  {% endif %}
+  {% endfor %}
+});
+</script>
+{% endblock %}

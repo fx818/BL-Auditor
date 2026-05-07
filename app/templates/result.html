@@ -7,38 +7,39 @@
 ] %}
 
 <div class="page-content">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
     <div>
-      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Audit Result</div>
-      <h2 style="font-size:1.4rem;font-weight:800;">{{ data.get('item_name', payload.get('item_name', '-')) }}</h2>
-      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
-        Offer ID: <b style="color:var(--text-secondary)">{{ offer_id }}</b> &nbsp;|&nbsp;
-        MCAT: <b style="color:var(--text-secondary)">{{ payload.get('mcat_name', '-') }}</b> &nbsp;|&nbsp;
-        Price: <b style="color:var(--text-secondary)">{{ payload.get('price', '-') }}</b>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.4px;">Audit Result</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);line-height:1.3;">{{ data.get('item_name', payload.get('item_name', '-')) }}</h2>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span>ID: <b style="color:var(--text-secondary);">{{ offer_id }}</b></span>
+        <span>MCAT: <b style="color:var(--text-secondary);">{{ payload.get('mcat_name', '-') }}</b></span>
+        <span>Price: <b style="color:var(--text-secondary);">{{ payload.get('price', '-') }}</b></span>
       </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button type="button" onclick="goBack()" class="btn btn-outline btn-sm">Back to Audit</button>
-      <button type="button" id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">Copy Audit JSON</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;">
+      <button type="button" onclick="goBack()" class="btn btn-outline btn-sm">← Back</button>
+      {% if trace_id %}<a href="/traces/{{ trace_id }}" class="btn btn-outline btn-sm">View Trace</a>{% endif %}
+      <button type="button" id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">Copy JSON</button>
     </div>
   </div>
 
   {% if csv_path %}
-  <div class="alert alert-info" style="margin-bottom:1.25rem;">
-    <span>Saved to CSV:</span>
-    <span>{{ csv_path }}</span>
+  <div class="alert alert-info" style="margin-bottom:0.875rem;">
+    <span>Saved →</span><span style="font-family:monospace;font-size:0.75rem;">{{ csv_path }}</span>
   </div>
   {% endif %}
 
   <div class="section-title">Category Checks</div>
-  <div class="dashboard-grid grid-3" style="margin-bottom:1.5rem;">
+  <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
     {% for label, verdict in checks %}
     <div class="card">
       <div class="card-header">
-        <div class="card-icon" style="background:rgba(245,158,11,0.15);color:var(--accent-orange);">C</div>
-        <div><div class="card-title">{{ label }}</div></div>
+        <div class="card-icon" style="background:rgba(217,119,6,0.1);color:var(--accent-orange);">C</div>
+        <div class="card-title">{{ label }}</div>
       </div>
-      <div style="margin-bottom:10px;">
+      <div style="margin-bottom:6px;">
         <span class="verdict verdict-{{ verdict.get('status', '').replace(' ', '_') }}">{{ verdict.get('status', '-') }}</span>
       </div>
       <div class="check-reason">{{ verdict.get('reason', '-') or '-' }}</div>
@@ -46,73 +47,106 @@
     {% endfor %}
   </div>
 
-  <div class="dashboard-grid grid-2" style="margin-bottom:1.5rem;">
+  <div class="dashboard-grid grid-2" style="margin-bottom:1rem;">
     <div class="card">
       <div class="card-header">
-        <div class="card-icon" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan);">PT</div>
-        <div><div class="card-title">Photo vs Title</div></div>
+        <div class="card-icon" style="background:rgba(8,145,178,0.1);color:var(--accent-cyan);">PT</div>
+        <div class="card-title">Photo vs Title</div>
       </div>
       {% set pt = data.get('photo_title_verdict', {}) %}
-      <div style="margin-bottom:10px;">
+      <div style="margin-bottom:6px;">
         <span class="verdict verdict-{{ pt.get('final_verdict', '').replace(' ', '_') }}">{{ pt.get('final_verdict', '-') }}</span>
       </div>
       <div class="check-reason">{{ data.get('photo_title_verdict_reason', '-') or '-' }}</div>
     </div>
-
     <div class="card">
       <div class="card-header">
-        <div class="card-icon" style="background:rgba(139,92,246,0.15);color:var(--accent-purple);">TS</div>
-        <div><div class="card-title">Title vs Specs</div></div>
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">TS</div>
+        <div class="card-title">Title vs Specs</div>
       </div>
       {% set ts = data.get('title_spec_verdict', {}) %}
-      <div style="margin-bottom:10px;">
+      <div style="margin-bottom:6px;">
         <span class="verdict verdict-{{ ts.get('final_verdict', '').replace(' ', '_') }}">{{ ts.get('final_verdict', '-') }}</span>
       </div>
       <div class="check-reason">{{ data.get('title_spec_verdict_reason', '-') or '-' }}</div>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:1.5rem;">
+  <div class="card" style="margin-bottom:1rem;">
     <div class="card-header">
-      <div class="card-icon" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">PR</div>
-      <div><div class="card-title">Price Flag</div></div>
+      <div class="card-icon" style="background:rgba(5,150,105,0.1);color:var(--accent-green);">PR</div>
+      <div class="card-title">Price Flag</div>
     </div>
     {% set pf = data.get('price_flag', {}) %}
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:1rem;">
-      <div class="stat-card"><div class="stat-value" style="color:var(--accent-green);">{{ payload.get('price', '-') }}</div><div class="stat-label">Mapped Price</div></div>
-      <div class="stat-card"><div class="stat-value" style="color:{{ 'var(--accent-green)' if 'not outlier' in pf.get('final_verdict', '').lower() else 'var(--accent-red)' }}">{{ pf.get('final_verdict', '-') }}</div><div class="stat-label">Verdict</div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:0.75rem;">
+      <div class="stat-card">
+        <div class="stat-value">{{ payload.get('price', '-') }}</div>
+        <div class="stat-label">Mapped Price</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:{{ 'var(--accent-green)' if 'not outlier' in pf.get('final_verdict', '').lower() else 'var(--accent-red)' }};">{{ pf.get('final_verdict', '-') }}</div>
+        <div class="stat-label">Verdict</div>
+      </div>
     </div>
     <div class="check-reason">{{ pf.get('reason', '-') or '-' }}</div>
   </div>
 
-  <div class="accordion" style="margin-bottom:1rem;">
-    <div class="accordion-header">
-      <span>Audit payload sent</span>
-      <span class="accordion-arrow">v</span>
+  <div class="dashboard-grid grid-2" style="margin-bottom:1rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">RT</div>
+        <div class="card-title">Retail Classification</div>
+      </div>
+      {% set rr = retail_result or {} %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:var(--accent-blue);">{{ rr.get('Classification', '-') }}</div><div class="stat-label">Classification</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ rr.get('Confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ rr.get('Classi_Score', '-') }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:0.85rem;">{{ rr.get('Override_Applied', '-') }}</div><div class="stat-label">Override</div></div>
+      </div>
+      <div class="check-reason">{{ rr.get('Reason', '-') or '-' }}</div>
+      {% if rr.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ rr.get('error') }}</div>{% endif %}
     </div>
-    <div class="accordion-body">
-      <div class="json-viewer payload-json-viewer">{{ payload | tojson(indent=2) }}</div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(217,119,6,0.1);color:var(--accent-orange);">PA</div>
+        <div class="card-title">Price Audit</div>
+      </div>
+      {% set pr = price_result or {} %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if pr.get('Price_Results') == 'Correct' else ('var(--accent-red)' if pr.get('Price_Results') == 'Not-Correct' else 'var(--accent-orange)') }};">{{ pr.get('Price_Results', '-') }}</div><div class="stat-label">Result</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ pr.get('Confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ pr.get('Price_Score', '-') }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:0.78rem;">{{ pr.get('Price_Value_By_AI', '-') }}</div><div class="stat-label">AI Range</div></div>
+      </div>
+      <div class="check-reason">{{ pr.get('Price_Reason', '-') or '-' }}</div>
+      {% if pr.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ pr.get('error') }}</div>{% endif %}
     </div>
   </div>
 
-  <div class="accordion" style="margin-bottom:1rem;">
-    <div class="accordion-header">
-      <span>BuyLead API response</span>
-      <span class="accordion-arrow">v</span>
+  <div style="display:grid;gap:0.5rem;margin-bottom:1.5rem;">
+    <div class="accordion">
+      <div class="accordion-header"><span>Audit payload sent</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer payload-json-viewer">{{ payload | tojson(indent=2) }}</div></div>
     </div>
-    <div class="accordion-body">
-      <div class="json-viewer buylead-json-viewer">{{ buylead_raw_json }}</div>
+    <div class="accordion">
+      <div class="accordion-header"><span>BuyLead API response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer buylead-json-viewer">{{ buylead_raw_json }}</div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header"><span>Retail agent raw response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer retail-json-viewer">{{ retail_raw_json }}</div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header"><span>Price agent raw response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer price-json-viewer">{{ price_raw_json }}</div></div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header"><span>Audit API raw response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer audit-json-viewer">{{ raw_json }}</div></div>
     </div>
   </div>
 
-  <div class="accordion" style="margin-bottom:2rem;">
-    <div class="accordion-header">
-      <span>Audit API raw response</span>
-      <span class="accordion-arrow">v</span>
-    </div>
-    <div class="accordion-body">
-      <div class="json-viewer audit-json-viewer">{{ raw_json }}</div>
-    </div>
-  </div>
 </div>
 {% endblock %}

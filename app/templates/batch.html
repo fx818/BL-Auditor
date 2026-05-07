@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.25rem;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Batch Processing</div>
+      <h2 style="font-size:1.4rem;font-weight:800;">Batch Audit</h2>
+    </div>
+    <a href="/" class="btn btn-outline btn-sm">Back Home</a>
+  </div>
+
+  <div class="form-card" style="margin-bottom:1.25rem;">
+    <div class="form-group" style="margin-bottom:0.75rem;">
+      <label class="form-label" for="batch-input">Offer IDs (comma-separated)</label>
+      <textarea
+        id="batch-input"
+        class="form-control"
+        rows="3"
+        placeholder="143796010195, 143816401285, 142764424452"
+        style="resize:vertical;font-family:monospace;font-size:0.85rem;"
+      ></textarea>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button id="batch-btn" class="btn btn-primary" onclick="startBatch()">Run Batch</button>
+      <a href="/records" class="btn btn-outline btn-sm">See Previous Records</a>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('batch-input').value='';document.getElementById('batch-count').textContent=''">Clear</button>
+      <span id="batch-count" style="font-size:0.78rem;color:var(--text-muted);"></span>
+    </div>
+  </div>
+
+  <div id="progress-section" style="display:none;margin-bottom:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span id="progress-label" style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);"></span>
+      <span id="progress-pct" style="font-size:0.78rem;color:var(--text-muted);"></span>
+    </div>
+    <div style="background:var(--card-border);border-radius:4px;height:6px;overflow:hidden;">
+      <div id="progress-bar" style="height:100%;background:var(--accent-blue);width:0%;transition:width 0.3s ease;"></div>
+    </div>
+    <div id="current-id" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
+  </div>
+
+  <div id="results-section" style="display:none;">
+    <div class="card records-card">
+      <div class="card-header records-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">BT</div>
+          <div>
+            <div class="card-title">Batch Results</div>
+            <div class="card-subtitle" id="results-summary"></div>
+          </div>
+        </div>
+        <div id="done-badge" style="display:none;font-size:0.75rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:var(--accent-green);font-weight:600;">All done</div>
+      </div>
+
+      <div class="records-table-wrap">
+        <table class="check-table records-table" id="batch-table" style="font-size:0.76rem;">
+          <thead>
+            <tr>
+              <th style="width:28px;">#</th>
+              <th>Offer ID</th>
+              <th>Item Name</th>
+              <th>MCAT</th>
+              <th>Price</th>
+              <th>Specs Status</th>
+              <th>Specs Reason</th>
+              <th>Title Status</th>
+              <th>Title Reason</th>
+              <th>Photo Status</th>
+              <th>Photo Reason</th>
+              <th>Photo/Title Verdict</th>
+              <th>Photo/Title Reason</th>
+              <th>Title/Spec Verdict</th>
+              <th>Title/Spec Reason</th>
+              <th>Price Flag</th>
+              <th>Price Flag Reason</th>
+              <th>Retail Classification</th>
+              <th>Retail Score</th>
+              <th>Retail Confidence</th>
+              <th>Retail Override</th>
+              <th>Retail Reason</th>
+              <th>Retail Error</th>
+              <th>Price Result</th>
+              <th>Price Score</th>
+              <th>Price Confidence</th>
+              <th>AI Price Range</th>
+              <th>Price Reason</th>
+              <th>Price Error</th>
+              <th>Saved</th>
+            </tr>
+          </thead>
+          <tbody id="batch-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  let es = null;
+
+  window.startBatch = function () {
+    const raw = document.getElementById('batch-input').value;
+    const ids = raw.split(',').map(s => s.trim()).filter(Boolean);
+    if (!ids.length) return;
+
+    document.getElementById('batch-tbody').innerHTML = '';
+    document.getElementById('progress-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'block';
+    document.getElementById('done-badge').style.display = 'none';
+    document.getElementById('batch-btn').disabled = true;
+    document.getElementById('batch-btn').textContent = 'Processing…';
+    document.getElementById('results-summary').textContent = '0 record(s)';
+    setProgress(0, ids.length, '');
+
+    if (es) es.close();
+    es = new EventSource('/batch/stream?offer_ids=' + encodeURIComponent(ids.join(',')));
+
+    es.onmessage = function (e) {
+      const d = JSON.parse(e.data);
+      if (d.done) {
+        es.close();
+        document.getElementById('done-badge').style.display = 'inline-block';
+        document.getElementById('batch-btn').disabled = false;
+        document.getElementById('batch-btn').textContent = 'Run Batch';
+        document.getElementById('current-id').textContent = '';
+        setProgress(d.total, d.total, '');
+        document.getElementById('results-summary').textContent =
+          d.total + ' record(s) — ' + d.errors + ' error(s)';
+        return;
+      }
+      setProgress(d.index, d.total, d.offer_id);
+      document.getElementById('results-summary').textContent = d.index + ' record(s)';
+      appendRow(d);
+    };
+
+    es.onerror = function () {
+      es.close();
+      document.getElementById('batch-btn').disabled = false;
+      document.getElementById('batch-btn').textContent = 'Run Batch';
+    };
+  };
+
+  function setProgress(done, total, currentId) {
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progress-label').textContent = done + ' of ' + total + ' processed';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('current-id').textContent = currentId ? 'Processing: ' + currentId : '';
+  }
+
+  function v(val) {
+    return (val === null || val === undefined || val === '') ? '-' : String(val);
+  }
+
+  function badge(val) {
+    const s = v(val);
+    if (s === '-') return '<span style="color:var(--text-muted)">-</span>';
+    const low = s.toLowerCase();
+    let color = 'var(--text-secondary)';
+    if (low.includes('not_outlier') || low === 'correct' || low === 'retail') color = 'var(--accent-green)';
+    else if (low.includes('outlier') || low === 'not-correct' || low === 'non-retail') color = 'var(--accent-red)';
+    else if (low.includes('review') || low.includes('unclassified') || low.includes('unverifiable')) color = 'var(--accent-orange)';
+    return '<span style="color:' + color + ';font-weight:600;">' + s + '</span>';
+  }
+
+  function cell(val) {
+    return '<td class="check-reason">' + v(val) + '</td>';
+  }
+
+  function badgeCell(val) {
+    return '<td>' + badge(val) + '</td>';
+  }
+
+  function appendRow(d) {
+    const tbody = document.getElementById('batch-tbody');
+    const tr = document.createElement('tr');
+    if (d.error) {
+      tr.innerHTML =
+        '<td>' + d.index + '</td>' +
+        '<td class="check-key">' + d.offer_id + '</td>' +
+        '<td colspan="28" style="color:var(--accent-red);font-size:0.75rem;">' + d.error + '</td>';
+    } else {
+      tr.innerHTML =
+        '<td>' + d.index + '</td>' +
+        '<td class="check-key">' + v(d.offer_id) + '</td>' +
+        cell(d.item_name) +
+        cell(d.mcat_name) +
+        cell(d.price) +
+        badgeCell(d.specs_category_outlier_status) +
+        cell(d.specs_category_outlier_reason) +
+        badgeCell(d.title_category_outlier_status) +
+        cell(d.title_category_outlier_reason) +
+        badgeCell(d.photo_category_outlier_status) +
+        cell(d.photo_category_outlier_reason) +
+        badgeCell(d.photo_title_verdict) +
+        cell(d.photo_title_verdict_reason) +
+        badgeCell(d.title_spec_verdict) +
+        cell(d.title_spec_verdict_reason) +
+        badgeCell(d.price_flag_verdict) +
+        cell(d.price_flag_reason) +
+        badgeCell(d.retail_classification) +
+        cell(d.retail_classi_score) +
+        cell(d.retail_confidence) +
+        cell(d.retail_override_applied) +
+        cell(d.retail_reason) +
+        cell(d.retail_error) +
+        badgeCell(d.price_agent_result) +
+        cell(d.price_agent_score) +
+        cell(d.price_agent_confidence) +
+        cell(d.price_value_by_ai) +
+        cell(d.price_agent_reason) +
+        cell(d.price_error) +
+        '<td><span style="color:var(--accent-green);font-size:0.72rem;font-weight:600;">✓</span></td>';
+    }
+    tbody.appendChild(tr);
+  }
+
+  document.getElementById('batch-input').addEventListener('input', function () {
+    const ids = this.value.split(',').map(s => s.trim()).filter(Boolean);
+    document.getElementById('batch-count').textContent = ids.length ? ids.length + ' offer ID(s)' : '';
+  });
+})();
+</script>
+{% endblock %}
