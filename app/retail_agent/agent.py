@@ -144,6 +144,29 @@ def _get_slab(qty: float | None) -> str:
     return "200+"
 
 
+_BULK_UNITS = {"TON", "TONNE", "MT", "METRIC TON", "QUINTAL", "KL", "KILOLITRE"}
+
+
+def _hard_override(offer: Dict[str, Any], qty: float | None) -> Dict[str, Any] | None:
+    unit = _canonical_unit(offer.get("Qty"))
+    if unit in _BULK_UNITS:
+        rule = f"Bulk unit ({unit})"
+    elif unit == "KG" and qty is not None and qty >= 200:
+        rule = "KG ≥ 200"
+    elif unit == "LITRE" and qty is not None and qty >= 200:
+        rule = "Litre ≥ 200"
+    else:
+        return None
+    return {
+        "Display_id": offer.get("Display_id"),
+        "Classification": "NON-RETAIL",
+        "Classi_Score": 1.0,
+        "Confidence": "High",
+        "Override_Applied": f"Yes — {rule}",
+        "Reason": f"Hard override: {rule} is always non-retail.",
+    }
+
+
 def _read_prompt() -> str:
     return PROMPT_PATH.read_text(encoding="utf-8")
 
@@ -478,6 +501,7 @@ async def _prepare_input(state: RetailState) -> RetailState:
         "median": price["median"],
         "q3": price["q3"],
         "price_match": price_match,
+        "_override": _hard_override(offer, qty),
     }
 
     return {"agent_input": agent_input}
@@ -493,6 +517,15 @@ async def _classify(state: RetailState) -> RetailState:
         raise RuntimeError("Missing RETAIL_LLM_API_KEY or RETAIL_LLM_MODEL")
 
     agent_input = state["agent_input"]
+    override = agent_input.pop("_override", None)
+    if override is not None:
+        return {
+            "system_prompt": "(skipped — hard override applied)",
+            "user_message": "(skipped — hard override applied)",
+            "raw_output": json.dumps(override, ensure_ascii=False),
+            "result": override,
+        }
+
     raw_prompt = _read_prompt()
     system_prompt = _render_template(raw_prompt, agent_input)
 
@@ -505,8 +538,25 @@ async def _classify(state: RetailState) -> RetailState:
     ]
     user_text = "\n".join(f"{k}: {agent_input.get(k, '')}" for k in _msg_keys)
 
-    llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
-    response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+    try:
+        llm = ChatOpenAI(
+            model=model,
+            api_key=api_key,
+            base_url=base_url,
+            timeout=timeout,
+            model_kwargs={
+                "response_format": {"type": "json_object"},
+                "reasoning_effort": "minimal",
+            },
+            extra_body={
+                "google": {"thinking_config": {"thinking_budget": 0}},
+            },
+        )
+        response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+    except Exception:
+        llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
+        response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+
     raw_output = str(response.content)
     try:
         result = _clean_classifier_output(raw_output)

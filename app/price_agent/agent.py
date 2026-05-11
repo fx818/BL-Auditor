@@ -25,8 +25,6 @@ class PriceState(TypedDict, total=False):
     user_message: str
     raw_output: str
     result: Dict[str, Any]
-    prepare_sub_steps: List[Dict[str, Any]]
-    classify_sub_steps: List[Dict[str, Any]]
 
 
 def _clean(value: Any) -> str:
@@ -421,87 +419,60 @@ def _find_price_data(norm_unit: str) -> Dict[str, float] | None:
 
 
 def _clean_price_output(raw: str) -> Dict[str, Any]:
-    raw = (raw or "").replace("```json", "").replace("```", "").strip()
-    return json.loads(raw)
+    text = (raw or "").replace("```json", "").replace("```", "").strip()
+    if not text:
+        raise ValueError("LLM returned empty response")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r"\{[\s\S]*\}", text)
+        if not match:
+            raise ValueError(f"No JSON object found in LLM output: {text[:300]}")
+        return json.loads(match.group(0))
 
 
 async def _prepare_input(state: PriceState) -> PriceState:
-    sub: List[Dict[str, Any]] = []
     offer_id = state["offer_id"]
-
     source = _build_offer_source(offer_id, state["buylead_response"])
-    sub.append({"seq": 1, "node": "prepare_input", "fn": "_build_offer_source",
-                "input": {"offer_id": offer_id}, "output": source})
-
     offer = _bl_detail_and_keys(source)
-    sub.append({"seq": 2, "node": "prepare_input", "fn": "_bl_detail_and_keys",
-                "input": source, "output": offer})
 
-    qty_raw = offer.get("Qty")
-    qty = _extract_qty(qty_raw)
-    sub.append({"seq": 3, "node": "prepare_input", "fn": "_extract_qty",
-                "input": {"qty_str": qty_raw}, "output": qty})
-
+    qty = _extract_qty(offer.get("Qty"))
     slab = _get_slab(qty)
-    sub.append({"seq": 4, "node": "prepare_input", "fn": "_get_slab",
-                "input": {"qty": qty}, "output": slab})
-
     norm_unit = _normalize_mcat_unit(offer.get("MCAT_Unit"))
-    sub.append({"seq": 5, "node": "prepare_input", "fn": "_normalize_mcat_unit",
-                "input": {"value": offer.get("MCAT_Unit")}, "output": norm_unit})
 
-    # Evidence lookup with fallback chain:
-    # exact slab → unit-only cross-slab aggregate → no_data
     by_slab, by_unit = _load_evidence_metrics()
-    metrics: Dict[str, Any] | None = None
     evidence_match = "no_data"
+    evidence_count = 0
     slab_key = f"{norm_unit}_{slab}" if (norm_unit and slab and slab != "no_slab") else ""
-    if slab_key:
-        metrics = by_slab.get(slab_key)
-        if metrics is not None:
-            evidence_match = "exact"
-    if metrics is None and norm_unit:
-        metrics = by_unit.get(norm_unit)
-        if metrics is not None:
-            evidence_match = "unit_only"
-    if metrics is None:
-        metrics = _empty_evidence_metrics()
-    sub.append({"seq": 6, "node": "prepare_input", "fn": "_load_evidence_metrics",
-                "input": {"slab_key": slab_key or "(skipped)", "unit_key": norm_unit},
-                "output": {"match_level": evidence_match, "metrics": metrics}})
+    if slab_key and slab_key in by_slab:
+        evidence_match = "exact"
+        evidence_count = by_slab[slab_key].get("bucket_count", 0)
+    elif norm_unit and norm_unit in by_unit:
+        evidence_match = "unit_only"
+        evidence_count = by_unit[norm_unit].get("bucket_count", 0)
 
-    # Price lookup
     price = _find_price_data(norm_unit)
     if price is None:
-        price = {"q1": 0, "median": 0, "q3": 0}
+        price = {"median": 0, "q3": 0}
         price_match = "no_data"
     else:
         price_match = "exact"
-    sub.append({"seq": 7, "node": "prepare_input", "fn": "_find_price_data",
-                "input": {"norm_unit": norm_unit},
-                "output": {"match_level": price_match, "price": price}})
 
     agent_input: Dict[str, Any] = {
-        **offer,
-        "Slab": slab,
-        "bl_apprvd": metrics["bl_apprvd"],
-        "pur": metrics["pur"],
-        "pur_retailer": metrics["pur_retailer"],
-        "pur_wholesaler": metrics["pur_wholesaler"],
-        "retail_ni": metrics["retail_ni"],
-        "ni_retailer": metrics["ni_retailer"],
-        "ni_wholesaler": metrics["ni_wholesaler"],
-        "evidence_count": metrics.get("bucket_count", 0),
-        "evidence_match": evidence_match,
-        "q1": price["q1"],
-        "median": price["median"],
-        "q3": price["q3"],
+        "Display_id": offer.get("Display_id"),
+        "Title": offer.get("Title"),
+        "MCAT": offer.get("MCAT"),
+        "Qty": offer.get("Qty"),
+        "Order_Value": offer.get("Order_Value"),
+        "BL_card": offer.get("BL_card"),
+        "median": price.get("median", 0),
+        "q3": price.get("q3", 0),
         "price_match": price_match,
+        "evidence_match": evidence_match,
+        "evidence_count": evidence_count,
     }
-    sub.append({"seq": 8, "node": "prepare_input", "fn": "_merge_inputs[result]",
-                "input": {"offer_keys": list(offer.keys())}, "output": agent_input})
 
-    return {"agent_input": agent_input, "prepare_sub_steps": sub}
+    return {"agent_input": agent_input}
 
 
 async def _price_classify(state: PriceState) -> PriceState:
@@ -513,24 +484,10 @@ async def _price_classify(state: PriceState) -> PriceState:
     if not api_key or not model:
         raise RuntimeError("Missing PRICE_LLM_API_KEY or PRICE_LLM_MODEL")
 
-    sub: List[Dict[str, Any]] = []
     agent_input = state["agent_input"]
-
     raw_prompt = _read_prompt()
-    sub.append({"seq": 1, "node": "price_classify", "fn": "_read_prompt",
-                "input": {"path": str(PROMPT_PATH)},
-                "output": {"char_count": len(raw_prompt)}})
-
     system_prompt = _render_template(raw_prompt, agent_input)
-    sub.append({"seq": 2, "node": "price_classify", "fn": "_render_template",
-                "input": {"variables": list(agent_input.keys())},
-                "output": {"char_count": len(system_prompt)}})
 
-    _msg_keys = [
-        "Display_id", "MCAT", "Qty", "Order_Value", "BL_card",
-        "median", "q3", "price_match",
-        "evidence_match", "evidence_count",
-    ]
     user_text = "\n".join([
         f"Display_id: {agent_input.get('Display_id', '')}",
         f"MCAT: {agent_input.get('MCAT', '')}",
@@ -543,30 +500,37 @@ async def _price_classify(state: PriceState) -> PriceState:
         f"evidence_match: {agent_input.get('evidence_match', '')}",
         f"evidence_count: {agent_input.get('evidence_count', '')}",
     ])
-    sub.append({"seq": 3, "node": "price_classify", "fn": "build_user_message",
-                "input": {"keys": _msg_keys},
-                "output": user_text})
 
-    llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
-    sub.append({"seq": 4, "node": "price_classify", "fn": "ChatOpenAI.ainvoke",
-                "input": {"model": model, "base_url": base_url,
-                          "system_chars": len(system_prompt), "user_chars": len(user_text)},
-                "output": None})
-    response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+    try:
+        llm = ChatOpenAI(
+            model=model,
+            api_key=api_key,
+            base_url=base_url,
+            timeout=timeout,
+            model_kwargs={
+                "response_format": {"type": "json_object"},
+                "reasoning_effort": "minimal",
+            },
+            extra_body={
+                "google": {"thinking_config": {"thinking_budget": 0}},
+            },
+        )
+        response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+    except Exception:
+        llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
+        response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
+
     raw_output = str(response.content)
-    sub[-1]["output"] = {"response_chars": len(raw_output), "preview": raw_output[:300]}
-
-    result = _clean_price_output(raw_output)
-    sub.append({"seq": 5, "node": "price_classify", "fn": "_clean_price_output",
-                "input": {"raw_chars": len(raw_output)},
-                "output": result})
+    try:
+        result = _clean_price_output(raw_output)
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Price LLM output parse failed: {exc}. Raw: {raw_output[:500]!r}") from exc
 
     return {
         "system_prompt": system_prompt,
         "user_message": user_text,
         "raw_output": raw_output,
         "result": result,
-        "classify_sub_steps": sub,
     }
 
 
@@ -603,6 +567,5 @@ async def run_price_agent(
             "raw_output": state.get("raw_output", ""),
             "system_prompt": state.get("system_prompt", ""),
             "user_message": state.get("user_message", ""),
-            "sub_steps": state.get("prepare_sub_steps", []) + state.get("classify_sub_steps", []),
         }
     return state["result"]

@@ -176,7 +176,6 @@ async def audit(request: Request):
                     "system": price_state.get("system_prompt", ""),
                     "user": price_state.get("user_message", ""),
                 },
-                sub_steps=price_state.get("sub_steps", []),
             )
         except Exception as price_exc:
             price_result = {
