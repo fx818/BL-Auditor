@@ -1,0 +1,1656 @@
+{
+  "trace_id": "142764424452_20260508_170347",
+  "offer_id": "142764424452",
+  "item_name": "Bath Soaps",
+  "mcat_name": "Bath Soaps",
+  "started_at": "2026-05-08T17:03:47.486864",
+  "completed_at": "2026-05-08T17:04:20.317481",
+  "total_steps": 6,
+  "has_error": false,
+  "steps": [
+    {
+      "step": 1,
+      "name": "BuyLead API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T17:03:48.734232",
+      "status": "success",
+      "duration_ms": 1247,
+      "endpoint": "https://leads.imutils.com/wservce/buyleads/detail/",
+      "input": {
+        "offer_id": "142764424452"
+      },
+      "output": {
+        "RESPONSE": {
+          "CODE": "200",
+          "STATUS": "2",
+          "DATA": {
+            "REJECT": "2",
+            "ETO_OFR_DISPLAY_ID": "142764424452",
+            "ETO_OFR_DATE": "18-APR-26",
+            "OFR_DATE": "20260418060323",
+            "ETO_OFR_QTY": null,
+            "ETO_OFR_QTY_UNIT": null,
+            "ETO_OFR_VERIFIED": "0",
+            "FK_GLUSR_USR_ID": "3qYHnZnVsF0t",
+            "ETO_OFR_APPROV": "A",
+            "PROD_SERV": "P",
+            "FK_GLCAT_MCAT_ID": "4267",
+            "IS_WHATSAPP_ACTIVE": null,
+            "ETO_ENQ_TYP": null,
+            "FK_GL_COUNTRY_ISO": "IN",
+            "ETO_OFR_TITLE": "Bath Soaps",
+            "ETO_OFR_LAST_UPDATED": "18-APR-26",
+            "ETO_OFR_GLCAT_MCAT_NAME": "Bath Soaps",
+            "ETO_OFR_APPROX_ORDER_VALUE": null,
+            "ETO_OFR_KEYWORDS": null,
+            "GLUSR_USR_STATE": "Odisha",
+            "ETO_OFR_SMALL_IMAGE": null,
+            "ETO_OFR_MEDIUM_IMAGE": null,
+            "ETO_OFR_LARGE_IMAGE": null,
+            "ETO_OFR_SMALL_IMAGE_WH": null,
+            "ETO_OFR_MEDIUM_IMAGE_WH": null,
+            "ETO_OFR_LARGE_IMAGE_WH": null,
+            "ETO_OFR_ORIGINAL_IMAGE_WH": null,
+            "ETO_OFR_MODREF_TYPE": "2",
+            "ETO_OFR_MODREFID": "2849152406033",
+            "ETO_OFR_DESC": "",
+            "DAY_DIFF_CEIL": "20",
+            "DAY_DIFF": "20",
+            "HR_DIFF": "491",
+            "MIN_DIFF": "29460",
+            "GL_COUNTRY_FLAG_SMALL": "https://1.imimg.com/country-flags/small/in_flag_s.png",
+            "GLUSR_USR_FAX_COUNTRY": "91",
+            "GLUSR_USR_PH_COUNTRY": "91",
+            "GLUSR_COMPANY": "Gowda Wholesale",
+            "GLUSR_NAME": "Jayaram ",
+            "NAME_AVAILABLE": "1",
+            "GLUSR_DESIGNATION": null,
+            "FK_GL_CITY_ID": "77035",
+            "GLUSR_CITY": "Bhanjanagar",
+            "FK_GL_STATE_ID": "6493",
+            "GLUSR_STATE": "Odisha",
+            "GLUSR_DISTRICT": "Ganjam",
+            "GL_CITY_DISTRICT_HQ": "90478",
+            "GLUSR_ADDRESS": null,
+            "ADDRESS_AVAILABLE": "0",
+            "GLUSR_USR_FAX_NUMBER": null,
+            "GLUSR_USR_FAX_AREA": null,
+            "GLUSR_ZIP": null,
+            "GLUSR_URL": null,
+            "GLUSR_COUNTRY": "India",
+            "GLUSR_COUNTRY_BUY": "India",
+            "ETO_OFR_IMAGE_PATH1": null,
+            "ETO_OFR_IMAGE_PATH2": null,
+            "ETO_OFR_IMAGE_PATH3": null,
+            "USER_IDENTIFIER_FLAG": "94",
+            "GLUSR_MOBILE": null,
+            "FK_GLCAT_CAT_ID": "61",
+            "ETO_OFR_DOC_PATH": null,
+            "GLUSR_USR_PH_NUMBER": null,
+            "GLUSR_USR_PH_AREA": null,
+            "GLUSR_USR_PH_MOBILE_ALT": null,
+            "GLUSR_USR_EMAIL": null,
+            "BUSINESS_TYPE": null,
+            "YEAR_OF_ESTABLISHMENT": null,
+            "INDIAMART_MEMBER_SINCE": "08-DEC-21",
+            "GLUSR_USR_MEMBERSINCE": "4+ years",
+            "GL_LEGAL_STATUS_VAL": null,
+            "GLUSR_USR_EMAIL_ALT": null,
+            "FK_ETO_OFR_TYPE_ID": null,
+            "FK_GL_MODULE_ID": "FENQ",
+            "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}",
+            "IS_ATTACHMENT": null,
+            "ADDITIONALINFO": null,
+            "ATTACHMENT_DETAIL": null,
+            "ETO_OFR_POSTDATE_ORIG": "18-APR-26",
+            "ETO_OFR_EXP_DATE": "21-APR-26",
+            "ETO_OFR_DELETIONDATE": "22-APR-26",
+            "BY_LEAD_TYPE": "3",
+            "PURCHASE_STATUS": "OPEN",
+            "LOGO_TYPE": "{\"0\":\"Not Verified\"}",
+            "PRIME_MCAT_NAME": "Bath Soaps",
+            "ETO_ENQ_PURPOSE": null,
+            "ETO_OFR_REQ_APP_USAGE": null,
+            "ETO_OFR_REQ_FREQ": null,
+            "ETO_OFR_GEOGRAPHY_ID": null,
+            "ETO_OFR_GEO_CITY1_ID": null,
+            "ETO_OFR_GEO_CITY2_ID": null,
+            "ETO_OFR_GEO_CITY3_ID": null,
+            "ETO_OFR_BUYER_IS_MOB_VERF": "1",
+            "ETO_OFR_BUYER_IS_GST_VERF": "0",
+            "ETO_OFR_BUYER_PRIME_MCATS": "FMCG Products,Lux Soaps,Palm Olein Oil",
+            "ETO_OFR_BUYER_PAST_SEARCH_MCAT": "Fmcg Products, Liquid Toilet Cleaners, Sabji Masala",
+            "ETO_OFR_BUYER_SELL_MCATS": null,
+            "ETO_OFR_BUYER_TOT_REQUIREMENT": "11",
+            "ETO_OFR_BUYER_TOT_UNQ_CALLS_CNT": "3",
+            "ETO_OFR_BUYER_REPLY_CNT": "14",
+            "ETO_OFR_EMAIL_VERIFIED": "1",
+            "EXPIRED_MESSAGE": "Sorry, this Buylead expired 16 days ago, Here are some similar leads for you",
+            "MCAT_IDS": "4267",
+            "GL_CITY_DISTRICT_HQ_NAME": "Ganjam",
+            "ORDER_VAL": null,
+            "IS_INDEX": "noindex,follow",
+            "BREADCRUMB_DETAILS": {
+              "GLCAT_MCAT_ID": "4267",
+              "GLCAT_MCAT_FLNAME": "bath-soaps",
+              "GLCAT_MCAT_NAME": "Bath Soaps"
+            },
+            "PRODUCTS_ENQUIRED": [],
+            "UNAVAILABLE_AFTER": "Tuesday, 21-Jul-26 00:00:00 EST",
+            "TITLE": "Bath Soaps buyer and buylead in Bhanjanagar,Odisha | ID: 142764424452",
+            "DESC": "Buyer is looking for Bath Soaps in Bhanjanagar,Odisha. Find buyers, buyleads, buying requirements and RFQs for Bath Soaps from India and abroad.",
+            "SUPPLIER_COUNT": 0,
+            "SUPPLIER_DETAIL": [],
+            "GLCAT_ALLCAT_GRP_ETOFNME": "cosmetics-toiletries",
+            "GLCAT_ALLCAT_ETOFNME": "cosmetics-toiletries",
+            "GLCAT_ALLCAT_GRP_ETOSNME": "Cosmetics & Personal Care",
+            "GLCAT_ALLCAT_DEFSHORTNAME": "Hand Sanitizers & Personal Hygiene",
+            "ETO_CREDITS": 200
+          },
+          "MESSAGE": "THE OFFER IS EXPIRED"
+        },
+        "unique_id": "69fdca1da333e"
+      }
+    },
+    {
+      "step": 2,
+      "name": "Payload Build",
+      "type": "transform",
+      "timestamp": "2026-05-08T17:03:48.734591",
+      "status": "success",
+      "duration_ms": 0,
+      "input": {
+        "ETO_OFR_TITLE": "Bath Soaps",
+        "PRIME_MCAT_NAME": "Bath Soaps",
+        "FK_GLCAT_MCAT_ID": "4267",
+        "ETO_OFR_APPROX_ORDER_VALUE": null,
+        "ETO_OFR_DESC": "",
+        "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}"
+      },
+      "output": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "Lifebuoy"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Weight",
+            "ISQ_RESPONSE": "100 g"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Variant",
+            "ISQ_RESPONSE": "Original"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Bath Soaps",
+        "mcat_flag": "-1",
+        "mcat_id": "4267",
+        "mcat_name": "Bath Soaps",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 142764424452,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 3,
+      "name": "Audit API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T17:04:16.365553",
+      "status": "success",
+      "duration_ms": 27630,
+      "endpoint": "http://3.108.184.25/categorization_outlier",
+      "input": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "Lifebuoy"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Weight",
+            "ISQ_RESPONSE": "100 g"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Variant",
+            "ISQ_RESPONSE": "Original"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Bath Soaps",
+        "mcat_flag": "-1",
+        "mcat_id": "4267",
+        "mcat_name": "Bath Soaps",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 142764424452,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      },
+      "output": {
+        "GLUSERID": "187147894",
+        "Generic_Category_Outlier_Flag": "False",
+        "ISQs": "[{'IM_SPEC_MASTER_DESC': 'Brand', 'ISQ_RESPONSE': 'Lifebuoy'}, {'IM_SPEC_MASTER_DESC': 'Weight', 'ISQ_RESPONSE': '100 g'}, {'IM_SPEC_MASTER_DESC': 'Variant', 'ISQ_RESPONSE': 'Original'}]",
+        "MAPPED_CATEGORY_ID": "4267",
+        "MCAT_GENERIC_FLAG": "None",
+        "PII_modified": {
+          "error_msg": "",
+          "status": "selected",
+          "tile_msg": ""
+        },
+        "PRODUCT_ITEM_ID": "142764424452",
+        "Service_mcat": "False",
+        "auditor_1_2_raw_response": {
+          "category": "Bath Soaps",
+          "category_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "",
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "skip_reason": "Skipped: no category_pool provided.",
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "category_agent_result": {
+            "new_category": "",
+            "new_category_id": "",
+            "new_category_reason": "rank_1_missing"
+          },
+          "category_pool": [],
+          "cross_entity_result": {
+            "data": {
+              "cost": 0.051363,
+              "cross_modal_api_raw_response": {
+                "task_1": {
+                  "primary_object": "soap bar"
+                },
+                "task_2": {
+                  "ocr_text": "Lifebuoy\nORIGINAL"
+                },
+                "task_3": {
+                  "product_search_query": "Lifebuoy Original Bath Soap"
+                },
+                "task_4": {
+                  "primary_object_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The primary object 'soap bar' is consistent with the product specifications that include Brand: Lifebuoy and Variant: Original.",
+                    "status": "not_outlier"
+                  },
+                  "primary_object_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The primary object 'soap bar' is consistent with the product title 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product photo of a soap bar aligns with the product specifications mentioning Brand: Lifebuoy and Variant: Original.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The product photo shows a soap bar, which aligns with the product title 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product title 'Bath Soaps' is consistent with the product specifications detailing Brand: Lifebuoy and Variant: Original.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_5": {
+                  "primary_object_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The primary object 'soap bar' is consistent with the category name 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product photo showing a soap bar aligns with the category name 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  },
+                  "product_specifications_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product specifications for a Lifebuoy soap are consistent with the category name 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product title 'Bath Soaps' directly corresponds to the category name 'Bath Soaps'.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_6": {
+                  "core_alignment_check": {
+                    "confidence": "high",
+                    "reason": "The product is a complete bath soap, directly matching the category and not a part, accessory, service, or used item.",
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "photo_category_verdict": {
+                "reason": "The primary object 'soap bar' is consistent with the category name 'Bath Soaps'.",
+                "status": "not_outlier"
+              },
+              "photo_spec_verdict": {
+                "reason": "The primary object 'soap bar' is consistent with the product specifications that include Brand: Lifebuoy and Variant: Original.",
+                "status": "not_outlier"
+              },
+              "photo_title_verdict": {
+                "reason": "The primary object 'soap bar' is consistent with the product title 'Bath Soaps'.",
+                "status": "not_outlier"
+              },
+              "prompt_used": "\nYou are a product catalog quality reviewer. You will analyze a product listing across image, text fields, and a category mapping, and return a strict JSON verdict for each defined task \n\nTwo images are attached to this request, in this exact order:\n  1) IMAGE 1 - Product Photo. The actual product being listed.\n  2) IMAGE 2 - Category Photo. A generic reference showing the type of product the category sells.\nDo not confuse the two images. \n\nIsolation rule for task 1 and task 2.\nFor Task 1 (Primary Object) and Task 2 (OCR), use ONLY the Product Photo above.\nDo NOT read, peek at, or use any of the Text Inputs declared further below in this prompt \n \nInstructions:\nTask 1:\n  Image Analysis: Carefully Detect the primary object from IMAGE 1 (Product Photo). \n  Avoid generic terms, unless no specific object can be inferred. Do not invent features not visible.\n\nTask 2:\n  - OCR (Optical Character Recognition): Carefully Extract text from the IMAGE 1 (Product Photo). \n  - Include only unique, clearly readable, product-related text (deduplicate repeated words/logos).\n  - Exclude watermarks, overlays, background patterns, decorative text, reflections, serials on wires/cables, partial or uncertain characters, repeated branding, and noise.\n  - Strictly base all OCR on the visible text and components in the provided image. Do not infer, normalize, correct, or hallucinate text. Preserve visible casing and spelling.\n  - If the image is noisy, include only confidently readable text.\n  - Max length: 200 characters.\n  - Do NOT read text from IMAGE 2 (attached to this request)\n\nProduct Title: Bath Soaps\nProduct Specifications: Brand: Lifebuoy, Weight: 100 g, Variant: Original\nCategory Name: Bath Soaps\nCategory Photo: provided as IMAGE 2 \n\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). \n\nTreat the Task 1 and Task 2 answers as fixed inputs . Do NOT revise them at this stage even if the text inputs suggest otherwise. \n\nTask 3:\nProduct Search Query : Generate a query using Primary Object (from Task 1) + OCR Extracted text (from Task 2) + Product Title + Product Specifications to represent the product.\n - Maximum word limit: 5.\n - Query should be relevant, grammatically correct, SEO-friendly for ecommerce search and should be able to represent the product. \n   Example: 1) bosch gsb550 power drill. \n            2) 5 ton hydraulic floor jack\n            3) 200 litre stainless storage tank\n            4) red cordless handheld vacuum\n - Recheck the query to make sure that it is meaningful.\n\nTask 4: Contradiction Check\nIdentify if there is contradiction in each pair below.\nAnalyze each pair independently. An \"outlier\" here requires a mismatch between the two listed sources. If the sources agree on the core fact, it is \"not outlier,\" even if one source is poorly formatted or has internal errors.\nIf the product title describes a service (e.g., 'Printing Services', 'Repair Service', 'Installation Service') and the photo shows the physical subject or substrate of that service, this is NOT a contradiction. Such photos are standard practice for service listings.\n  4a) Primary Object of IMAGE 1 (Product Photo) - Product Title\n   Only flag as outlier when the photo shows a fundamentally different product type - e.g., photo shows a motorcycle when title says 'bicycle', or photo shows a ceiling fan when title says 'table fan'. Specificity gaps (photo more specific than title) are never contradictions - e.g., a red cordless handheld vacuum cleaner photographed under the title 'Vacuum Cleaner' is not a contradiction.\n  4b) IMAGE 1 (Product Photo)  -  Product Title\n  4c) Primary Object of IMAGE 1 (Product Photo) -  Product Specifications\n  4d) IMAGE 1 (Product Photo)  - Product Specifications\n  4e) Product Title - Product Specifications \n\nTask 5: Category Analysis\nAnalyze the Category Name: Bath Soaps  and identify the type of products it represents. Refer to IMAGE 2 (Category Photo) for product class only. Refer to Category Photo IMAGE 2 Disclaimer below.\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). If image is missing, use Category Name for analysis.\nOnly flag as \"outlier\" if the entity does not belong in the category. Ignore spelling/formatting errors in the entities. \nA product being a specific variant, design, or themed version of the category product still belongs to the category. Only flag as outlier if the product is from a completely different product class. A character-themed keychain belongs in 'Fashion Keychain'. A holographic sticker belongs in 'PVC Stickers'. A specific institutional badge belongs in 'Corporate/School Event Badges'. An enamel coated wooden tray belongs in 'Wooden Tray'.\nUse the Category understanding from above to identify if there is a contradiction in:\n  5a) Primary Object of IMAGE 1 (Product Photo) - Category\n  5b) IMAGE 1 (Product Photo)  - Category\n  5c) Product Title - Category\n  5d) Product Specifications - Category\n\nTask 6: \nCore Alignment Check: Determine whether the Product (based on Title, Specifications, and IMAGE 1 (Product Photo) ) is any of the following relative to the mapped Category: \n- A Part or Component of the category product \n- An Accessory of the category product \n- A Service related to the category product \n- A Used / Second-Hand version of the category product \n- An entirely different / unrelated product \nIf ANY of the above conditions are true, mark as \"Outlier.\" \nIf the product IS the category product (new, whole, and complete), mark as \"Not Outlier.\"\n\nOutlier Examples (mark as Outlier): \n1. Car Vent Clip → Car AC Category [Reason: Clip is an accessory used near AC, not the AC unit itself] \n2. Blasting Machine Valve → Blasting Machine Category [Reason: Valve is a component/part of the machine] \n3. JCB Backhoe Loader Service → JCB Backhoe Loader Category [Reason: Service offering, not the physical machine] \n4. Second Hand Tractor → Tractor Category [Reason: Used/second-hand condition, not a new product] \n5. Generator Battery Cable → Generator Category [Reason: Cable is an accessory, not the generator itself]\n6. Washing Machine Repair Service → Washing Machine Category [Reason: Service, not a physical product] \n\nNot Outlier Examples (mark as Not Outlier): \n1. Adidas Unisex Trainers Samba OG Shoes → Adidas Shoes Category [Reason: Product is the complete shoe, directly matching the category] \n2. 4 Way Wooden Pallet 45X22X6 → Wooden Pallet Category [Reason: Product is a complete pallet unit as defined by the category] \n3. 5 Ton Hydraulic Floor Jack → Hydraulic Jack Category [Reason: Product is the complete jack unit, not a part or accessory] \n4. Komatsu PC200 Excavator (New) → Excavator Category [Reason: Product is a new, complete machine matching the category] \n5. Bosch GSB 550 Power Drill → Power Drill Category [Reason: Product is the complete drill unit, directly matching the category] \n\nEdge Case Guidance: - If a product name includes the category name but is still a part/service/accessory, mark as Outlier (e.g., \"Tractor Engine\" in Category \"Tractor\" = Outlier).\n\nConfidence and Verdict Definitions : Every verdict you return MUST be paired with a confidence level. There are no exceptions.\n\nConfidence value MUST be one of: high, medium, low,\n  high - Evidence is clear. No inference needed.\n  medium - Minor ambiguity or small inference needed, but the verdict is likely correct.\n  low - Significant uncertainty, weak evidence, or conflicting signals. \nYour verdict status MUST be directly consistent with your stated reason. If your reason contains words like 'aligns', 'matches', 'consistent', 'supports', or 'corresponds' - the status must be 'not_outlier'. If your reason contains 'contradicts', 'mismatch', 'inconsistent', 'different product', 'does not match' - the status must be 'outlier'. Never output a verdict that contradicts your own reasoning.\n\nGive all output in JSON format.\nGive response for task and subtasks of  task 4, task 5 and task 6 as outlier / not outlier / can't say for each subtask and its confidence (high/medium/low). Give one line reason for each subtask of task 4, task 5 and task 6.\n\n{\n    \"task_1\": {\n      \"primary_object\": \"\"\n    },\n    \"task_2\": {\n      \"ocr_text\": \"\"\n    },\n    \"task_3\": {\n      \"product_search_query\": \"\"\n    },\n    \"task_4\": {\n      \"primary_object_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product title are not available, so consistency between them cannot be verified.\"\n      },\n      \"product_photo_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product title are not available to confirm alignment.\"\n      },\n      \"primary_object_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product specifications are missing, preventing alignment validation.\"\n      },\n      \"product_photo_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product specifications are not available to assess alignment.\"\n      },\n      \"product_title_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and product specifications are unavailable to confirm consistency.\"\n      }\n    },\n    \"task_5\": {\n      \"primary_object_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and category name are not available to verify category alignment.\"\n      },\n      \"product_photo_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and category name are not available to confirm alignment.\"\n      },\n      \"product_title_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and category name are not available to assess alignment.\"\n      },\n      \"product_specifications_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product specifications and category name are missing, preventing category validation.\"\n      }\n    },\n    \"task_6\": {\n      \"core_alignment_check\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Insufficient information to verify whether the product is a complete unit matching the category definition.\"\n      }\n    }\n  }\n",
+              "response_time": 3.417,
+              "retry_token": false,
+              "specs_category_verdict": {
+                "reason": "The product specifications for a Lifebuoy soap are consistent with the category name 'Bath Soaps'.",
+                "status": "not_outlier"
+              },
+              "title_category_verdict": {
+                "reason": "The product title 'Bath Soaps' directly corresponds to the category name 'Bath Soaps'.",
+                "status": "not_outlier"
+              },
+              "title_spec_verdict": {
+                "reason": "The product title 'Bath Soaps' is consistent with the product specifications detailing Brand: Lifebuoy and Variant: Original.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 742,
+                "prompt_tokens": 2739,
+                "total_tokens": 3481
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "Bath Soaps",
+          "photo_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "google/gemini-3-flash-preview",
+              "photo_api_raw_response": {
+                "task_1": {
+                  "image_visibility_assessment": {
+                    "checks": {
+                      "generally_unclear_or_incomplete": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "human_blocking_product": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_cut_off": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_obscured_or_blocked": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "unidentifiable_blur_or_pixelation": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      }
+                    },
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "photo_quality_check": {
+                "reason": "",
+                "status": "not_outlier"
+              },
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "pii_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "fallback_model_flag": false,
+              "model": "",
+              "pii_analysis": {
+                "aadhaar_id": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "email_address": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "overall_status": "APPROVED",
+                "pan_card": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "phone_number": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "upi_id": {
+                  "status": "Not Detected",
+                  "value": null
+                }
+              },
+              "pii_status": {
+                "overall_status": "APPROVED",
+                "reason": ""
+              },
+              "prompt_used": "PII Agent:\n\nInput:\n  Image: provided alongside this prompt.\n  Use it to visually confirm INTRINSIC vs EXTRINSIC\n  for every detected value. Image context takes\n  priority over text-based CONTEXT_TYPE inference.\n  OCR Text: Lifebuoy\nORIGINAL\n  Product Title: Bath Soaps\n  Product Description: (none)\n  Product Specifications: Brand: Lifebuoy\nWeight: 100 g\nVariant: Original\n\nPre-filtered Candidates (from code layer):\n  email_candidates   : none\n  numeric_candidates : detected by digit-pattern filter — LLM confirms if phone\n  social_candidates  : detected by LLM scan\n\n════════════════════════════════════════\nSTEP 1 — PRE-PROCESSING\n════════════════════════════════════════\nExtract and store before scanning:\n  - BRAND_NAME      : Seller/brand name from title or description\n  - PRODUCT_TOKENS  : Any value labeled as model no, SKU, item code,\n                      part no, barcode, HSN, GST, EAN, batch, serial,\n                      invoice, ref, order id\n  - CONTEXT_LABELS  : Section heading nearest to each detected value\n  - CONTEXT_TYPE    : For each detected value, classify source as:\n                      INTRINSIC → printed on physical product /\n                                  manufacturer packaging / engraved label\n                      EXTRINSIC → digital overlay, banner, watermark,\n                                  business card, screenshot element\n                      UNKNOWN   → cannot determine\n  - CONTACT_INTENT  : Look at the image and answer:\n                      \"Does this image show a phone number that a buyer\n                       would call or WhatsApp to reach the seller?\"\n                      SELLER_CONTACT → yes, number is for buyer to reach seller\n                                       (label, banner, business card, packaging\n                                        with contact info, promotional graphic)\n                      CS_ONLY        → only toll-free / customer care numbers\n                      NONE           → no contact number visible\n                      UNKNOWN        → cannot determine from image\n  - IS_TEMPLATE     : Set True if the listing is a product template,\n                      sample design, mock-up, or blank form\n                      (e.g. ID card template, visiting card sample,\n                      letterhead design, label template)\n                      Signal words: \"template\", \"sample\", \"mock\",\n                      \"design\", \"blank\", \"dummy\", \"specimen\",\n                      \"id card\", \"visiting card\", \"business card design\",\n                      \"brochure design\", \"pamphlet design\", \"flyer design\",\n                      \"product brochure\", \"lorem ipsum\"\n\nTEMPLATE RULE: If IS_TEMPLATE is True, all detected PII values are\ntreated as sample/placeholder data — mark all fields Not Detected.\nSample names (John Smith, Jane Doe), sample phones, sample emails\non a template product are not real PII.\n\n════════════════════════════════════════\nSTEP 2 — FIELD SCANNING\n════════════════════════════════════════\nFields not listed below were cleared by the code layer\nand are already decided as Not Detected. Only evaluate\nthe fields explicitly listed here.\n\n\n\n════════════════════════════════════════\nSTEP 3 — OUTPUT\n════════════════════════════════════════\nReturn ONLY valid JSON for the fields listed above.\nNo explanation, no markdown fences.\n\n{\n\n}",
+              "response_time": 0.0,
+              "retry_token": false,
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "predicted_titles": [
+            "luxury bath soaps set",
+            "Lifebuoy Original 100g soap",
+            "Lifebuoy Original Bath Soap"
+          ],
+          "response_time": "26.35s",
+          "specs": [
+            {
+              "IM_SPEC_MASTER_DESC": "Brand",
+              "ISQ_RESPONSE": "Lifebuoy"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Weight",
+              "ISQ_RESPONSE": "100 g"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Variant",
+              "ISQ_RESPONSE": "Original"
+            }
+          ],
+          "specs_agent_output": {
+            "data": {
+              "contradiction_in_specs": {
+                "reason": "No internal contradictions found in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "cost": 0.008397,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Specifications: Brand: Lifebuoy, Weight: 100 g, Variant: Original\n\n    Instructions:\n\n    Task 1: \n    Product Specifications: Brand: Lifebuoy, Weight: 100 g, Variant: Original Assessment:\n        a) Spelling Error in Product Specifications: \n           - Flag words that are contextually incorrect for an industrial listing.\n           - Flag only clear typos in common dictionary words (e.g., \"Steel\" vs \"Stel\").\n           - Guardrail: DO NOT flag brand names, model numbers (e.g., \"L805\", \"GGT\"), or unit concatenations (e.g., \"70ltr\", \"20inch\", \"400kg.up\"). These are standard in industrial listings.\n\n        b) Contradiction/ Redundancy in Product Specifications: Flag as \"outlier\" only if values are physically impossible to coexist (e.g., Material: Wood and Material: Stainless Steel). \n           (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Specification Based Query: Generate a  query using Product Specifications. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1 as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"specification_based_query\": \"\"\n    }\n    }\n    ",
+              "response_time": 2.063,
+              "retry_token": false,
+              "specs_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "No internal contradictions found in the provided product specifications.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "No spelling errors detected in the provided product specifications.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "specification_based_query": "Lifebuoy Original 100g soap"
+                }
+              },
+              "spell_error_in_specs": {
+                "reason": "No spelling errors detected in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 123,
+                "prompt_tokens": 441,
+                "total_tokens": 564
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "text_agent_output": {
+            "data": {
+              "cost": 0.007641,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Title: Bath Soaps\n\n    Instructions:\n\n    Task 1: \n    Product Title: Bath Soaps Assessment:\n        a) Spelling Error in Title: Flag words that are contextually incorrect for an industrial listing.\n        b) Contradiction in Product Title: Flag logical conflicts (e.g., \"Manual Automatic Machine\").\n        Constraint: Do NOT flag If title contains multiple product nouns, verify category supports kits/sets.(e.g., \" Pump and Motor Set,  Razor with Blade set.”)\n        (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Title Based Query: Generate a  query enhancing Product Title. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1  as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"title_based_query\": \"\"\n    }\n}\n",
+              "response_time": 26.348,
+              "retry_token": false,
+              "textual_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "The product title 'Bath Soaps' does not contain any internal contradictions.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "The provided product title 'Bath Soaps' does not contain any spelling errors.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "title_based_query": "luxury bath soaps set"
+                }
+              },
+              "title_contradiction_outlier": {
+                "reason": "The product title 'Bath Soaps' does not contain any internal contradictions.",
+                "status": "not_outlier"
+              },
+              "title_spell_outlier": {
+                "reason": "The provided product title 'Bath Soaps' does not contain any spelling errors.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 128,
+                "prompt_tokens": 337,
+                "total_tokens": 465
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "total_cost": 0.067401
+        },
+        "base_suggestion": [
+          {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "reason": "",
+            "source": ""
+          }
+        ],
+        "cataloging_error": true,
+        "categorization_error": false,
+        "custtype": "53",
+        "datetime": "2026-05-08 05:03:50 PM",
+        "display_name": "",
+        "ensemble_confidence": null,
+        "error": "cannot unpack non-iterable bool object",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": "1",
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_name": "Bath Soaps",
+        "location_flag": {
+          "biztype": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          },
+          "location": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          }
+        },
+        "log_type": "Auditor",
+        "mcat_flag": "-1",
+        "mcat_is_generic_flag": null,
+        "mcat_name": "Bath Soaps",
+        "mcat_pool": "[]",
+        "missing_img": "True",
+        "modid": "GLADMIN",
+        "no_category_found": "False",
+        "non_llm_raw_response": {
+          "category": "Bath Soaps",
+          "duplicate_title_output": {
+            "data": {
+              "duplicate_title_raw_response": {},
+              "response_time": 10.008
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "Bath Soaps",
+          "location_biztype_output": {
+            "data": {
+              "location_biztype_raw_response": {},
+              "response_time": 10.007
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "response_time": 20.015
+        },
+        "pc_item_id": 142764424452,
+        "photo_category_outlier": {
+          "reason": "The primary object 'soap bar' is consistent with the category name 'Bath Soaps'.",
+          "status": "not_outlier"
+        },
+        "photo_quality_verdict": "not_outlier",
+        "photo_qualtiy_reason": "",
+        "photo_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_spec_verdict_reason": "",
+        "photo_title_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_title_verdict_reason": "",
+        "pii_flag": "selected",
+        "price": "0",
+        "price_flag": {
+          "final_verdict": "outlier",
+          "price_raw_response": "{'absurd_flag': '1', 'err_text': 'Prod price <= Q1/10', 'in_product_id': 0, 'absurd_price_unit_flag': '3', 'response_time_ms': 0.047021, 'status_code': 200}",
+          "reason": "Price Absurd"
+        },
+        "process_name": "Multiagent Auditor New Arch 1.2",
+        "product_search_query": [
+          "luxury bath soaps set",
+          "Lifebuoy Original 100g soap",
+          "Lifebuoy Original Bath Soap"
+        ],
+        "response_time": 26.36,
+        "screen_name": "live_product_approval",
+        "secondary_image": "False",
+        "secondary_mcats": [],
+        "specs_category_outlier": {
+          "reason": "The product specifications for a Lifebuoy soap are consistent with the category name 'Bath Soaps'.",
+          "status": "not_outlier"
+        },
+        "specs_contradiction_verdict": "not_outlier",
+        "specs_contradiction_verdict_reason": "No internal contradictions found in the provided product specifications.",
+        "specs_quality_reason": "No spelling errors detected in the provided product specifications.",
+        "specs_quality_verdict": "not_outlier",
+        "status": 500,
+        "suggested_mcat": {
+          "suggested_mcats": [
+            {
+              "confidence": "",
+              "id": "",
+              "name": "",
+              "rank": "",
+              "source": ""
+            }
+          ]
+        },
+        "title_category_outlier": {
+          "reason": "The product title 'Bath Soaps' directly corresponds to the category name 'Bath Soaps'.",
+          "status": "not_outlier"
+        },
+        "title_contradiction_verdict": "not_outlier",
+        "title_contradiction_verdict_reason": "The product title 'Bath Soaps' does not contain any internal contradictions.",
+        "title_quality_reason": "The provided product title 'Bath Soaps' does not contain any spelling errors.",
+        "title_quality_verdict": "not_outlier",
+        "title_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "title_spec_verdict_reason": "The product title 'Bath Soaps' is consistent with the product specifications detailing Brand: Lifebuoy and Variant: Original.",
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 4,
+      "name": "Retail Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-08T17:04:17.325638",
+      "status": "success",
+      "duration_ms": 960,
+      "input": {
+        "Display_id": "142764424452",
+        "Title": "Bath Soaps",
+        "MCAT": "Bath Soaps",
+        "MCAT_id": "4267",
+        "MCAT_Unit": "",
+        "Retail_Flag": "Yes",
+        "ISQ": {
+          "Brand": "Lifebuoy",
+          "Weight": "100 g",
+          "Variant": "Original"
+        },
+        "Qty": "",
+        "Order_Value": "",
+        "Buyer_profile": {
+          "Sells": "No Selling Activity",
+          "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+        },
+        "BL_card": [],
+        "Slab": "no_slab",
+        "bl_apprvd": 0,
+        "pur": 0,
+        "pur_retailer": 0,
+        "pur_wholesaler": 0,
+        "retail_ni": 0,
+        "ni_retailer": 0,
+        "ni_wholesaler": 0,
+        "evidence_count": 0,
+        "evidence_match": "no_data",
+        "q1": 0,
+        "median": 0,
+        "q3": 0,
+        "price_match": "no_data"
+      },
+      "raw_output": "{\n  \"Display_id\": 142764424452,\n  \"Classification\": \"UNCLASSIFIED\",\n  \"Classi_Score\": null,\n  \"Confidence\": \"None\",\n  \"Reason\": \"Classification skipped — Quantity is missing or invalid.\"\n}",
+      "parsed": {
+        "Display_id": 142764424452,
+        "Classification": "UNCLASSIFIED",
+        "Classi_Score": null,
+        "Confidence": "None",
+        "Reason": "Classification skipped — Quantity is missing or invalid."
+      },
+      "llm_messages": {
+        "system": "You are an Expert Retail Classification Agent specializing in Indian B2B marketplace requirements.\nYou have deep knowledge of Indian trade behavior, category-level procurement norms, buyer personas,\nand the distinction between retail resale procurement vs. wholesale/industrial/institutional buying.\n\n===========================================\nINPUT\n===========================================\n- Display ID      : 142764424452\n- Category Name   : Bath Soaps\n- Category ID     : 4267\n- Category & Unit : \n- Retail Flag     : Yes\n- Quantity        : \n- Order Value     : \n- Median Price    : 0\n- Quantity Slab   : no_slab\n\nMarketplace Behavioral Signals (same Category + Qty Slab):\n- Total BL Purchases      : 0\n- Retailer Purchases      : 0\n- Wholesaler Purchases    : 0\n- Retailer NI Feedback    : 0\n- Wholesaler NI Feedback  : 0\n- Retail NI (overall)     : 0\n- Overall BL Approvals    : 0\n\nEvidence Provenance (how the signals above were sourced):\n- Evidence Match Level    : no_data\n    \"exact\"     = the numbers above are from the SAME (Category, Unit, Quantity Slab) bucket — strongest signal\n    \"unit_only\" = exact slab had no data; the numbers are aggregated across ALL slabs of this (Category, Unit) — weaker signal, treat as directional\n    \"no_data\"   = NO matching historical data was found for this (Category, Unit); ALL signal numbers above are zeros and carry NO information — DO NOT interpret zeros as a real \"no purchases / no NI\" signal\n- Evidence Sample Size    : 0   (number of historical BL rows aggregated)\n\n===========================================\nGUARDRAIL — QUANTITY REQUIRED (HARD STOP)\n===========================================\nIF Quantity is missing, null, blank, or unparseable:\n  → Do NOT attempt any classification\n  → Return immediately:\n\n{\n  \"Display_id\"      : 142764424452,\n  \"Classification\"  : \"UNCLASSIFIED\",\n  \"Classi_Score\"    : null,\n  \"Confidence\"      : \"None\",\n  \"Reason\"          : \"Classification skipped — Quantity is missing or invalid.\"\n}\n\nDo not proceed further. Quantity is mandatory for classification.\n\n===========================================\nGUARDRAIL — HARD NON-RETAIL RULES\n===========================================\nBefore applying any framework, check these absolute overrides.\nIf ANY condition below is true → classify as NON-RETAIL immediately, regardless of other signals.\n\nUNIT-BASED OVERRIDES (always Non-Retail):\n  - Quantity unit is: Ton, Tonne, MT, Metric Ton, Quintal, KL, Kilolitre\n  - Quantity unit is KG and quantity ≥ 200 KG\n  - Quantity unit is Litre and quantity ≥ 200 Litres\n\nCATEGORY-BASED OVERRIDES (always Non-Retail):\n  These categories are inherently industrial, institutional, or trade-use — never retail resale:\n  - Chemicals (industrial, agricultural, lab, cleaning)\n  - Raw materials (metals, minerals, ores, polymers, resins)\n  - Machinery, equipment, machine parts, tools\n  - Construction materials (cement, TMT bars, bricks, aggregates, pipes)\n  - Electrical & electronic components (wires, switches, panels, transformers)\n  - Fuels, lubricants, industrial oils\n  - Pharmaceutical APIs, bulk drugs, hospital consumables\n  - Agricultural inputs (fertilizers, pesticides, seeds in bulk)\n  - Packaging raw material in bulk (rolls, master sheets, industrial film)\n  - B2B services (logistics, printing, fabrication)\n\nIf a hard override applies → set Confidence = \"High\" and note override in Reason.\n\n===========================================\nCORE CLASSIFICATION FRAMEWORK\n===========================================\nOnly apply this framework if no hard override triggered above.\n\n--- STEP 1: QUANTITY & ORDER VALUE CONTEXT ---\n\nKey principle:\n  RETAIL = buying to RESELL to end consumers (kirana, pharmacy, hardware, general store)\n  NON-RETAIL = buying for own use, further processing, or wholesale distribution\n\nQuantity signals:\n  - Small, shop-friendly quantities → lean Retail\n  - Very large quantities → lean Non-Retail\n  - \"Large\" is category-relative — apply Indian market norms:\n      FMCG / grocery      : >200 units likely Non-Retail\n      Bottles / packaging : >200 units likely Non-Retail\n      Apparel / footwear  : >50 pieces likely Non-Retail\n      Stationery          : >100 units likely Non-Retail\n      Electronics         : >40 units likely Non-Retail\n\nCRITICAL — Do not confuse \"re-sell\" with \"personal use\":\n  Any quantity clearly beyond personal consumption IS B2B.\n  The question is whether the buyer is a RETAILER (resells to consumers)\n  or a WHOLESALER / DISTRIBUTOR / INDUSTRIAL buyer (resells to businesses or uses in trade).\n\n  Example: 160 bottles — clearly not personal use.\n  Ask: Is 160 bottles a retail shop's stock quantity or a distributor's lot?\n  → For bottles: a kirana or general store may stock 50–150 units. 160 is borderline retail.\n  → For a distributor: 160 is too small. They typically buy 500+.\n  → Verdict: leans Retail, but check category and signals before finalizing.\n\n--- STEP 2: CATEGORY NATURE ASSESSMENT ---\n\nClassify the MCAT into one of these orientations BEFORE using signals:\n\n  RETAIL-ORIENTED categories (commonly stocked by retail shops):\n    FMCG, food & beverages, personal care, household items, stationery,\n    apparel, footwear, toys, crockery, general merchandise, OTC pharma,\n    consumer electronics accessories, packaged goods\n\n  NEUTRAL categories (can go either way — rely on quantity + signals):\n    Packaging materials, plastics, bottles, containers, fabric, paper,\n    furniture, hardware, small tools, agricultural produce\n\n  NON-RETAIL-ORIENTED categories (industrial/institutional by nature):\n    Chemicals, raw materials, machinery, construction, electrical components,\n    bulk pharma, fuels, B2B services (already covered in hard overrides above)\n\n--- STEP 3: MARKETPLACE PURCHASE SIGNAL ANALYSIS ---\n\nEvaluate retailer vs wholesaler purchase split for this category + slab:\n  - Retailer purchase share > 60%  → Retail signal\n  - Wholesaler purchase share > 60% → Non-Retail signal\n  - Mixed (40–60% split)            → Neutral, rely on other steps\n\nThese are directional signals only — not conclusive proof.\n\n--- STEP 4: NI (NEED INTENT) SIGNAL ANALYSIS ---\n\n  High retailer NI + high retailer transactions    → Strong Retail signal\n  High wholesaler NI + high wholesaler transactions → Strong Non-Retail signal\n  High retailer transactions + high wholesaler NI  → Leans Retail\n    (actual transaction behavior outweighs stated intent)\n  Low NI data overall                              → Reduce confidence, use other signals\n\n--- STEP 5: HOLISTIC JUDGMENT ---\n\nWeigh all steps together with this priority order:\n  1. Hard override rules (absolute)\n  2. Category nature (strong prior)\n  3. Quantity relative to category norms (strong signal)\n  4. Marketplace purchase signals (supporting)\n  5. NI feedback signals (supporting)\n\nWhen signals conflict → category nature + quantity context wins.\nNever classify as Retail if quantity is implausibly large for any retail shop to stock.\n\n===========================================\nSCORING LOGIC\n===========================================\n\nClassi_Score reflects strength of the classification signal (0 to 1):\n\n  1.0  → Hard override OR all signals unanimously agree\n  0.8  → Strong category + quantity alignment + supporting signals agree\n  0.6  → Category/quantity lean one way, signals are mixed\n  0.4  → Weak signals, borderline quantity, conflicting data\n  0.2  → Very sparse data, classification is a best guess\n\nConfidence:\n  High   → Hard override triggered OR 3+ signals clearly aligned\n  Medium → 2 signals aligned, 1 conflicting or missing\n  Low    → Sparse data, ambiguous quantity, neutral category\n\nDATA-PROVENANCE OVERRIDES on Confidence:\n  - If Evidence Match Level == \"no_data\" → Confidence MUST be at most \"Low\".\n    All BL signal numbers (purchases, NI, approvals) are zeros by default and carry NO information.\n    Lean entirely on category nature + quantity context to classify, and reflect this uncertainty in Reason.\n  - If Evidence Match Level == \"unit_only\" → cap Confidence at \"Medium\".\n    The signals are real but were aggregated across all qty slabs (not the buyer's specific slab),\n    so they are directional, not bucket-specific.\n  - If Evidence Sample Size < 3 → reduce Confidence by one level\n    (a 1- or 2-row aggregate is too thin to weigh heavily even if it matches exactly).\n\n===========================================\nOUTPUT FORMAT (STRICT JSON ONLY)\n===========================================\n{\n  \"Display_id\"      : 142764424452,\n  \"Classification\"  : \"RETAIL | NON-RETAIL | UNCLASSIFIED\",\n  \"Classi_Score\"    : <0.0 to 1.0 or null>,\n  \"Confidence\"      : \"High | Medium | Low | None\",\n  \"Override_Applied\": \"Yes — <rule name> | No\",\n  \"Reason\"          : \"<Max 30 words explaining the classification verdict>\"\n}\n\n===========================================\nIMPORTANT GUIDELINES\n===========================================\n- Quantity is MANDATORY — never classify without it\n- Hard override rules are absolute — no signal can reverse them\n- Never confuse \"not personal use\" with \"retail\" — re-selling to consumers = Retail,\n  re-selling to businesses or using in trade = Non-Retail\n- Category nature is a strong prior — apply Indian market knowledge\n- Marketplace signals are supportive only — never let them override category + quantity logic\n- Large bulk units (Ton, Quintal, MT, KL) = always Non-Retail, no exceptions\n- Always triangulate — never over-index on a single signal\n- Return STRICT valid JSON only — no markdown, no text outside the JSON block\n",
+        "user": "Display_id: 142764424452\nMCAT: Bath Soaps\nMCAT_id: 4267\nMCAT_Unit: \nRetail_Flag: Yes\nQty: \nOrder_Value: \nmedian: 0\nSlab: no_slab\nbl_apprvd: 0\npur: 0\npur_retailer: 0\npur_wholesaler: 0\nretail_ni: 0\nni_retailer: 0\nni_wholesaler: 0\nevidence_match: no_data\nevidence_count: 0"
+      },
+      "sub_steps": [
+        {
+          "seq": 1,
+          "node": "prepare_input",
+          "fn": "_build_offer_source",
+          "input": {
+            "offer_id": "142764424452"
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "FMCG Products,Lux Soaps,Palm Olein Oil"
+              }
+            ],
+            "BL_card_data": []
+          }
+        },
+        {
+          "seq": 2,
+          "node": "prepare_input",
+          "fn": "_bl_detail_and_keys",
+          "input": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "FMCG Products,Lux Soaps,Palm Olein Oil"
+              }
+            ],
+            "BL_card_data": []
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "MCAT_Unit": "",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Brand": "Lifebuoy",
+              "Weight": "100 g",
+              "Variant": "Original"
+            },
+            "Qty": "",
+            "Order_Value": "",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+            },
+            "BL_card": []
+          }
+        },
+        {
+          "seq": 3,
+          "node": "prepare_input",
+          "fn": "_extract_qty",
+          "input": {
+            "qty_str": ""
+          },
+          "output": null
+        },
+        {
+          "seq": 4,
+          "node": "prepare_input",
+          "fn": "_get_slab",
+          "input": {
+            "qty": null
+          },
+          "output": "no_slab"
+        },
+        {
+          "seq": 5,
+          "node": "prepare_input",
+          "fn": "_normalize_mcat_unit",
+          "input": {
+            "value": ""
+          },
+          "output": ""
+        },
+        {
+          "seq": 6,
+          "node": "prepare_input",
+          "fn": "_load_evidence_metrics",
+          "input": {
+            "slab_key": "(skipped)",
+            "unit_key": ""
+          },
+          "output": {
+            "match_level": "no_data",
+            "metrics": {
+              "bl_apprvd": 0,
+              "pur": 0,
+              "pur_retailer": 0,
+              "pur_wholesaler": 0,
+              "retail_ni": 0,
+              "ni_retailer": 0,
+              "ni_wholesaler": 0,
+              "bucket_count": 0
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "node": "prepare_input",
+          "fn": "_find_price_data",
+          "input": {
+            "norm_unit": ""
+          },
+          "output": {
+            "match_level": "no_data",
+            "price": {
+              "q1": 0,
+              "median": 0,
+              "q3": 0
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "node": "prepare_input",
+          "fn": "_merge_inputs[result]",
+          "input": {
+            "offer_keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card"
+            ]
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "MCAT_Unit": "",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Brand": "Lifebuoy",
+              "Weight": "100 g",
+              "Variant": "Original"
+            },
+            "Qty": "",
+            "Order_Value": "",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+            },
+            "BL_card": [],
+            "Slab": "no_slab",
+            "bl_apprvd": 0,
+            "pur": 0,
+            "pur_retailer": 0,
+            "pur_wholesaler": 0,
+            "retail_ni": 0,
+            "ni_retailer": 0,
+            "ni_wholesaler": 0,
+            "evidence_count": 0,
+            "evidence_match": "no_data",
+            "q1": 0,
+            "median": 0,
+            "q3": 0,
+            "price_match": "no_data"
+          }
+        },
+        {
+          "seq": 1,
+          "node": "classify",
+          "fn": "_read_prompt",
+          "input": {
+            "path": "C:\\Users\\Imart\\Documents\\GitHub\\BL-Auditor\\app\\retail_agent\\prompt.md"
+          },
+          "output": {
+            "char_count": 9753
+          }
+        },
+        {
+          "seq": 2,
+          "node": "classify",
+          "fn": "_render_template",
+          "input": {
+            "variables": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card",
+              "Slab",
+              "bl_apprvd",
+              "pur",
+              "pur_retailer",
+              "pur_wholesaler",
+              "retail_ni",
+              "ni_retailer",
+              "ni_wholesaler",
+              "evidence_count",
+              "evidence_match",
+              "q1",
+              "median",
+              "q3",
+              "price_match"
+            ]
+          },
+          "output": {
+            "char_count": 9525
+          }
+        },
+        {
+          "seq": 3,
+          "node": "classify",
+          "fn": "build_user_message",
+          "input": {
+            "keys": [
+              "Display_id",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "Qty",
+              "Order_Value",
+              "median",
+              "Slab",
+              "bl_apprvd",
+              "pur",
+              "pur_retailer",
+              "pur_wholesaler",
+              "retail_ni",
+              "ni_retailer",
+              "ni_wholesaler",
+              "evidence_match",
+              "evidence_count"
+            ]
+          },
+          "output": "Display_id: 142764424452\nMCAT: Bath Soaps\nMCAT_id: 4267\nMCAT_Unit: \nRetail_Flag: Yes\nQty: \nOrder_Value: \nmedian: 0\nSlab: no_slab\nbl_apprvd: 0\npur: 0\npur_retailer: 0\npur_wholesaler: 0\nretail_ni: 0\nni_retailer: 0\nni_wholesaler: 0\nevidence_match: no_data\nevidence_count: 0"
+        },
+        {
+          "seq": 4,
+          "node": "classify",
+          "fn": "ChatOpenAI.ainvoke",
+          "input": {
+            "model": "openai/gpt-oss-120b",
+            "base_url": "https://api.groq.com/openai/v1",
+            "system_chars": 9525,
+            "user_chars": 269
+          },
+          "output": {
+            "response_chars": 188,
+            "preview": "{\n  \"Display_id\": 142764424452,\n  \"Classification\": \"UNCLASSIFIED\",\n  \"Classi_Score\": null,\n  \"Confidence\": \"None\",\n  \"Reason\": \"Classification skipped — Quantity is missing or invalid.\"\n}"
+          }
+        },
+        {
+          "seq": 5,
+          "node": "classify",
+          "fn": "_clean_classifier_output",
+          "input": {
+            "raw_chars": 188
+          },
+          "output": {
+            "Display_id": 142764424452,
+            "Classification": "UNCLASSIFIED",
+            "Classi_Score": null,
+            "Confidence": "None",
+            "Reason": "Classification skipped — Quantity is missing or invalid."
+          }
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "name": "Price Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-08T17:04:18.686028",
+      "status": "success",
+      "duration_ms": 1360,
+      "input": {
+        "Display_id": "142764424452",
+        "Title": "Bath Soaps",
+        "MCAT": "Bath Soaps",
+        "MCAT_id": "4267",
+        "MCAT_Unit": "",
+        "Retail_Flag": "Yes",
+        "ISQ": {
+          "Brand": "Lifebuoy",
+          "Weight": "100 g",
+          "Variant": "Original"
+        },
+        "Qty": "",
+        "Order_Value": "",
+        "Buyer_profile": {
+          "Sells": "No Selling Activity",
+          "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+        },
+        "BL_card": [],
+        "Slab": "no_slab",
+        "bl_apprvd": 0,
+        "pur": 0,
+        "pur_retailer": 0,
+        "pur_wholesaler": 0,
+        "retail_ni": 0,
+        "ni_retailer": 0,
+        "ni_wholesaler": 0,
+        "evidence_count": 0,
+        "evidence_match": "no_data",
+        "q1": 0,
+        "median": 0,
+        "q3": 0,
+        "price_match": "no_data"
+      },
+      "raw_output": "{\n  \"Display_id\": \"142764424452\",\n  \"Price_Results\": \"Unverifiable\",\n  \"Price_Score\": 0.0,\n  \"Confidence\": \"Low\",\n  \"Quantity\": \"\",\n  \"Qty_Normalized\": \"\",\n  \"Price_Value\": \"\",\n  \"Price_Value_By_AI\": \"\",\n  \"Unit_Price_Used\": \"\",\n  \"Unit_Price_Logic\": \"No median; cannot compute price.\",\n  \"BL_Data_Quality\": \"Absent\",\n  \"BL_Items_Used\": [],\n  \"Tolerance_Applied\": \"\",\n  \"Deviation_Pct\": \"\",\n  \"Price_Reason\": \"No reference price data; median and Q3 missing.\"\n}",
+      "parsed": {
+        "Display_id": "142764424452",
+        "Price_Results": "Unverifiable",
+        "Price_Score": 0.0,
+        "Confidence": "Low",
+        "Quantity": "",
+        "Qty_Normalized": "",
+        "Price_Value": "",
+        "Price_Value_By_AI": "",
+        "Unit_Price_Used": "",
+        "Unit_Price_Logic": "No median; cannot compute price.",
+        "BL_Data_Quality": "Absent",
+        "BL_Items_Used": [],
+        "Tolerance_Applied": "",
+        "Deviation_Pct": "",
+        "Price_Reason": "No reference price data; median and Q3 missing."
+      },
+      "llm_messages": {
+        "system": "You are an expert Pricing Audit Agent for Indian B2B buyer requirements.\nYou have deep knowledge of Indian wholesale pricing, commodity markets, B2B trade norms,\nunit conversions, and realistic price bands across product categories.\n\n===========================================\nINPUT\n===========================================\n- Display_id    : 142764424452\n- Title         : Bath Soaps\n- MCAT          : Bath Soaps\n- Qty           : \n- Order_Value   : \n- Median_Price  : 0   ← per unit median price (most trusted anchor)\n- Q3_Price      : 0 ← per unit Q3 price (outlier filter only)\n- BL_card       : []\n\nReference-Data Provenance:\n- Price Match     : no_data\n    \"exact\"   = Median_Price and Q3_Price came from a real mcat_data row for this (Category, Unit)\n    \"no_data\" = no row matched; Median_Price/Q3_Price are ZEROS and CANNOT be used as anchors\n- Evidence Match  : no_data\n    \"exact\"     = matched the same (Category, Unit, Slab) historical bucket\n    \"unit_only\" = aggregated across all slabs of this (Category, Unit)\n    \"no_data\"   = no historical buylead data for this (Category, Unit)\n- Evidence Count  : 0   (sample size behind the evidence aggregates above)\n\n===========================================\nSTEP 1 — NORMALIZE QTY & UNIT\n===========================================\nExtract the numeric quantity and unit from Qty field.\n\nApply these standard normalizations:\n\n  Weight  : g, gm, gram → G  |  kg, kilo, kilogram → KG  |  ton, tonne, MT → TON\n  Volume  : ml, millilitre → ML  |  l, ltr, litre → LITRE\n  Count   : piece, pieces, pcs, pc, nos → PIECE  |  bottle, bottles, btl → BOTTLE\n             box, boxes → BOX  |  pack, packet, packets → PACK  |  bag, bags → BAG\n             roll, rolls → ROLL  |  sheet, sheets → SHEET  |  set, sets → SET\n             dozen → DOZEN (= 12 pieces)\nif required Apply unit conversions BEFORE any calculation:\n  1000 G    = 1 KG\n  1000 KG   = 1 TON\n  1000 ML   = 1 LITRE\n  1 DOZEN   = 12 PIECES\n\nIf unit is ambiguous or missing → flag in Confidence as Low and use Median_Price directly.\n\n===========================================\nSTEP 2 — FILTER RELEVANT BL_CARD ITEMS\n===========================================\nFrom the BL_card list, retain ONLY items where:\n\n  a) The product is relevant to MCAT or Title (same category or close subcategory)\n  b) The price unit is compatible with the normalized Qty unit\n  c) The price is a valid numeric value (ignore \"On Request\", \"Call for Price\", etc.)\n\nExtract numeric price per unit from BL_card price strings.\nHandle formats like: \"₹ 8 / Piece\", \"Rs. 120/kg\", \"INR 5 per bottle\"\n\nIf fewer than 2 BL_card items pass filtering → treat BL data as Weak.\nIf 2 or more pass → treat BL data as Valid.\n\n===========================================\nSTEP 3 — CLEAN BL PRICE DATA\n===========================================\nFrom the filtered BL prices, apply:\n\n  Remove if price > Q3_Price  (overpriced outlier — not market representative)\n  Remove if price < Median_Price × 0.5  (suspiciously low — likely data noise)\n\nKeep only prices within:\n  ( Median_Price × 0.5 )  ≤  BL_price  ≤  Q3_Price\n\nAfter cleaning:\n  If ≥ 2 prices remain → BL data is Usable, compute BL_Avg = average of cleaned prices\n  If < 2 prices remain → BL data is Weak, discard BL entirely\n\n===========================================\nSTEP 4 — DETERMINE FINAL UNIT PRICE\n===========================================\n\n  IF BL data is Usable:\n    Unit_Price_Used = ( Median_Price × 0.7 ) + ( BL_Avg × 0.3 )\n    (Median is dominant anchor, BL provides mild market adjustment)\n\n  IF BL data is Weak or absent:\n    Unit_Price_Used = Median_Price\n    (Fall back fully to platform median)\n\nAlways round Unit_Price_Used to 2 decimal places.\n\n===========================================\nSTEP 5 — DYNAMIC RANGE CALCULATION\n===========================================\n\n  Base_Value = Normalized_Qty × Unit_Price_Used\n\nDetermine tolerance band based on BL data quality:\n\n  BL Usable + prices are tightly clustered (std dev < 15% of mean) → tolerance = ±10%\n  BL Usable + prices are moderately spread                         → tolerance = ±15%\n  BL Weak or absent                                                → tolerance = ±20%\n\nApply category-level override for high-volatility commodities\n(e.g., agri produce, metals, fuel-linked products):\n  → Always use ±25% regardless of BL quality\n\nFinal AI Range:\n  Lower_Bound = Base_Value × ( 1 - tolerance )\n  Upper_Bound = Base_Value × ( 1 + tolerance )\n\n  Price_Value_By_AI = \"₹ {Lower_Bound} - ₹ {Upper_Bound}\"\n\n===========================================\nSTEP 6 — PARSE ORDER_VALUE\n===========================================\nExtract numeric bounds from Order_Value field.\n\nHandle formats like:\n  \"Rs. 5,000 - 10,000\"  →  Buyer_Low = 5000,  Buyer_High = 10000\n  \"₹10000 - ₹15000\"    →  Buyer_Low = 10000, Buyer_High = 15000\n  \"Around 8000\"         →  Buyer_Low = 7200,  Buyer_High = 8800  (±10% assumed)\n  \"Less than 5000\"      →  Buyer_Low = 0,     Buyer_High = 5000\n  \"Above 10000\"         →  Buyer_Low = 10000, Buyer_High = null\n\nIf Order_Value is missing, null, or unparseable → set Price_Results = \"Unverifiable\"\nand skip Steps 6 and 7.\n\n===========================================\nSTEP 7 — DECISION LOGIC\n===========================================\nCalculate overlap between buyer range and AI range:\n\n  Overlap exists IF:\n    Buyer_Low  ≤ Upper_Bound\n    AND Buyer_High ≥ Lower_Bound  (or Buyer_High is null and Buyer_Low ≤ Upper_Bound)\n\n  Deviation % = ABS( midpoint(Buyer) - midpoint(AI) ) / midpoint(AI) × 100\n\nVERDICT:\n\n  \"Correct\"     → Overlap exists  OR  Deviation ≤ 25%\n  \"Not-Correct\" → No overlap AND Deviation > 25%\n  \"Review\"      → Deviation between 25%–40% with partial overlap (borderline case)\n\n===========================================\nSCORING LOGIC\n===========================================\n\n  Price_Score:\n    1.0  → Full overlap, deviation < 10%\n    0.8  → Partial overlap, deviation 10–20%\n    0.6  → Slight miss, deviation 20–30%\n    0.4  → Moderate miss, deviation 30–50%\n    0.2  → Large miss, deviation 50–75%\n    0.0  → Extreme mismatch, deviation > 75% or clearly unrealistic\n\n  Confidence:\n    High   → BL Usable + Median_Price present + Order_Value clearly parsed\n    Medium → BL Weak OR unit required inference OR Order_Value partially parsed\n    Low    → No BL data + unit ambiguous + Order_Value vague or missing\n\nDATA-PROVENANCE OVERRIDES on Verdict & Confidence:\n  - If Price Match == \"no_data\" → Median_Price and Q3_Price are zeros and have NO meaning.\n    You CANNOT compute a meaningful AI range from them. Set Price_Results = \"Unverifiable\",\n    Confidence = \"Low\", and explain in Price_Reason that no reference price data exists for this category-unit.\n  - If Evidence Match == \"no_data\" or \"unit_only\" → cap Confidence at \"Medium\" even if BL_card is Usable\n    (the broader market-evidence context is missing or aggregated across slabs).\n  - If Evidence Count < 3 → reduce Confidence by one level.\n\n===========================================\nOUTPUT FORMAT (STRICT JSON ONLY)\n===========================================\n{\n  \"Display_id\"          : \"142764424452\",\n  \"Price_Results\"       : \"Correct | Not-Correct | Review | Unverifiable\",\n  \"Price_Score\"         : <0.0 to 1.0>,\n  \"Confidence\"          : \"High | Medium | Low\",\n  \"Quantity\"            : \"\",\n  \"Qty_Normalized\"      : \"<normalized numeric qty + standard unit>\",\n  \"Price_Value\"         : \"\",\n  \"Price_Value_By_AI\"   : \"₹ <Lower_Bound> - ₹ <Upper_Bound>\",\n  \"Unit_Price_Used\"     : \"<final INR per unit>\",\n  \"Unit_Price_Logic\"    : \"<which inputs were used and how — max 20 words>\",\n  \"BL_Data_Quality\"     : \"Usable | Weak | Absent\",\n  \"BL_Items_Used\"       : [\"<item name> @ ₹<price>/<unit>\"],\n  \"Tolerance_Applied\"   : \"<±X% — reason in max 8 words>\",\n  \"Deviation_Pct\"       : \"<calculated % deviation between midpoints>\",\n  \"Price_Reason\"        : \"<max 20 words explaining the final verdict>\"\n}\n\n===========================================\nIMPORTANT RULES\n===========================================\n- Median_Price is the primary anchor — always trust it most\n- Q3_Price is ONLY used to filter BL outliers — never use it to set the upper range directly\n- BL_card prices are supporting signals only — never let them override Median\n- Always Normalize units before ANY price or quantity calculation\n- Never fabricate prices — if data is insufficient, lower confidence and use Median only\n- \"Review\" verdict exists for borderline cases — use it instead of forcing Correct/Not-Correct\n- Return STRICT valid JSON only — no markdown, no explanation outside the JSON block\n",
+        "user": "Display_id: 142764424452\nMCAT: Bath Soaps\nQty: \nOrder_Value: \nBL_card: []\nmedian: 0\nq3: 0\nprice_match: no_data\nevidence_match: no_data\nevidence_count: 0"
+      },
+      "sub_steps": [
+        {
+          "seq": 1,
+          "node": "prepare_input",
+          "fn": "_build_offer_source",
+          "input": {
+            "offer_id": "142764424452"
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "FMCG Products,Lux Soaps,Palm Olein Oil"
+              }
+            ],
+            "BL_card_data": []
+          }
+        },
+        {
+          "seq": 2,
+          "node": "prepare_input",
+          "fn": "_bl_detail_and_keys",
+          "input": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Brand\",\"RESPONSE\":\"Lifebuoy\"},{\"DESC\":\"Weight\",\"RESPONSE\":\"100 g\"},{\"DESC\":\"Variant\",\"RESPONSE\":\"Original\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "FMCG Products,Lux Soaps,Palm Olein Oil"
+              }
+            ],
+            "BL_card_data": []
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "MCAT_Unit": "",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Brand": "Lifebuoy",
+              "Weight": "100 g",
+              "Variant": "Original"
+            },
+            "Qty": "",
+            "Order_Value": "",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+            },
+            "BL_card": []
+          }
+        },
+        {
+          "seq": 3,
+          "node": "prepare_input",
+          "fn": "_extract_qty",
+          "input": {
+            "qty_str": ""
+          },
+          "output": null
+        },
+        {
+          "seq": 4,
+          "node": "prepare_input",
+          "fn": "_get_slab",
+          "input": {
+            "qty": null
+          },
+          "output": "no_slab"
+        },
+        {
+          "seq": 5,
+          "node": "prepare_input",
+          "fn": "_normalize_mcat_unit",
+          "input": {
+            "value": ""
+          },
+          "output": ""
+        },
+        {
+          "seq": 6,
+          "node": "prepare_input",
+          "fn": "_load_evidence_metrics",
+          "input": {
+            "slab_key": "(skipped)",
+            "unit_key": ""
+          },
+          "output": {
+            "match_level": "no_data",
+            "metrics": {
+              "bl_apprvd": 0,
+              "pur": 0,
+              "pur_retailer": 0,
+              "pur_wholesaler": 0,
+              "retail_ni": 0,
+              "ni_retailer": 0,
+              "ni_wholesaler": 0,
+              "bucket_count": 0
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "node": "prepare_input",
+          "fn": "_find_price_data",
+          "input": {
+            "norm_unit": ""
+          },
+          "output": {
+            "match_level": "no_data",
+            "price": {
+              "q1": 0,
+              "median": 0,
+              "q3": 0
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "node": "prepare_input",
+          "fn": "_merge_inputs[result]",
+          "input": {
+            "offer_keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card"
+            ]
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "MCAT_Unit": "",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Brand": "Lifebuoy",
+              "Weight": "100 g",
+              "Variant": "Original"
+            },
+            "Qty": "",
+            "Order_Value": "",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "FMCG Products,Lux Soaps,Palm Olein Oil"
+            },
+            "BL_card": [],
+            "Slab": "no_slab",
+            "bl_apprvd": 0,
+            "pur": 0,
+            "pur_retailer": 0,
+            "pur_wholesaler": 0,
+            "retail_ni": 0,
+            "ni_retailer": 0,
+            "ni_wholesaler": 0,
+            "evidence_count": 0,
+            "evidence_match": "no_data",
+            "q1": 0,
+            "median": 0,
+            "q3": 0,
+            "price_match": "no_data"
+          }
+        },
+        {
+          "seq": 1,
+          "node": "price_classify",
+          "fn": "_read_prompt",
+          "input": {
+            "path": "C:\\Users\\Imart\\Documents\\GitHub\\BL-Auditor\\app\\price_agent\\prompt.md"
+          },
+          "output": {
+            "char_count": 8722
+          }
+        },
+        {
+          "seq": 2,
+          "node": "price_classify",
+          "fn": "_render_template",
+          "input": {
+            "variables": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card",
+              "Slab",
+              "bl_apprvd",
+              "pur",
+              "pur_retailer",
+              "pur_wholesaler",
+              "retail_ni",
+              "ni_retailer",
+              "ni_wholesaler",
+              "evidence_count",
+              "evidence_match",
+              "q1",
+              "median",
+              "q3",
+              "price_match"
+            ]
+          },
+          "output": {
+            "char_count": 8590
+          }
+        },
+        {
+          "seq": 3,
+          "node": "price_classify",
+          "fn": "build_user_message",
+          "input": {
+            "keys": [
+              "Display_id",
+              "MCAT",
+              "Qty",
+              "Order_Value",
+              "BL_card",
+              "median",
+              "q3",
+              "price_match",
+              "evidence_match",
+              "evidence_count"
+            ]
+          },
+          "output": "Display_id: 142764424452\nMCAT: Bath Soaps\nQty: \nOrder_Value: \nBL_card: []\nmedian: 0\nq3: 0\nprice_match: no_data\nevidence_match: no_data\nevidence_count: 0"
+        },
+        {
+          "seq": 4,
+          "node": "price_classify",
+          "fn": "ChatOpenAI.ainvoke",
+          "input": {
+            "model": "openai/gpt-oss-120b",
+            "base_url": "https://api.groq.com/openai/v1",
+            "system_chars": 8590,
+            "user_chars": 152
+          },
+          "output": {
+            "response_chars": 460,
+            "preview": "{\n  \"Display_id\": \"142764424452\",\n  \"Price_Results\": \"Unverifiable\",\n  \"Price_Score\": 0.0,\n  \"Confidence\": \"Low\",\n  \"Quantity\": \"\",\n  \"Qty_Normalized\": \"\",\n  \"Price_Value\": \"\",\n  \"Price_Value_By_AI\": \"\",\n  \"Unit_Price_Used\": \"\",\n  \"Unit_Price_Logic\": \"No median; cannot compute price.\",\n  \"BL_Data_Qu"
+          }
+        },
+        {
+          "seq": 5,
+          "node": "price_classify",
+          "fn": "_clean_price_output",
+          "input": {
+            "raw_chars": 460
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Price_Results": "Unverifiable",
+            "Price_Score": 0.0,
+            "Confidence": "Low",
+            "Quantity": "",
+            "Qty_Normalized": "",
+            "Price_Value": "",
+            "Price_Value_By_AI": "",
+            "Unit_Price_Used": "",
+            "Unit_Price_Logic": "No median; cannot compute price.",
+            "BL_Data_Quality": "Absent",
+            "BL_Items_Used": [],
+            "Tolerance_Applied": "",
+            "Deviation_Pct": "",
+            "Price_Reason": "No reference price data; median and Q3 missing."
+          }
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "name": "Buyer Profile Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-08T17:04:20.314479",
+      "status": "success",
+      "duration_ms": 1628,
+      "input": {
+        "Display_id": "142764424452",
+        "Title": "Bath Soaps",
+        "MCAT": "Bath Soaps",
+        "MCAT_id": "4267",
+        "PRODUCTS_ENQUIRED": [],
+        "Products_Enquired_Count": 0,
+        "Total_Requirements": "11",
+        "Total_Unique_Calls": "3",
+        "Reply_Count": "14",
+        "Leads_Count": "",
+        "Mobile_Verified": "1",
+        "GST_Verified": "0",
+        "WhatsApp_Active": "",
+        "Member_Since": "4+ years",
+        "Business_Type": "",
+        "Company": "Gowda Wholesale",
+        "City": "Bhanjanagar",
+        "State": "Odisha",
+        "Buyer_Prime_MCATs": "FMCG Products,Lux Soaps,Palm Olein Oil",
+        "Buyer_Sell_MCATs": "",
+        "Buyer_Past_Search_MCATs": "Fmcg Products, Liquid Toilet Cleaners, Sabji Masala"
+      },
+      "raw_output": "{\n  \"Display_id\": 142764424452,\n  \"Buyer_Profile_Type\": \"Wholesaler\",\n  \"Genuineness\": \"Genuine\",\n  \"Profile_Score\": 0.8,\n  \"Confidence\": \"Medium\",\n  \"Profile_Reason\": \"Company name implies wholesaler; prime MCATs cover multiple FMCG items; mobile verified and 4+ years membership confirm genuineness.\"\n}",
+      "parsed": {
+        "Display_id": 142764424452,
+        "Buyer_Profile_Type": "Wholesaler",
+        "Genuineness": "Genuine",
+        "Profile_Score": 0.8,
+        "Confidence": "Medium",
+        "Profile_Reason": "Company name implies wholesaler; prime MCATs cover multiple FMCG items; mobile verified and 4+ years membership confirm genuineness."
+      },
+      "llm_messages": {
+        "system": "You are an Expert Buyer Profile Classification Agent specializing in Indian B2B marketplace buyers.\nYou have deep knowledge of Indian trade behavior, buyer personas, retail vs trade procurement signals,\nand how to differentiate genuine business buyers from speculative, suspicious, or low-intent profiles.\n\n===========================================\nINPUT\n===========================================\n- Display ID                 : 142764424452\n- BuyLead Title              : Bath Soaps\n- Category Name              : Bath Soaps\n- Category ID                : 4267\n\nPRODUCTS_ENQUIRED (other products this buyer has enquired about — JSON list):\n[]\n- Products Enquired Count    : 0\n\nBuyer Activity Signals (lifetime on the marketplace):\n- Total Requirements posted  : 11\n- Total Unique Calls         : 3\n- Reply Count                : 14\n- Leads Count                : \n\nBuyer Trust Signals:\n- Mobile Verified (1=yes)    : 1\n- GST Verified (1=yes)       : 0\n- WhatsApp Active (1=yes)    : \n- Member Since               : 4+ years\n\nBuyer Identity:\n- Business Type              : \n- Company                    : Gowda Wholesale\n- City                       : Bhanjanagar\n- State                      : Odisha\n\nCategory Alignment Signals:\n- Buyer's Primary MCATs      : FMCG Products,Lux Soaps,Palm Olein Oil\n- Buyer's Sell MCATs         : \n- Buyer's Past Search MCATs  : Fmcg Products, Liquid Toilet Cleaners, Sabji Masala\n\n===========================================\nGUARDRAIL — INSUFFICIENT DATA (HARD STOP)\n===========================================\nIF PRODUCTS_ENQUIRED is empty AND ALL of the following are empty/zero:\n  - Total Requirements, Total Unique Calls, Reply Count, Leads Count\n  - Buyer's Primary MCATs, Sell MCATs, Past Search MCATs\nTHEN do NOT classify. Return immediately:\n\n{\n  \"Display_id\"          : 142764424452,\n  \"Buyer_Profile_Type\"  : \"Unknown\",\n  \"Genuineness\"         : \"Unverifiable\",\n  \"Profile_Score\"       : null,\n  \"Confidence\"          : \"None\",\n  \"Profile_Reason\"      : \"Insufficient buyer signals — no enquiry history, activity, or category alignment available.\"\n}\n\n===========================================\nCLASSIFICATION FRAMEWORK\n===========================================\nTwo output axes:\n\n1. **Buyer_Profile_Type** — primary buyer persona:\n   - **Reseller**     : Buys to resell to end consumers (kirana, retail shop, pharmacy, hardware store).\n                        Smaller, varied product baskets aligned with shop assortment.\n   - **EndUser**      : Buys for own consumption, in-house use, or institutional use (factory, office, hospital).\n                        Single-category focus, quantities tied to operational need, low cross-category sprawl.\n   - **Trader**       : Buys to resell B2B (intermediary, broker, dealer). May trade across multiple\n                        unrelated categories, or have Sell MCATs that overlap with Prime MCATs.\n   - **Wholesaler**   : Buys in bulk to redistribute to other businesses / smaller retailers.\n                        Large quantities, repeat enquiries in same category, distributor-style behavior.\n   - **Unknown**      : Signals are too sparse or contradictory to commit to a persona.\n\n2. **Genuineness** — trust / spam axis:\n   - **Genuine**       : Verified contact + coherent business identity + activity consistent with declared business type.\n   - **Suspicious**    : Mismatches (e.g. heavy enquiries across unrelated categories with no identity, GST missing,\n                         very new member with abnormally high requirement count, declared type contradicts behavior).\n   - **Unverifiable**  : Not enough data to call it either way; no evidence FOR or AGAINST genuineness.\n\n--- STEP 1: PRODUCT BASKET DIVERSITY ---\nInspect PRODUCTS_ENQUIRED against the current Title/MCAT.\n  - All products in/around the same MCAT → Reseller or EndUser (depth signal)\n  - Products span multiple unrelated MCATs → Trader (breadth signal) — possibly Suspicious if very wide\n  - Empty PRODUCTS_ENQUIRED but other activity exists → fall back to MCAT alignment signals\n\n--- STEP 2: SELL ACTIVITY & MCAT ALIGNMENT ---\n  - Buyer's Sell MCATs overlap with Buyer's Prime MCATs (what they buy ≈ what they sell)\n    → strong Trader / Wholesaler signal\n  - Sell MCATs are empty AND Prime MCATs concentrated in a single retail-oriented family\n    → Reseller signal\n  - Sell MCATs empty AND Prime MCATs concentrated in industrial/operational family\n    → EndUser signal\n\n--- STEP 3: ACTIVITY & QUANTITY CONTEXT ---\n  - High Total Requirements + High Leads Count + High Reply Count\n    → active business buyer (lean Genuine)\n  - Very high Total Requirements but low Reply Count and low Leads Count\n    → may be Suspicious (mass-posting without engagement)\n  - Low overall activity but verified Mobile + GST + coherent identity\n    → still Genuine, just low volume\n\n--- STEP 4: GENUINENESS ASSESSMENT ---\nTrust signals (treat each \"1\" as positive evidence):\n  - Mobile Verified + GST Verified + WhatsApp Active + Member Since old (≥ 2 years)\n    → Genuine\n  - Mobile not verified + GST not verified + member very new (< 6 months) + erratic activity\n    → Suspicious\n  - One or two trust flags missing but coherent business identity (Company, Business_Type, City)\n    → Genuine with reduced confidence\n  - Business_Type / Company empty AND no enquiry history AND no MCAT alignment\n    → Unverifiable\n\n--- STEP 5: HOLISTIC JUDGMENT ---\nWeight order (highest first):\n  1. PRODUCTS_ENQUIRED basket pattern (most direct evidence of intent)\n  2. Sell vs Prime MCAT alignment (defines persona)\n  3. Activity volume + ratios (modulates confidence)\n  4. Trust verifications (modulates Genuineness)\n  5. Identity completeness (last-tier sanity check)\n\nWhen signals conflict → product basket pattern + MCAT alignment win.\n\n===========================================\nSCORING LOGIC\n===========================================\nProfile_Score reflects strength of the combined Type + Genuineness verdict (0.0 to 1.0):\n\n  1.0  → All five steps unanimously agree on Type AND Genuineness\n  0.8  → Type clear (basket + MCAT alignment); Genuineness clear from trust signals\n  0.6  → Type leans one direction but trust signals are mixed\n  0.4  → Sparse activity, borderline persona, trust ambiguous\n  0.2  → Best-guess persona on minimal data\n\nConfidence:\n  High    → Strong basket evidence + strong MCAT alignment + 3+ trust flags positive\n  Medium  → 2 clear signals out of {basket, MCAT alignment, trust}\n  Low     → Sparse but non-empty signals; persona is directional only\n  None    → Hard guardrail triggered (Insufficient Data path above)\n\nDATA-PROVENANCE OVERRIDES on Confidence:\n  - PRODUCTS_ENQUIRED count == 0 → cap Confidence at \"Medium\".\n  - Member Since blank AND no trust verifications → cap Confidence at \"Low\".\n  - Genuineness == \"Suspicious\" → require at least 2 corroborating signals; otherwise downgrade\n    Genuineness to \"Unverifiable\" rather than emit a weak Suspicious call.\n\n===========================================\nOUTPUT FORMAT (STRICT JSON ONLY)\n===========================================\n{\n  \"Display_id\"          : 142764424452,\n  \"Buyer_Profile_Type\"  : \"Reseller | EndUser | Trader | Wholesaler | Unknown\",\n  \"Genuineness\"         : \"Genuine | Suspicious | Unverifiable\",\n  \"Profile_Score\"       : <0.0 to 1.0 or null>,\n  \"Confidence\"          : \"High | Medium | Low | None\",\n  \"Profile_Reason\"      : \"<Max 30 words explaining the verdict — cite the strongest signal>\"\n}\n\n===========================================\nIMPORTANT GUIDELINES\n===========================================\n- Two-axis classification — Type AND Genuineness must each be set.\n- Never label \"Suspicious\" without at least two corroborating signals.\n- PRODUCTS_ENQUIRED is the strongest direct signal — read it carefully.\n- Sell MCAT overlap with Prime MCAT is the cleanest Trader/Wholesaler tell.\n- Trust verifications support Genuineness, never override Type.\n- Never invent data — if a field is blank, treat it as missing, not negative.\n- Return STRICT valid JSON only — no markdown, no commentary outside the JSON block.\n",
+        "user": "Display_id: 142764424452\nTitle: Bath Soaps\nMCAT: Bath Soaps\nPRODUCTS_ENQUIRED: []\nProducts_Enquired_Count: 0\nBuyer_Prime_MCATs: FMCG Products,Lux Soaps,Palm Olein Oil\nBuyer_Sell_MCATs: \nBuyer_Past_Search_MCATs: Fmcg Products, Liquid Toilet Cleaners, Sabji Masala\nTotal_Requirements: 11\nTotal_Unique_Calls: 3\nReply_Count: 14\nLeads_Count: \nMobile_Verified: 1\nGST_Verified: 0\nWhatsApp_Active: \nMember_Since: 4+ years\nBusiness_Type: \nCompany: Gowda Wholesale\nCity: Bhanjanagar\nState: Odisha"
+      },
+      "sub_steps": [
+        {
+          "seq": 1,
+          "node": "prepare_input",
+          "fn": "_build_offer_source",
+          "input": {
+            "offer_id": "142764424452"
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "PRODUCTS_ENQUIRED": [],
+            "Buyer_Signals": {
+              "Total_Requirements": "11",
+              "Total_Unique_Calls": "3",
+              "Reply_Count": "14",
+              "Leads_Count": "",
+              "Mobile_Verified": "1",
+              "GST_Verified": "0",
+              "WhatsApp_Active": "",
+              "Member_Since": "4+ years",
+              "Business_Type": "",
+              "Company": "Gowda Wholesale",
+              "City": "Bhanjanagar",
+              "State": "Odisha",
+              "Buyer_Prime_MCATs": "FMCG Products,Lux Soaps,Palm Olein Oil",
+              "Buyer_Sell_MCATs": "",
+              "Buyer_Past_Search_MCATs": "Fmcg Products, Liquid Toilet Cleaners, Sabji Masala"
+            }
+          }
+        },
+        {
+          "seq": 2,
+          "node": "prepare_input",
+          "fn": "_merge_inputs[result]",
+          "input": {
+            "offer_keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED",
+              "Buyer_Signals"
+            ]
+          },
+          "output": {
+            "Display_id": "142764424452",
+            "Title": "Bath Soaps",
+            "MCAT": "Bath Soaps",
+            "MCAT_id": "4267",
+            "PRODUCTS_ENQUIRED": [],
+            "Products_Enquired_Count": 0,
+            "Total_Requirements": "11",
+            "Total_Unique_Calls": "3",
+            "Reply_Count": "14",
+            "Leads_Count": "",
+            "Mobile_Verified": "1",
+            "GST_Verified": "0",
+            "WhatsApp_Active": "",
+            "Member_Since": "4+ years",
+            "Business_Type": "",
+            "Company": "Gowda Wholesale",
+            "City": "Bhanjanagar",
+            "State": "Odisha",
+            "Buyer_Prime_MCATs": "FMCG Products,Lux Soaps,Palm Olein Oil",
+            "Buyer_Sell_MCATs": "",
+            "Buyer_Past_Search_MCATs": "Fmcg Products, Liquid Toilet Cleaners, Sabji Masala"
+          }
+        },
+        {
+          "seq": 1,
+          "node": "buyer_classify",
+          "fn": "_read_prompt",
+          "input": {
+            "path": "C:\\Users\\Imart\\Documents\\GitHub\\BL-Auditor\\app\\buyer_profile_agent\\prompt.md"
+          },
+          "output": {
+            "char_count": 8310
+          }
+        },
+        {
+          "seq": 2,
+          "node": "buyer_classify",
+          "fn": "_render_template",
+          "input": {
+            "variables": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED",
+              "Products_Enquired_Count",
+              "Total_Requirements",
+              "Total_Unique_Calls",
+              "Reply_Count",
+              "Leads_Count",
+              "Mobile_Verified",
+              "GST_Verified",
+              "WhatsApp_Active",
+              "Member_Since",
+              "Business_Type",
+              "Company",
+              "City",
+              "State",
+              "Buyer_Prime_MCATs",
+              "Buyer_Sell_MCATs",
+              "Buyer_Past_Search_MCATs"
+            ]
+          },
+          "output": {
+            "char_count": 8088
+          }
+        },
+        {
+          "seq": 3,
+          "node": "buyer_classify",
+          "fn": "build_user_message",
+          "input": {
+            "keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED",
+              "Products_Enquired_Count",
+              "Total_Requirements",
+              "Total_Unique_Calls",
+              "Reply_Count",
+              "Leads_Count",
+              "Mobile_Verified",
+              "GST_Verified",
+              "WhatsApp_Active",
+              "Member_Since",
+              "Business_Type",
+              "Company",
+              "City",
+              "State",
+              "Buyer_Prime_MCATs",
+              "Buyer_Sell_MCATs",
+              "Buyer_Past_Search_MCATs"
+            ]
+          },
+          "output": "Display_id: 142764424452\nTitle: Bath Soaps\nMCAT: Bath Soaps\nPRODUCTS_ENQUIRED: []\nProducts_Enquired_Count: 0\nBuyer_Prime_MCATs: FMCG Products,Lux Soaps,Palm Olein Oil\nBuyer_Sell_MCATs: \nBuyer_Past_Search_MCATs: Fmcg Products, Liquid Toilet Cleaners, Sabji Masala\nTotal_Requirements: 11\nTotal_Unique_Calls: 3\nReply_Count: 14\nLeads_Count: \nMobile_Verified: 1\nGST_Verified: 0\nWhatsApp_Active: \nMember_Since: 4+ years\nBusiness_Type: \nCompany: Gowda Wholesale\nCity: Bhanjanagar\nState: Odisha"
+        },
+        {
+          "seq": 4,
+          "node": "buyer_classify",
+          "fn": "ChatOpenAI.ainvoke",
+          "input": {
+            "model": "openai/gpt-oss-120b",
+            "base_url": "https://api.groq.com/openai/v1",
+            "system_chars": 8088,
+            "user_chars": 486
+          },
+          "output": {
+            "response_chars": 304,
+            "preview": "{\n  \"Display_id\": 142764424452,\n  \"Buyer_Profile_Type\": \"Wholesaler\",\n  \"Genuineness\": \"Genuine\",\n  \"Profile_Score\": 0.8,\n  \"Confidence\": \"Medium\",\n  \"Profile_Reason\": \"Company name implies wholesaler; prime MCATs cover multiple FMCG items; mobile verified and 4+ years membership confirm genuineness"
+          }
+        },
+        {
+          "seq": 5,
+          "node": "buyer_classify",
+          "fn": "_clean_classifier_output",
+          "input": {
+            "raw_chars": 304
+          },
+          "output": {
+            "Display_id": 142764424452,
+            "Buyer_Profile_Type": "Wholesaler",
+            "Genuineness": "Genuine",
+            "Profile_Score": 0.8,
+            "Confidence": "Medium",
+            "Profile_Reason": "Company name implies wholesaler; prime MCATs cover multiple FMCG items; mobile verified and 4+ years membership confirm genuineness."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,20 @@
   ('Title vs Category', data.get('title_category_outlier', {})),
   ('Photo vs Category', data.get('photo_category_outlier', {})),
 ] %}
+{% set bl = (buylead_response or {}).get('RESPONSE', {}).get('DATA', {}) %}
+{% set bl_isq = (payload or {}).get('ISQ', []) %}
+{% set bl_products = bl.get('PRODUCTS_ENQUIRED') or [] %}
+{% set bl_city = bl.get('GLUSR_CITY') or bl.get('GL_CITY_DISTRICT_HQ_NAME') or '' %}
+{% set bl_state = bl.get('GLUSR_STATE') or '' %}
+{% set bl_loc = (bl_city ~ (', ' if bl_city and bl_state else '') ~ bl_state) or '-' %}
+{% set bl_mcat = bl.get('PRIME_MCAT_NAME') or bl.get('ETO_OFR_GLCAT_MCAT_NAME') or payload.get('mcat_name', '-') %}
+{% set bl_title = bl.get('ETO_OFR_TITLE') or payload.get('item_name', '-') %}
+{% set bl_flag = bl.get('GL_COUNTRY_FLAG_SMALL') %}
+{% set bl_mob = bl.get('ETO_OFR_BUYER_IS_MOB_VERF') == '1' %}
+{% set bl_email = bl.get('ETO_OFR_EMAIL_VERIFIED') == '1' %}
+{% set bl_wa = bl.get('IS_WHATSAPP_ACTIVE') == '1' %}
+{% set bl_member = bl.get('GLUSR_USR_MEMBERSINCE') %}
+{% set bl_date = bl.get('ETO_OFR_DATE') %}
 
 <div class="page-content">
 
@@ -31,6 +45,68 @@
   </div>
   {% endif %}
 
+  <div class="bl-audit-layout" style="display:grid;grid-template-columns:340px 1fr;gap:1rem;align-items:start;">
+    <aside class="bl-side" style="position:sticky;top:1rem;">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:0.75rem 0.875rem 0.5rem;border-bottom:1px solid var(--border);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">BuyLead</div>
+          <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);line-height:1.3;">Buyer looking for {{ bl_mcat }}</div>
+        </div>
+        <div style="padding:0.75rem 0.875rem;">
+          <div style="font-size:0.95rem;font-weight:700;color:var(--accent-blue);line-height:1.3;margin-bottom:0.5rem;">{{ bl_title }}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;">
+            {% if bl_flag %}<img src="{{ bl_flag }}" alt="flag" style="width:18px;height:auto;border-radius:2px;">{% endif %}
+            <span style="font-weight:600;">{{ bl_loc }}</span>
+            {% if bl_date %}<span style="color:var(--accent-cyan);">⏰ {{ bl_date }}</span>{% endif %}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:0.75rem;margin-bottom:8px;">
+            <span style="color:{{ 'var(--accent-green)' if bl_mob else 'var(--text-muted)' }};">Mobile {{ '✓' if bl_mob else '✗' }}</span>
+            <span style="color:{{ 'var(--accent-green)' if bl_email else 'var(--text-muted)' }};">Email {{ '✓' if bl_email else '✗' }}</span>
+            <span style="color:{{ 'var(--accent-green)' if bl_wa else 'var(--text-muted)' }};">WhatsApp {{ '✓' if bl_wa else '✗' }}</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">Category: <span style="color:var(--accent-red);font-weight:600;">{{ bl_mcat }}</span></div>
+        </div>
+        {% if bl_isq %}
+        <div style="padding:0.75rem 0.875rem;border-top:1px solid var(--border);background:var(--bg-primary);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.5rem;">ISQs</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+            <tbody>
+              {% for q in bl_isq %}
+              <tr>
+                <td style="padding:4px 6px 4px 0;color:var(--text-secondary);font-weight:600;vertical-align:top;width:48%;">{{ q.get('IM_SPEC_MASTER_DESC', '-') }}</td>
+                <td style="padding:4px 0;color:var(--text-muted);vertical-align:top;width:4%;">:</td>
+                <td style="padding:4px 0;color:var(--text-primary);vertical-align:top;">{{ q.get('ISQ_RESPONSE', '-') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        {% if bl_products %}
+        <div style="padding:0.75rem 0.875rem;border-top:1px solid var(--border);background:var(--bg-primary);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:0.5rem;">
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">Products Enquired</div>
+            <span style="font-size:0.65rem;padding:1px 6px;border-radius:8px;background:rgba(124,58,237,0.12);color:var(--accent-purple);font-weight:600;">{{ bl_products|length }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;">
+            {% for p in bl_products %}
+            {% set _name = p.get('FK_PC_ITEM_NAME') or p.get('FK_PC_ITEM_DISPLAY_NAME') or '-' %}
+            {% set _price = (p.get('PRODUCT_PRICE') or '')|string %}
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg-secondary);">
+              <div style="font-size:0.76rem;color:var(--text-primary);font-weight:600;line-height:1.3;flex:1;min-width:0;word-break:break-word;">{{ _name }}</div>
+              {% if _price %}<div style="font-size:0.72rem;color:var(--accent-green);font-weight:700;white-space:nowrap;flex-shrink:0;">{{ _price }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if bl_member %}
+        <div style="padding:0.5rem 0.875rem;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text-muted);text-align:center;">— Member since {{ bl_member }} —</div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <main class="bl-main" style="min-width:0;">
   <div class="section-title">Category Checks</div>
   <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
     {% for label, verdict in checks %}
@@ -72,26 +148,7 @@
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:1rem;">
-    <div class="card-header">
-      <div class="card-icon" style="background:rgba(5,150,105,0.1);color:var(--accent-green);">PR</div>
-      <div class="card-title">Price Flag</div>
-    </div>
-    {% set pf = data.get('price_flag', {}) %}
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:0.75rem;">
-      <div class="stat-card">
-        <div class="stat-value">{{ payload.get('price', '-') }}</div>
-        <div class="stat-label">Mapped Price</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" style="color:{{ 'var(--accent-green)' if 'not outlier' in pf.get('final_verdict', '').lower() else 'var(--accent-red)' }};">{{ pf.get('final_verdict', '-') }}</div>
-        <div class="stat-label">Verdict</div>
-      </div>
-    </div>
-    <div class="check-reason">{{ pf.get('reason', '-') or '-' }}</div>
-  </div>
-
-  <div class="dashboard-grid grid-2" style="margin-bottom:1rem;">
+  <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
     <div class="card">
       <div class="card-header">
         <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">RT</div>
@@ -123,6 +180,22 @@
       <div class="check-reason">{{ pr.get('Price_Reason', '-') or '-' }}</div>
       {% if pr.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ pr.get('error') }}</div>{% endif %}
     </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">BP</div>
+        <div class="card-title">Buyer Profile</div>
+      </div>
+      {% set br = buyer_result or {} %}
+      {% set _g = br.get('Genuineness', '') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _g == 'Genuine' else ('var(--accent-red)' if _g == 'Suspicious' else 'var(--accent-orange)') }};">{{ _g or '-' }}</div><div class="stat-label">Genuineness</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ br.get('Profile_Score', '-') }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ br.get('Confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+      </div>
+      <div class="check-reason">{{ br.get('Profile_Reason', '-') or '-' }}</div>
+      {% if br.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ br.get('error') }}</div>{% endif %}
+    </div>
   </div>
 
   <div style="display:grid;gap:0.5rem;margin-bottom:1.5rem;">
@@ -130,23 +203,60 @@
       <div class="accordion-header"><span>Audit payload sent</span><span class="accordion-arrow">▾</span></div>
       <div class="accordion-body"><div class="json-viewer payload-json-viewer">{{ payload | tojson(indent=2) }}</div></div>
     </div>
+    {% if is_detail_view %}
+    {% if buylead_raw_json %}
     <div class="accordion">
-      <div class="accordion-header"><span>BuyLead API response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-header"><span>BuyLead detail API response</span><span class="accordion-arrow">▾</span></div>
       <div class="accordion-body"><div class="json-viewer buylead-json-viewer">{{ buylead_raw_json }}</div></div>
     </div>
+    {% endif %}
+    {% if raw_json %}
     <div class="accordion">
-      <div class="accordion-header"><span>Retail agent raw response</span><span class="accordion-arrow">▾</span></div>
-      <div class="accordion-body"><div class="json-viewer retail-json-viewer">{{ retail_raw_json }}</div></div>
-    </div>
-    <div class="accordion">
-      <div class="accordion-header"><span>Price agent raw response</span><span class="accordion-arrow">▾</span></div>
-      <div class="accordion-body"><div class="json-viewer price-json-viewer">{{ price_raw_json }}</div></div>
-    </div>
-    <div class="accordion">
-      <div class="accordion-header"><span>Audit API raw response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-header"><span>Audit API response</span><span class="accordion-arrow">▾</span></div>
       <div class="accordion-body"><div class="json-viewer audit-json-viewer">{{ raw_json }}</div></div>
     </div>
+    {% endif %}
+    {% if retail_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Retail agent response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer retail-json-viewer">{{ retail_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if price_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Price agent response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer price-json-viewer">{{ price_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if buyer_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Buyer profile agent response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer buyer-json-viewer">{{ buyer_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if trace_id %}
+    <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:0.3rem;">
+      Step-by-step execution log → <a href="/traces/{{ trace_id }}" style="color:var(--accent-blue);font-weight:600;">View Trace Steps</a>
+    </div>
+    {% endif %}
+    {% else %}
+    {% if trace_id %}
+    <div style="font-size:0.75rem;color:var(--text-muted);text-align:center;padding:0.4rem;">
+      Raw API responses are available in the trace step view →
+      <a href="/traces/{{ trace_id }}" style="color:var(--accent-blue);font-weight:600;">View Trace Steps</a>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+
+    </main>
   </div>
 
 </div>
+<style>
+  @media (max-width: 1100px) {
+    .bl-audit-layout { grid-template-columns: 1fr !important; }
+    .bl-side { position: static !important; }
+  }
+</style>
 {% endblock %}

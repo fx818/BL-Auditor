@@ -1,5 +1,4 @@
 import csv
-import json
 import os
 from datetime import datetime
 from typing import Any, Dict, Optional
@@ -8,6 +7,7 @@ from typing import Any, Dict, Optional
 CSV_HEADERS = [
     "logged_at",
     "offer_id",
+    "trace_id",
     "item_name",
     "mcat_name",
     "price",
@@ -28,15 +28,18 @@ CSV_HEADERS = [
     "retail_confidence",
     "retail_override_applied",
     "retail_reason",
-    "retail_raw_json",
     "retail_error",
     "price_agent_result",
     "price_agent_score",
     "price_agent_confidence",
     "price_value_by_ai",
     "price_agent_reason",
-    "price_raw_json",
     "price_error",
+    "buyer_profile_genuineness",
+    "buyer_profile_score",
+    "buyer_profile_confidence",
+    "buyer_profile_reason",
+    "buyer_profile_error",
 ]
 
 CSV_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "audit_dashboard_log.csv"))
@@ -76,14 +79,18 @@ def append_audit_dashboard_row(
     audit_response: Dict[str, Any],
     retail_response: Optional[Dict[str, Any]] = None,
     price_response: Optional[Dict[str, Any]] = None,
+    buyer_response: Optional[Dict[str, Any]] = None,
+    trace_id: Optional[str] = None,
 ) -> str:
     _ensure_csv_headers()
     retail_response = retail_response or {}
     price_response = price_response or {}
+    buyer_response = buyer_response or {}
 
     row = {
         "logged_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "offer_id": offer_id,
+        "trace_id": trace_id or "",
         "item_name": audit_response.get("item_name") or payload.get("item_name", ""),
         "mcat_name": payload.get("mcat_name", ""),
         "price": payload.get("price", ""),
@@ -104,15 +111,18 @@ def append_audit_dashboard_row(
         "retail_confidence": retail_response.get("Confidence", ""),
         "retail_override_applied": retail_response.get("Override_Applied", ""),
         "retail_reason": retail_response.get("Reason", ""),
-        "retail_raw_json": json.dumps(retail_response, ensure_ascii=False),
         "retail_error": retail_response.get("error", ""),
         "price_agent_result": price_response.get("Price_Results", ""),
         "price_agent_score": price_response.get("Price_Score", ""),
         "price_agent_confidence": price_response.get("Confidence", ""),
         "price_value_by_ai": price_response.get("Price_Value_By_AI", ""),
         "price_agent_reason": price_response.get("Price_Reason", ""),
-        "price_raw_json": json.dumps(price_response, ensure_ascii=False),
         "price_error": price_response.get("error", ""),
+        "buyer_profile_genuineness": buyer_response.get("Genuineness", ""),
+        "buyer_profile_score": buyer_response.get("Profile_Score", ""),
+        "buyer_profile_confidence": buyer_response.get("Confidence", ""),
+        "buyer_profile_reason": buyer_response.get("Profile_Reason", ""),
+        "buyer_profile_error": buyer_response.get("error", ""),
     }
 
     file_exists = os.path.exists(CSV_PATH)

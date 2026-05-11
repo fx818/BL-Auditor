@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:0.72rem;color:var(--accent-red);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.4px;font-weight:700;">Audit Failed</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);line-height:1.3;">Pipeline halted at: {{ failed_step }}</h2>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span>Offer ID: <b style="color:var(--text-secondary);">{{ offer_id }}</b></span>
+        <span>Steps executed: <b style="color:var(--text-secondary);">{{ steps|length }}</b></span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;">
+      <button type="button" onclick="goBack()" class="btn btn-outline btn-sm">← Back</button>
+      {% if trace_id %}<a href="/traces/{{ trace_id }}" class="btn btn-outline btn-sm">View Trace</a>{% endif %}
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--accent-red);margin-bottom:1rem;">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(239,68,68,0.12);color:var(--accent-red);">!</div>
+      <div class="card-title" style="color:var(--accent-red);">{{ failed_step }} — Error</div>
+    </div>
+    <div style="font-size:0.82rem;color:var(--text-primary);font-weight:600;margin-bottom:6px;">{{ friendly_error }}</div>
+    <div class="check-reason" style="white-space:pre-wrap;font-family:monospace;font-size:0.75rem;color:var(--accent-red);">{{ error_message }}</div>
+  </div>
+
+  <div class="section-title">Executed Steps Before Error</div>
+  <div style="display:grid;gap:0.6rem;margin-bottom:1.5rem;">
+    {% for s in steps %}
+    {% set is_err = s.get('status') == 'error' %}
+    <div class="card" style="border-left:3px solid {{ 'var(--accent-red)' if is_err else 'var(--accent-green)' }};">
+      <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="card-icon" style="background:{{ 'rgba(239,68,68,0.12)' if is_err else 'rgba(16,185,129,0.12)' }};color:{{ 'var(--accent-red)' if is_err else 'var(--accent-green)' }};">{{ s.get('step', '?') }}</div>
+          <div>
+            <div class="card-title">{{ s.get('name', '-') }}</div>
+            <div class="card-subtitle">{{ s.get('type', '-') }} · {{ s.get('duration_ms', 0) }}ms · {{ s.get('timestamp', '')[:19].replace('T', ' ') }}</div>
+          </div>
+        </div>
+        <span style="font-size:0.72rem;padding:2px 10px;border-radius:10px;font-weight:600;background:{{ 'rgba(239,68,68,0.12)' if is_err else 'rgba(16,185,129,0.12)' }};color:{{ 'var(--accent-red)' if is_err else 'var(--accent-green)' }};">{{ s.get('status', '-')|upper }}</span>
+      </div>
+      {% if s.get('endpoint') %}
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:6px;font-family:monospace;">→ {{ s.get('endpoint') }}</div>
+      {% endif %}
+      {% if s.get('error') %}
+      <div class="check-reason" style="margin-bottom:6px;color:var(--accent-red);font-family:monospace;font-size:0.75rem;white-space:pre-wrap;">{{ s.get('error') }}</div>
+      {% endif %}
+      <div style="display:grid;gap:0.4rem;">
+        {% if s.get('input') is not none %}
+        <div class="accordion">
+          <div class="accordion-header"><span>Input / Request</span><span class="accordion-arrow">▾</span></div>
+          <div class="accordion-body"><div class="json-viewer">{{ s.get('input') | tojson(indent=2) }}</div></div>
+        </div>
+        {% endif %}
+        {% if s.get('output') is not none %}
+        <div class="accordion">
+          <div class="accordion-header"><span>Output / Raw Response</span><span class="accordion-arrow">▾</span></div>
+          <div class="accordion-body"><div class="json-viewer">{{ s.get('output') | tojson(indent=2) }}</div></div>
+        </div>
+        {% endif %}
+        {% if s.get('raw_output') %}
+        <div class="accordion">
+          <div class="accordion-header"><span>Raw Output (text)</span><span class="accordion-arrow">▾</span></div>
+          <div class="accordion-body"><pre style="white-space:pre-wrap;font-size:0.78rem;">{{ s.get('raw_output') }}</pre></div>
+        </div>
+        {% endif %}
+        {% if s.get('parsed') is not none %}
+        <div class="accordion">
+          <div class="accordion-header"><span>Parsed Output</span><span class="accordion-arrow">▾</span></div>
+          <div class="accordion-body"><div class="json-viewer">{{ s.get('parsed') | tojson(indent=2) }}</div></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <div class="card"><div class="check-reason">No steps were executed before the error.</div></div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

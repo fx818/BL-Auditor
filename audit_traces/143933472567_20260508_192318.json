@@ -1,0 +1,756 @@
+{
+  "trace_id": "143933472567_20260508_192318",
+  "offer_id": "143933472567",
+  "item_name": "4 in 9 in Bricks",
+  "mcat_name": "Bricks",
+  "started_at": "2026-05-08T19:23:18.427000",
+  "completed_at": "2026-05-08T19:23:45.012628",
+  "total_steps": 3,
+  "has_error": false,
+  "steps": [
+    {
+      "step": 1,
+      "name": "BuyLead API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T19:23:18.816097",
+      "status": "success",
+      "duration_ms": 389,
+      "endpoint": "https://leads.imutils.com/wservce/buyleads/detail/",
+      "input": {
+        "offer_id": "143933472567"
+      },
+      "output": {
+        "RESPONSE": {
+          "CODE": "200",
+          "STATUS": "1",
+          "DATA": {
+            "REJECT": "1",
+            "ETO_OFR_DISPLAY_ID": "143933472567",
+            "ETO_OFR_DATE": "08-MAY-26",
+            "OFR_DATE": "20260508174947",
+            "ETO_OFR_QTY": null,
+            "ETO_OFR_QTY_UNIT": null,
+            "ETO_OFR_VERIFIED": "3",
+            "FK_GLUSR_USR_ID": "2KoGn5/Wu10=",
+            "IS_WHATSAPP_ACTIVE": "1",
+            "ETO_OFR_APPROV": "A",
+            "PROD_SERV": "P",
+            "FK_GLCAT_MCAT_ID": "623",
+            "ETO_ENQ_TYP": null,
+            "FK_GL_COUNTRY_ISO": "IN",
+            "ETO_OFR_TITLE": "4 in 9 in Bricks",
+            "ETO_OFR_LAST_UPDATED": "08-MAY-26",
+            "ETO_OFR_GLCAT_MCAT_NAME": "Bricks",
+            "ETO_OFR_APPROX_ORDER_VALUE": null,
+            "ETO_OFR_KEYWORDS": null,
+            "GLUSR_USR_STATE": "Delhi",
+            "ETO_OFR_SMALL_IMAGE": null,
+            "ETO_OFR_MEDIUM_IMAGE": null,
+            "ETO_OFR_LARGE_IMAGE": null,
+            "ETO_OFR_SMALL_IMAGE_WH": null,
+            "ETO_OFR_MEDIUM_IMAGE_WH": null,
+            "ETO_OFR_LARGE_IMAGE_WH": null,
+            "ETO_OFR_ORIGINAL_IMAGE_WH": null,
+            "ETO_OFR_MODREF_TYPE": null,
+            "ETO_OFR_MODREFID": "2851169170812",
+            "ETO_OFR_DESC": "",
+            "DAY_DIFF_CEIL": "0",
+            "DAY_DIFF": "0",
+            "HR_DIFF": "1",
+            "MIN_DIFF": "93",
+            "GL_COUNTRY_FLAG_SMALL": "https://1.imimg.com/country-flags/small/in_flag_s.png",
+            "GLUSR_USR_FAX_COUNTRY": "91",
+            "GLUSR_USR_PH_COUNTRY": "91",
+            "GLUSR_COMPANY": null,
+            "GLUSR_NAME": "Vinay Pathak",
+            "NAME_AVAILABLE": "1",
+            "GLUSR_DESIGNATION": null,
+            "FK_GL_CITY_ID": "69514",
+            "GLUSR_CITY": "Delhi",
+            "FK_GL_STATE_ID": "6478",
+            "GLUSR_STATE": "Delhi",
+            "GLUSR_DISTRICT": null,
+            "GL_CITY_DISTRICT_HQ": "69514",
+            "GLUSR_ADDRESS": null,
+            "ADDRESS_AVAILABLE": "0",
+            "GLUSR_USR_FAX_NUMBER": null,
+            "GLUSR_USR_FAX_AREA": null,
+            "GLUSR_ZIP": null,
+            "GLUSR_URL": null,
+            "GLUSR_COUNTRY": "India",
+            "GLUSR_COUNTRY_BUY": "India",
+            "ETO_OFR_IMAGE_PATH1": null,
+            "ETO_OFR_IMAGE_PATH2": null,
+            "ETO_OFR_IMAGE_PATH3": null,
+            "USER_IDENTIFIER_FLAG": "95",
+            "GLUSR_MOBILE": null,
+            "FK_GLCAT_CAT_ID": "643",
+            "ETO_OFR_DOC_PATH": null,
+            "GLUSR_USR_PH_NUMBER": null,
+            "GLUSR_USR_PH_AREA": null,
+            "GLUSR_USR_PH_MOBILE_ALT": null,
+            "GLUSR_USR_EMAIL": null,
+            "BUSINESS_TYPE": null,
+            "YEAR_OF_ESTABLISHMENT": null,
+            "INDIAMART_MEMBER_SINCE": "19-DEC-18",
+            "GLUSR_USR_MEMBERSINCE": "7+ years",
+            "GL_LEGAL_STATUS_VAL": null,
+            "GLUSR_USR_EMAIL_ALT": null,
+            "FK_ETO_OFR_TYPE_ID": "2",
+            "FK_GL_MODULE_ID": "IMOB",
+            "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"8000 piece\"},{\"DESC\":\"Height\",\"RESPONSE\":\"4 in\"},{\"DESC\":\"Length\",\"RESPONSE\":\"9 in\"},{\"DESC\":\"Buyer Filled Details\",\"RESPONSE\":\"Mujhe gaziabad Loni me chahiye\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 50,000 to 1 Lakh\"}]}",
+            "IS_ATTACHMENT": null,
+            "ADDITIONALINFO": null,
+            "ATTACHMENT_DETAIL": null,
+            "ETO_OFR_POSTDATE_ORIG": "08-MAY-26",
+            "ETO_OFR_EXP_DATE": "11-MAY-26",
+            "ETO_OFR_DELETIONDATE": null,
+            "BY_LEAD_TYPE": "1",
+            "PURCHASE_STATUS": "OPEN",
+            "LOGO_TYPE": "{\"0\":\"Updated Only\"}",
+            "PRIME_MCAT_NAME": "Bricks",
+            "ETO_ENQ_PURPOSE": null,
+            "ETO_OFR_REQ_APP_USAGE": null,
+            "ETO_OFR_REQ_FREQ": null,
+            "ETO_OFR_GEOGRAPHY_ID": null,
+            "ETO_OFR_GEO_CITY1_ID": null,
+            "ETO_OFR_GEO_CITY2_ID": null,
+            "ETO_OFR_GEO_CITY3_ID": null,
+            "ETO_OFR_BUYER_LEADS_CNT": "0",
+            "ETO_OFR_BUYER_IS_MOB_VERF": "1",
+            "ETO_OFR_BUYER_IS_GST_VERF": "0",
+            "ETO_OFR_BUYER_PRIME_MCATS": "Walnut",
+            "ETO_OFR_BUYER_PAST_SEARCH_MCAT": null,
+            "ETO_OFR_BUYER_SELL_MCATS": null,
+            "ETO_OFR_BUYER_TOT_REQUIREMENT": "1",
+            "ETO_OFR_BUYER_TOT_UNQ_CALLS_CNT": "0",
+            "ETO_OFR_BUYER_REPLY_CNT": "0",
+            "ETO_OFR_EMAIL_VERIFIED": "0",
+            "MCAT_IDS": "623",
+            "GL_CITY_DISTRICT_HQ_NAME": "Delhi",
+            "ORDER_VAL": "600",
+            "IS_INDEX": "index,follow",
+            "BREADCRUMB_DETAILS": {
+              "GLCAT_MCAT_ID": "623",
+              "GLCAT_MCAT_FLNAME": "bricks",
+              "GLCAT_MCAT_NAME": "Bricks"
+            },
+            "PRODUCTS_ENQUIRED": [
+              {
+                "FK_PC_ITEM_NAME": "Bricks",
+                "PC_IMG_SMALL_100X100": "http://5.imimg.com/data5/SELLER/Default/2023/8/332813765/BK/SE/GS/129210299/wooden-scrap-125x125.jpg",
+                "PRODUCT_PRICE": null
+              }
+            ],
+            "UNAVAILABLE_AFTER": "Monday, 10-Aug-26 00:00:00 EST",
+            "TITLE": "4 in 9 in Bricks buyer and buylead in Delhi,Delhi | ID: 143933472567",
+            "DESC": "Buyer is looking for 4 in 9 in Bricks in Delhi,Delhi. Find buyers, buyleads, buying requirements and RFQs for Bricks from India and abroad.",
+            "SUPPLIER_COUNT": 0,
+            "SUPPLIER_DETAIL": [],
+            "GLCAT_ALLCAT_GRP_ETOFNME": "builders-hardware",
+            "GLCAT_ALLCAT_ETOFNME": "mortar-bricks",
+            "GLCAT_ALLCAT_GRP_ETOSNME": "Building & Construction",
+            "GLCAT_ALLCAT_DEFSHORTNAME": "Bricks & Construction Aggregates",
+            "ETO_CREDITS": 200
+          },
+          "MESSAGE": "THE OFFER IS VALID"
+        },
+        "unique_id": "69fdeacfd81c2"
+      }
+    },
+    {
+      "step": 2,
+      "name": "Payload Build",
+      "type": "transform",
+      "timestamp": "2026-05-08T19:23:18.816225",
+      "status": "success",
+      "duration_ms": 0,
+      "output": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "8000 piece"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Height",
+            "ISQ_RESPONSE": "4 in"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Length",
+            "ISQ_RESPONSE": "9 in"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Buyer Filled Details",
+            "ISQ_RESPONSE": "Mujhe gaziabad Loni me chahiye"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 50,000 to 1 Lakh"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "4 in 9 in Bricks",
+        "mcat_flag": "-1",
+        "mcat_id": "623",
+        "mcat_name": "Bricks",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 143933472567,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 3,
+      "name": "Audit API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T19:23:45.012051",
+      "status": "success",
+      "duration_ms": 26195,
+      "endpoint": "http://3.108.184.25/categorization_outlier",
+      "input": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "8000 piece"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Height",
+            "ISQ_RESPONSE": "4 in"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Length",
+            "ISQ_RESPONSE": "9 in"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Buyer Filled Details",
+            "ISQ_RESPONSE": "Mujhe gaziabad Loni me chahiye"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 50,000 to 1 Lakh"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "4 in 9 in Bricks",
+        "mcat_flag": "-1",
+        "mcat_id": "623",
+        "mcat_name": "Bricks",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 143933472567,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      },
+      "output": {
+        "GLUSERID": "187147894",
+        "Generic_Category_Outlier_Flag": "False",
+        "ISQs": "[{'IM_SPEC_MASTER_DESC': 'Quantity', 'ISQ_RESPONSE': '8000 piece'}, {'IM_SPEC_MASTER_DESC': 'Height', 'ISQ_RESPONSE': '4 in'}, {'IM_SPEC_MASTER_DESC': 'Length', 'ISQ_RESPONSE': '9 in'}, {'IM_SPEC_MASTER_DESC': 'Buyer Filled Details', 'ISQ_RESPONSE': 'Mujhe gaziabad Loni me chahiye'}, {'IM_SPEC_MASTER_DESC': 'Probable Order Value', 'ISQ_RESPONSE': 'Rs. 50,000 to 1 Lakh'}]",
+        "MAPPED_CATEGORY_ID": "623",
+        "MCAT_GENERIC_FLAG": "None",
+        "PII_modified": {
+          "error_msg": "",
+          "status": "selected",
+          "tile_msg": ""
+        },
+        "PRODUCT_ITEM_ID": "143933472567",
+        "Service_mcat": "False",
+        "auditor_1_2_raw_response": {
+          "category": "Bricks",
+          "category_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "",
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "skip_reason": "Skipped: no category_pool provided.",
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "category_agent_result": {
+            "new_category": "",
+            "new_category_id": "",
+            "new_category_reason": "rank_1_missing"
+          },
+          "category_pool": [],
+          "cross_entity_result": {
+            "data": {
+              "cost": 0.052101,
+              "cross_modal_api_raw_response": {
+                "task_1": {
+                  "primary_object": "Brick"
+                },
+                "task_2": {
+                  "ocr_text": "Quantity: 8000 piece Height: 4 in Length: 9 in"
+                },
+                "task_3": {
+                  "product_search_query": "4 in 9 in bricks"
+                },
+                "task_4": {
+                  "primary_object_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Brick' is consistent with the product specifications describing brick dimensions and quantity.",
+                    "status": "not_outlier"
+                  },
+                  "primary_object_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Brick' is consistent with the product title '4 in 9 in Bricks'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product photo shows bricks, which aligns with the product specifications detailing dimensions and quantity.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The product photo shows bricks, which aligns with the product title '4 in 9 in Bricks'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product title '4 in 9 in Bricks' is consistent with the product specifications of 'Height: 4 in, Length: 9 in' and quantity.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_5": {
+                  "primary_object_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Brick' is consistent with the category name 'Bricks'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product photo shows bricks, which aligns with the category name 'Bricks'.",
+                    "status": "not_outlier"
+                  },
+                  "product_specifications_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product specifications describe dimensions and quantity of bricks, aligning with the category name 'Bricks'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product title '4 in 9 in Bricks' is consistent with the category name 'Bricks'.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_6": {
+                  "core_alignment_check": {
+                    "confidence": "high",
+                    "reason": "The product is a complete brick unit, directly matching the category and not a part, accessory, service, or used item.",
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "photo_category_verdict": {
+                "reason": "The primary object 'Brick' is consistent with the category name 'Bricks'.",
+                "status": "not_outlier"
+              },
+              "photo_spec_verdict": {
+                "reason": "The primary object 'Brick' is consistent with the product specifications describing brick dimensions and quantity.",
+                "status": "not_outlier"
+              },
+              "photo_title_verdict": {
+                "reason": "The primary object 'Brick' is consistent with the product title '4 in 9 in Bricks'.",
+                "status": "not_outlier"
+              },
+              "prompt_used": "\nYou are a product catalog quality reviewer. You will analyze a product listing across image, text fields, and a category mapping, and return a strict JSON verdict for each defined task \n\nTwo images are attached to this request, in this exact order:\n  1) IMAGE 1 - Product Photo. The actual product being listed.\n  2) IMAGE 2 - Category Photo. A generic reference showing the type of product the category sells.\nDo not confuse the two images. \n\nIsolation rule for task 1 and task 2.\nFor Task 1 (Primary Object) and Task 2 (OCR), use ONLY the Product Photo above.\nDo NOT read, peek at, or use any of the Text Inputs declared further below in this prompt \n \nInstructions:\nTask 1:\n  Image Analysis: Carefully Detect the primary object from IMAGE 1 (Product Photo). \n  Avoid generic terms, unless no specific object can be inferred. Do not invent features not visible.\n\nTask 2:\n  - OCR (Optical Character Recognition): Carefully Extract text from the IMAGE 1 (Product Photo). \n  - Include only unique, clearly readable, product-related text (deduplicate repeated words/logos).\n  - Exclude watermarks, overlays, background patterns, decorative text, reflections, serials on wires/cables, partial or uncertain characters, repeated branding, and noise.\n  - Strictly base all OCR on the visible text and components in the provided image. Do not infer, normalize, correct, or hallucinate text. Preserve visible casing and spelling.\n  - If the image is noisy, include only confidently readable text.\n  - Max length: 200 characters.\n  - Do NOT read text from IMAGE 2 (attached to this request)\n\nProduct Title: 4 in 9 in Bricks\nProduct Specifications: Quantity: 8000 piece, Height: 4 in, Length: 9 in, Buyer Filled Details: Mujhe gaziabad Loni me chahiye, Probable Order Value: Rs. 50,000 to 1 Lakh\nCategory Name: Bricks\nCategory Photo: provided as IMAGE 2 \n\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). \n\nTreat the Task 1 and Task 2 answers as fixed inputs . Do NOT revise them at this stage even if the text inputs suggest otherwise. \n\nTask 3:\nProduct Search Query : Generate a query using Primary Object (from Task 1) + OCR Extracted text (from Task 2) + Product Title + Product Specifications to represent the product.\n - Maximum word limit: 5.\n - Query should be relevant, grammatically correct, SEO-friendly for ecommerce search and should be able to represent the product. \n   Example: 1) bosch gsb550 power drill. \n            2) 5 ton hydraulic floor jack\n            3) 200 litre stainless storage tank\n            4) red cordless handheld vacuum\n - Recheck the query to make sure that it is meaningful.\n\nTask 4: Contradiction Check\nIdentify if there is contradiction in each pair below.\nAnalyze each pair independently. An \"outlier\" here requires a mismatch between the two listed sources. If the sources agree on the core fact, it is \"not outlier,\" even if one source is poorly formatted or has internal errors.\nIf the product title describes a service (e.g., 'Printing Services', 'Repair Service', 'Installation Service') and the photo shows the physical subject or substrate of that service, this is NOT a contradiction. Such photos are standard practice for service listings.\n  4a) Primary Object of IMAGE 1 (Product Photo) - Product Title\n   Only flag as outlier when the photo shows a fundamentally different product type - e.g., photo shows a motorcycle when title says 'bicycle', or photo shows a ceiling fan when title says 'table fan'. Specificity gaps (photo more specific than title) are never contradictions - e.g., a red cordless handheld vacuum cleaner photographed under the title 'Vacuum Cleaner' is not a contradiction.\n  4b) IMAGE 1 (Product Photo)  -  Product Title\n  4c) Primary Object of IMAGE 1 (Product Photo) -  Product Specifications\n  4d) IMAGE 1 (Product Photo)  - Product Specifications\n  4e) Product Title - Product Specifications \n\nTask 5: Category Analysis\nAnalyze the Category Name: Bricks  and identify the type of products it represents. Refer to IMAGE 2 (Category Photo) for product class only. Refer to Category Photo IMAGE 2 Disclaimer below.\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). If image is missing, use Category Name for analysis.\nOnly flag as \"outlier\" if the entity does not belong in the category. Ignore spelling/formatting errors in the entities. \nA product being a specific variant, design, or themed version of the category product still belongs to the category. Only flag as outlier if the product is from a completely different product class. A character-themed keychain belongs in 'Fashion Keychain'. A holographic sticker belongs in 'PVC Stickers'. A specific institutional badge belongs in 'Corporate/School Event Badges'. An enamel coated wooden tray belongs in 'Wooden Tray'.\nUse the Category understanding from above to identify if there is a contradiction in:\n  5a) Primary Object of IMAGE 1 (Product Photo) - Category\n  5b) IMAGE 1 (Product Photo)  - Category\n  5c) Product Title - Category\n  5d) Product Specifications - Category\n\nTask 6: \nCore Alignment Check: Determine whether the Product (based on Title, Specifications, and IMAGE 1 (Product Photo) ) is any of the following relative to the mapped Category: \n- A Part or Component of the category product \n- An Accessory of the category product \n- A Service related to the category product \n- A Used / Second-Hand version of the category product \n- An entirely different / unrelated product \nIf ANY of the above conditions are true, mark as \"Outlier.\" \nIf the product IS the category product (new, whole, and complete), mark as \"Not Outlier.\"\n\nOutlier Examples (mark as Outlier): \n1. Car Vent Clip → Car AC Category [Reason: Clip is an accessory used near AC, not the AC unit itself] \n2. Blasting Machine Valve → Blasting Machine Category [Reason: Valve is a component/part of the machine] \n3. JCB Backhoe Loader Service → JCB Backhoe Loader Category [Reason: Service offering, not the physical machine] \n4. Second Hand Tractor → Tractor Category [Reason: Used/second-hand condition, not a new product] \n5. Generator Battery Cable → Generator Category [Reason: Cable is an accessory, not the generator itself]\n6. Washing Machine Repair Service → Washing Machine Category [Reason: Service, not a physical product] \n\nNot Outlier Examples (mark as Not Outlier): \n1. Adidas Unisex Trainers Samba OG Shoes → Adidas Shoes Category [Reason: Product is the complete shoe, directly matching the category] \n2. 4 Way Wooden Pallet 45X22X6 → Wooden Pallet Category [Reason: Product is a complete pallet unit as defined by the category] \n3. 5 Ton Hydraulic Floor Jack → Hydraulic Jack Category [Reason: Product is the complete jack unit, not a part or accessory] \n4. Komatsu PC200 Excavator (New) → Excavator Category [Reason: Product is a new, complete machine matching the category] \n5. Bosch GSB 550 Power Drill → Power Drill Category [Reason: Product is the complete drill unit, directly matching the category] \n\nEdge Case Guidance: - If a product name includes the category name but is still a part/service/accessory, mark as Outlier (e.g., \"Tractor Engine\" in Category \"Tractor\" = Outlier).\n\nConfidence and Verdict Definitions : Every verdict you return MUST be paired with a confidence level. There are no exceptions.\n\nConfidence value MUST be one of: high, medium, low,\n  high - Evidence is clear. No inference needed.\n  medium - Minor ambiguity or small inference needed, but the verdict is likely correct.\n  low - Significant uncertainty, weak evidence, or conflicting signals. \nYour verdict status MUST be directly consistent with your stated reason. If your reason contains words like 'aligns', 'matches', 'consistent', 'supports', or 'corresponds' - the status must be 'not_outlier'. If your reason contains 'contradicts', 'mismatch', 'inconsistent', 'different product', 'does not match' - the status must be 'outlier'. Never output a verdict that contradicts your own reasoning.\n\nGive all output in JSON format.\nGive response for task and subtasks of  task 4, task 5 and task 6 as outlier / not outlier / can't say for each subtask and its confidence (high/medium/low). Give one line reason for each subtask of task 4, task 5 and task 6.\n\n{\n    \"task_1\": {\n      \"primary_object\": \"\"\n    },\n    \"task_2\": {\n      \"ocr_text\": \"\"\n    },\n    \"task_3\": {\n      \"product_search_query\": \"\"\n    },\n    \"task_4\": {\n      \"primary_object_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product title are not available, so consistency between them cannot be verified.\"\n      },\n      \"product_photo_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product title are not available to confirm alignment.\"\n      },\n      \"primary_object_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product specifications are missing, preventing alignment validation.\"\n      },\n      \"product_photo_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product specifications are not available to assess alignment.\"\n      },\n      \"product_title_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and product specifications are unavailable to confirm consistency.\"\n      }\n    },\n    \"task_5\": {\n      \"primary_object_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and category name are not available to verify category alignment.\"\n      },\n      \"product_photo_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and category name are not available to confirm alignment.\"\n      },\n      \"product_title_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and category name are not available to assess alignment.\"\n      },\n      \"product_specifications_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product specifications and category name are missing, preventing category validation.\"\n      }\n    },\n    \"task_6\": {\n      \"core_alignment_check\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Insufficient information to verify whether the product is a complete unit matching the category definition.\"\n      }\n    }\n  }\n",
+              "response_time": 3.217,
+              "retry_token": false,
+              "specs_category_verdict": {
+                "reason": "The product specifications describe dimensions and quantity of bricks, aligning with the category name 'Bricks'.",
+                "status": "not_outlier"
+              },
+              "title_category_verdict": {
+                "reason": "The product title '4 in 9 in Bricks' is consistent with the category name 'Bricks'.",
+                "status": "not_outlier"
+              },
+              "title_spec_verdict": {
+                "reason": "The product title '4 in 9 in Bricks' is consistent with the product specifications of 'Height: 4 in, Length: 9 in' and quantity.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 753,
+                "prompt_tokens": 2777,
+                "total_tokens": 3530
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "4 in 9 in Bricks",
+          "photo_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "google/gemini-3-flash-preview",
+              "photo_api_raw_response": {
+                "task_1": {
+                  "image_visibility_assessment": {
+                    "checks": {
+                      "generally_unclear_or_incomplete": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "human_blocking_product": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_cut_off": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_obscured_or_blocked": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "unidentifiable_blur_or_pixelation": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      }
+                    },
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "photo_quality_check": {
+                "reason": "",
+                "status": "not_outlier"
+              },
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "pii_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "fallback_model_flag": false,
+              "model": "",
+              "pii_analysis": {
+                "aadhaar_id": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "email_address": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "overall_status": "APPROVED",
+                "pan_card": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "phone_number": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "upi_id": {
+                  "status": "Not Detected",
+                  "value": null
+                }
+              },
+              "pii_status": {
+                "overall_status": "APPROVED",
+                "reason": ""
+              },
+              "prompt_used": "PII Agent:\n\nInput:\n  Image: provided alongside this prompt.\n  Use it to visually confirm INTRINSIC vs EXTRINSIC\n  for every detected value. Image context takes\n  priority over text-based CONTEXT_TYPE inference.\n  OCR Text: Quantity: 8000 piece Height: 4 in Length: 9 in\n  Product Title: 4 in 9 in Bricks\n  Product Description: (none)\n  Product Specifications: Quantity: 8000 piece\nHeight: 4 in\nLength: 9 in\nBuyer Filled Details: Mujhe gaziabad Loni me chahiye\nProbable Order Value: Rs. 50,000 to 1 Lakh\n\nPre-filtered Candidates (from code layer):\n  email_candidates   : none\n  numeric_candidates : detected by digit-pattern filter — LLM confirms if phone\n  social_candidates  : detected by LLM scan\n\n════════════════════════════════════════\nSTEP 1 — PRE-PROCESSING\n════════════════════════════════════════\nExtract and store before scanning:\n  - BRAND_NAME      : Seller/brand name from title or description\n  - PRODUCT_TOKENS  : Any value labeled as model no, SKU, item code,\n                      part no, barcode, HSN, GST, EAN, batch, serial,\n                      invoice, ref, order id\n  - CONTEXT_LABELS  : Section heading nearest to each detected value\n  - CONTEXT_TYPE    : For each detected value, classify source as:\n                      INTRINSIC → printed on physical product /\n                                  manufacturer packaging / engraved label\n                      EXTRINSIC → digital overlay, banner, watermark,\n                                  business card, screenshot element\n                      UNKNOWN   → cannot determine\n  - CONTACT_INTENT  : Look at the image and answer:\n                      \"Does this image show a phone number that a buyer\n                       would call or WhatsApp to reach the seller?\"\n                      SELLER_CONTACT → yes, number is for buyer to reach seller\n                                       (label, banner, business card, packaging\n                                        with contact info, promotional graphic)\n                      CS_ONLY        → only toll-free / customer care numbers\n                      NONE           → no contact number visible\n                      UNKNOWN        → cannot determine from image\n  - IS_TEMPLATE     : Set True if the listing is a product template,\n                      sample design, mock-up, or blank form\n                      (e.g. ID card template, visiting card sample,\n                      letterhead design, label template)\n                      Signal words: \"template\", \"sample\", \"mock\",\n                      \"design\", \"blank\", \"dummy\", \"specimen\",\n                      \"id card\", \"visiting card\", \"business card design\",\n                      \"brochure design\", \"pamphlet design\", \"flyer design\",\n                      \"product brochure\", \"lorem ipsum\"\n\nTEMPLATE RULE: If IS_TEMPLATE is True, all detected PII values are\ntreated as sample/placeholder data — mark all fields Not Detected.\nSample names (John Smith, Jane Doe), sample phones, sample emails\non a template product are not real PII.\n\n════════════════════════════════════════\nSTEP 2 — FIELD SCANNING\n════════════════════════════════════════\nFields not listed below were cleared by the code layer\nand are already decided as Not Detected. Only evaluate\nthe fields explicitly listed here.\n\n\n\n════════════════════════════════════════\nSTEP 3 — OUTPUT\n════════════════════════════════════════\nReturn ONLY valid JSON for the fields listed above.\nNo explanation, no markdown fences.\n\n{\n\n}",
+              "response_time": 0.0,
+              "retry_token": false,
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "predicted_titles": [
+            "4x9 inch bricks",
+            "8000 piece 4x9 inch",
+            "4 in 9 in bricks"
+          ],
+          "response_time": "10.03s",
+          "specs": [
+            {
+              "IM_SPEC_MASTER_DESC": "Quantity",
+              "ISQ_RESPONSE": "8000 piece"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Height",
+              "ISQ_RESPONSE": "4 in"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Length",
+              "ISQ_RESPONSE": "9 in"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Buyer Filled Details",
+              "ISQ_RESPONSE": "Mujhe gaziabad Loni me chahiye"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Probable Order Value",
+              "ISQ_RESPONSE": "Rs. 50,000 to 1 Lakh"
+            }
+          ],
+          "specs_agent_output": {
+            "data": {
+              "contradiction_in_specs": {
+                "reason": "No internal contradictions found in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "cost": 0.009027,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Specifications: Quantity: 8000 piece, Height: 4 in, Length: 9 in, Buyer Filled Details: Mujhe gaziabad Loni me chahiye, Probable Order Value: Rs. 50,000 to 1 Lakh\n\n    Instructions:\n\n    Task 1: \n    Product Specifications: Quantity: 8000 piece, Height: 4 in, Length: 9 in, Buyer Filled Details: Mujhe gaziabad Loni me chahiye, Probable Order Value: Rs. 50,000 to 1 Lakh Assessment:\n        a) Spelling Error in Product Specifications: \n           - Flag words that are contextually incorrect for an industrial listing.\n           - Flag only clear typos in common dictionary words (e.g., \"Steel\" vs \"Stel\").\n           - Guardrail: DO NOT flag brand names, model numbers (e.g., \"L805\", \"GGT\"), or unit concatenations (e.g., \"70ltr\", \"20inch\", \"400kg.up\"). These are standard in industrial listings.\n\n        b) Contradiction/ Redundancy in Product Specifications: Flag as \"outlier\" only if values are physically impossible to coexist (e.g., Material: Wood and Material: Stainless Steel). \n           (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Specification Based Query: Generate a  query using Product Specifications. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1 as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"specification_based_query\": \"\"\n    }\n    }\n    ",
+              "response_time": 6.48,
+              "retry_token": false,
+              "specs_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "No internal contradictions found in the provided product specifications.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "No spelling errors found in the provided product specifications.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "specification_based_query": "8000 piece 4x9 inch"
+                }
+              },
+              "spell_error_in_specs": {
+                "reason": "No spelling errors found in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 123,
+                "prompt_tokens": 511,
+                "total_tokens": 634
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "text_agent_output": {
+            "data": {
+              "cost": 0.007227,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Title: 4 in 9 in Bricks\n\n    Instructions:\n\n    Task 1: \n    Product Title: 4 in 9 in Bricks Assessment:\n        a) Spelling Error in Title: Flag words that are contextually incorrect for an industrial listing.\n        b) Contradiction in Product Title: Flag logical conflicts (e.g., \"Manual Automatic Machine\").\n        Constraint: Do NOT flag If title contains multiple product nouns, verify category supports kits/sets.(e.g., \" Pump and Motor Set,  Razor with Blade set.”)\n        (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Title Based Query: Generate a  query enhancing Product Title. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1  as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"title_based_query\": \"\"\n    }\n}\n",
+              "response_time": 1.398,
+              "retry_token": false,
+              "textual_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "No internal contradictions found in the title.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "No spelling errors found in the title.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "title_based_query": "4x9 inch bricks"
+                }
+              },
+              "title_contradiction_outlier": {
+                "reason": "No internal contradictions found in the title.",
+                "status": "not_outlier"
+              },
+              "title_spell_outlier": {
+                "reason": "No spelling errors found in the title.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 114,
+                "prompt_tokens": 347,
+                "total_tokens": 461
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "total_cost": 0.068355
+        },
+        "base_suggestion": [
+          {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "reason": "",
+            "source": ""
+          }
+        ],
+        "cataloging_error": true,
+        "categorization_error": false,
+        "custtype": "53",
+        "datetime": "2026-05-08 07:23:20 PM",
+        "display_name": "",
+        "ensemble_confidence": null,
+        "error": "cannot unpack non-iterable bool object",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": "1",
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_name": "4 in 9 in Bricks",
+        "location_flag": {
+          "biztype": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          },
+          "location": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          }
+        },
+        "log_type": "Auditor",
+        "mcat_flag": "-1",
+        "mcat_is_generic_flag": null,
+        "mcat_name": "Bricks",
+        "mcat_pool": "[]",
+        "missing_img": "True",
+        "modid": "GLADMIN",
+        "no_category_found": "False",
+        "non_llm_raw_response": {
+          "category": "Bricks",
+          "duplicate_title_output": {
+            "data": {
+              "duplicate_title_raw_response": {},
+              "response_time": 10.005
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "4 in 9 in Bricks",
+          "location_biztype_output": {
+            "data": {
+              "location_biztype_raw_response": {},
+              "response_time": 10.005
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "response_time": 20.01
+        },
+        "pc_item_id": 143933472567,
+        "photo_category_outlier": {
+          "reason": "The primary object 'Brick' is consistent with the category name 'Bricks'.",
+          "status": "not_outlier"
+        },
+        "photo_quality_verdict": "not_outlier",
+        "photo_qualtiy_reason": "",
+        "photo_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_spec_verdict_reason": "",
+        "photo_title_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_title_verdict_reason": "",
+        "pii_flag": "selected",
+        "price": "0",
+        "price_flag": {
+          "final_verdict": "outlier",
+          "price_raw_response": "{'absurd_flag': '1', 'err_text': 'Prod price <= Q1/10', 'in_product_id': 0, 'absurd_price_unit_flag': '3', 'response_time_ms': 0.03825, 'status_code': 200}",
+          "reason": "Price Absurd"
+        },
+        "process_name": "Multiagent Auditor New Arch 1.2",
+        "product_search_query": [
+          "4x9 inch bricks",
+          "8000 piece 4x9 inch",
+          "4 in 9 in bricks"
+        ],
+        "response_time": 10.04,
+        "screen_name": "live_product_approval",
+        "secondary_image": "False",
+        "secondary_mcats": [],
+        "specs_category_outlier": {
+          "reason": "The product specifications describe dimensions and quantity of bricks, aligning with the category name 'Bricks'.",
+          "status": "not_outlier"
+        },
+        "specs_contradiction_verdict": "not_outlier",
+        "specs_contradiction_verdict_reason": "No internal contradictions found in the provided product specifications.",
+        "specs_quality_reason": "No spelling errors found in the provided product specifications.",
+        "specs_quality_verdict": "not_outlier",
+        "status": 500,
+        "suggested_mcat": {
+          "suggested_mcats": [
+            {
+              "confidence": "",
+              "id": "",
+              "name": "",
+              "rank": "",
+              "source": ""
+            }
+          ]
+        },
+        "title_category_outlier": {
+          "reason": "The product title '4 in 9 in Bricks' is consistent with the category name 'Bricks'.",
+          "status": "not_outlier"
+        },
+        "title_contradiction_verdict": "not_outlier",
+        "title_contradiction_verdict_reason": "No internal contradictions found in the title.",
+        "title_quality_reason": "No spelling errors found in the title.",
+        "title_quality_verdict": "not_outlier",
+        "title_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "title_spec_verdict_reason": "The product title '4 in 9 in Bricks' is consistent with the product specifications of 'Height: 4 in, Length: 9 in' and quantity.",
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    }
+  ]
+}

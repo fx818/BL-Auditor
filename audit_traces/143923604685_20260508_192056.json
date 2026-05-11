@@ -1,0 +1,280 @@
+{
+  "trace_id": "143923604685_20260508_192056",
+  "offer_id": "143923604685",
+  "item_name": "Luvlap Baby Wipes",
+  "mcat_name": "Baby Wet Wipe",
+  "started_at": "2026-05-08T19:20:56.042825",
+  "completed_at": "2026-05-08T19:23:07.418617",
+  "total_steps": 3,
+  "has_error": true,
+  "steps": [
+    {
+      "step": 1,
+      "name": "BuyLead API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T19:20:57.140945",
+      "status": "success",
+      "duration_ms": 1097,
+      "endpoint": "https://leads.imutils.com/wservce/buyleads/detail/",
+      "input": {
+        "offer_id": "143923604685"
+      },
+      "output": {
+        "RESPONSE": {
+          "CODE": "200",
+          "STATUS": "1",
+          "DATA": {
+            "REJECT": "1",
+            "ETO_OFR_DISPLAY_ID": "143923604685",
+            "ETO_OFR_DATE": "08-MAY-26",
+            "OFR_DATE": "20260508151600",
+            "ETO_OFR_QTY": null,
+            "ETO_OFR_QTY_UNIT": null,
+            "ETO_OFR_VERIFIED": "3",
+            "FK_GLUSR_USR_ID": "3aIFmJjdtlYh",
+            "IS_WHATSAPP_ACTIVE": "1",
+            "ETO_OFR_APPROV": "A",
+            "PROD_SERV": "P",
+            "FK_GLCAT_MCAT_ID": "65056",
+            "ETO_ENQ_TYP": null,
+            "FK_GL_COUNTRY_ISO": "IN",
+            "ETO_OFR_TITLE": "Luvlap Baby Wipes",
+            "ETO_OFR_LAST_UPDATED": "08-MAY-26",
+            "ETO_OFR_GLCAT_MCAT_NAME": "Baby Wet Wipe",
+            "ETO_OFR_APPROX_ORDER_VALUE": null,
+            "ETO_OFR_KEYWORDS": null,
+            "GLUSR_USR_STATE": "Uttar Pradesh",
+            "ETO_OFR_SMALL_IMAGE": null,
+            "ETO_OFR_MEDIUM_IMAGE": null,
+            "ETO_OFR_LARGE_IMAGE": null,
+            "ETO_OFR_SMALL_IMAGE_WH": null,
+            "ETO_OFR_MEDIUM_IMAGE_WH": null,
+            "ETO_OFR_LARGE_IMAGE_WH": null,
+            "ETO_OFR_ORIGINAL_IMAGE_WH": null,
+            "ETO_OFR_MODREF_TYPE": null,
+            "ETO_OFR_MODREFID": "26607559788",
+            "ETO_OFR_DESC": "",
+            "DAY_DIFF_CEIL": "0",
+            "DAY_DIFF": "0",
+            "HR_DIFF": "4",
+            "MIN_DIFF": "244",
+            "GL_COUNTRY_FLAG_SMALL": "https://1.imimg.com/country-flags/small/in_flag_s.png",
+            "GLUSR_USR_FAX_COUNTRY": "91",
+            "GLUSR_USR_PH_COUNTRY": "91",
+            "GLUSR_COMPANY": "Pallavi Enterprises",
+            "GLUSR_NAME": "Sangita Devi",
+            "NAME_AVAILABLE": "1",
+            "GLUSR_DESIGNATION": null,
+            "FK_GL_CITY_ID": "77543",
+            "GLUSR_CITY": "Dudhi",
+            "FK_GL_STATE_ID": "6499",
+            "GLUSR_STATE": "Uttar Pradesh",
+            "GLUSR_DISTRICT": "Sonbhadra",
+            "GL_CITY_DISTRICT_HQ": "96297",
+            "GLUSR_ADDRESS": "00088,0,Sub Health Centre Jabar,Jabar,Sonbhadra",
+            "ADDRESS_AVAILABLE": "1",
+            "GLUSR_USR_FAX_NUMBER": null,
+            "GLUSR_USR_FAX_AREA": null,
+            "GLUSR_ZIP": "231208",
+            "GLUSR_URL": "https://www.indiamart.com/company/201618584/",
+            "GLUSR_COUNTRY": "India",
+            "GLUSR_COUNTRY_BUY": "India",
+            "ETO_OFR_IMAGE_PATH1": null,
+            "ETO_OFR_IMAGE_PATH2": null,
+            "ETO_OFR_IMAGE_PATH3": null,
+            "USER_IDENTIFIER_FLAG": "94",
+            "GLUSR_MOBILE": null,
+            "FK_GLCAT_CAT_ID": "33",
+            "ETO_OFR_DOC_PATH": null,
+            "GLUSR_USR_PH_NUMBER": null,
+            "GLUSR_USR_PH_AREA": null,
+            "GLUSR_USR_PH_MOBILE_ALT": null,
+            "GLUSR_USR_EMAIL": null,
+            "BUSINESS_TYPE": null,
+            "YEAR_OF_ESTABLISHMENT": null,
+            "INDIAMART_MEMBER_SINCE": "26-OCT-23",
+            "GLUSR_USR_MEMBERSINCE": "2+ years",
+            "GL_LEGAL_STATUS_VAL": "Individual - Proprietor",
+            "GLUSR_USR_EMAIL_ALT": null,
+            "FK_ETO_OFR_TYPE_ID": "2",
+            "FK_GL_MODULE_ID": "IMOB",
+            "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"50 Piece\"},{\"DESC\":\"Pack Size\",\"RESPONSE\":\"72 Pieces\"},{\"DESC\":\"Brand\",\"RESPONSE\":\"LuvLap\"},{\"DESC\":\"Features\",\"RESPONSE\":\"With Lid\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 2,600 - 5,000\"},{\"DESC\":\"Probable Requirement Type\",\"RESPONSE\":\"Business Use\"}]}",
+            "IS_ATTACHMENT": null,
+            "ADDITIONALINFO": null,
+            "ATTACHMENT_DETAIL": null,
+            "ETO_OFR_POSTDATE_ORIG": "08-MAY-26",
+            "ETO_OFR_EXP_DATE": "11-MAY-26",
+            "ETO_OFR_DELETIONDATE": null,
+            "BY_LEAD_TYPE": "3",
+            "PURCHASE_STATUS": "OPEN",
+            "LOGO_TYPE": "{\"0\":\"Updated Only\"}",
+            "PRIME_MCAT_NAME": "Baby Wet Wipe",
+            "ETO_ENQ_PURPOSE": null,
+            "ETO_OFR_REQ_APP_USAGE": null,
+            "ETO_OFR_REQ_FREQ": null,
+            "ETO_OFR_GEOGRAPHY_ID": null,
+            "ETO_OFR_GEO_CITY1_ID": null,
+            "ETO_OFR_GEO_CITY2_ID": null,
+            "ETO_OFR_GEO_CITY3_ID": null,
+            "ETO_OFR_BUYER_LEADS_CNT": "1",
+            "ETO_OFR_BUYER_IS_MOB_VERF": "1",
+            "ETO_OFR_BUYER_IS_GST_VERF": "1",
+            "ETO_OFR_BUYER_PRIME_MCATS": "Flour Bag,Handheld Inkjet Printer,PVC Transparent Pouch",
+            "ETO_OFR_BUYER_PAST_SEARCH_MCAT": null,
+            "ETO_OFR_BUYER_SELL_MCATS": "Agricultural Implements, Milk Processing Plant and Machines, Crushing Machines & Plants",
+            "ETO_OFR_BUYER_TOT_REQUIREMENT": "14",
+            "ETO_OFR_BUYER_TOT_UNQ_CALLS_CNT": "15",
+            "ETO_OFR_BUYER_REPLY_CNT": "2",
+            "ETO_OFR_EMAIL_VERIFIED": "1",
+            "MCAT_IDS": "65056",
+            "GL_CITY_DISTRICT_HQ_NAME": "Sonbhadra",
+            "ORDER_VAL": "300",
+            "IS_INDEX": "index,follow",
+            "BREADCRUMB_DETAILS": {
+              "GLCAT_MCAT_ID": null,
+              "GLCAT_MCAT_FLNAME": null,
+              "GLCAT_MCAT_NAME": null
+            },
+            "PRODUCTS_ENQUIRED": [
+              {
+                "FK_PC_ITEM_NAME": "Luvlap Baby Wipes",
+                "PC_IMG_SMALL_100X100": "http://5.imimg.com/data5/SELLER/Default/2022/12/KL/CX/DE/39927407/luvlap-baby-wipes-125x125.jpg",
+                "PRODUCT_PRICE": "₹ 99 / Packet"
+              }
+            ],
+            "UNAVAILABLE_AFTER": "Monday, 10-Aug-26 00:00:00 EST",
+            "TITLE": "Luvlap Baby Wipes buyer and buylead in Dudhi,Uttar Pradesh | ID: 143923604685",
+            "DESC": "Buyer is looking for Luvlap Baby Wipes in Dudhi,Uttar Pradesh. Find buyers, buyleads, buying requirements and RFQs for Baby Wet Wipe from India and abroad.",
+            "SUPPLIER_COUNT": 0,
+            "SUPPLIER_DETAIL": [],
+            "GLCAT_ALLCAT_GRP_ETOFNME": "cosmetics-toiletries",
+            "GLCAT_ALLCAT_ETOFNME": "child-baby-care-products",
+            "GLCAT_ALLCAT_GRP_ETOSNME": "Cosmetics & Personal Care",
+            "GLCAT_ALLCAT_DEFSHORTNAME": "Child and Baby Care Products",
+            "ETO_CREDITS": 200
+          },
+          "MESSAGE": "THE OFFER IS VALID"
+        },
+        "unique_id": "69fdea4230839"
+      }
+    },
+    {
+      "step": 2,
+      "name": "Payload Build",
+      "type": "transform",
+      "timestamp": "2026-05-08T19:20:57.141076",
+      "status": "success",
+      "duration_ms": 0,
+      "output": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "50 Piece"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Pack Size",
+            "ISQ_RESPONSE": "72 Pieces"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "LuvLap"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Features",
+            "ISQ_RESPONSE": "With Lid"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 2,600 - 5,000"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Requirement Type",
+            "ISQ_RESPONSE": "Business Use"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Luvlap Baby Wipes",
+        "mcat_flag": "-1",
+        "mcat_id": "65056",
+        "mcat_name": "Baby Wet Wipe",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 143923604685,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 3,
+      "name": "Audit API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T19:23:07.418019",
+      "status": "error",
+      "duration_ms": 130276,
+      "endpoint": "http://3.108.184.25/categorization_outlier",
+      "input": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "50 Piece"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Pack Size",
+            "ISQ_RESPONSE": "72 Pieces"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "LuvLap"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Features",
+            "ISQ_RESPONSE": "With Lid"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 2,600 - 5,000"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Requirement Type",
+            "ISQ_RESPONSE": "Business Use"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Luvlap Baby Wipes",
+        "mcat_flag": "-1",
+        "mcat_id": "65056",
+        "mcat_name": "Baby Wet Wipe",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 143923604685,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      },
+      "error": ""
+    }
+  ]
+}

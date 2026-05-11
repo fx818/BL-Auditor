@@ -181,7 +181,7 @@ def _build_offer_source(offer_id: str, buylead_response: Dict[str, Any]) -> Dict
         "Display_id": data.get("ETO_OFR_DISPLAY_ID") or offer_id,
         "Title": data.get("ETO_OFR_TITLE") or "",
         "MCAT": data.get("PRIME_MCAT_NAME") or data.get("ETO_OFR_GLCAT_MCAT_NAME") or "",
-        "MCAT_id": data.get("MCAT_IDS") or data.get("FK_GLCAT_MCAT_ID") or "",
+        "MCAT_id": data.get("FK_GLCAT_MCAT_ID") or "",
         "ISQ_info": isq_info,
         "BL_Type": data.get("BY_LEAD_TYPE") or data.get("FK_ETO_OFR_TYPE_ID"),
         "Buyer_profile": buyer_profile,
