@@ -88,7 +88,7 @@ def build_audit_payload_from_buylead(offer_id: str, buylead_response: Dict[str, 
     payload["item_name"] = data.get("ETO_OFR_TITLE") or payload["item_name"]
     payload["item_desc"] = data.get("ETO_OFR_DESC") or ""
     payload["mcat_name"] = data.get("PRIME_MCAT_NAME") or payload["mcat_name"]
-    payload["mcat_id"] = data.get("MCAT_IDS") or payload["mcat_id"]
+    payload["mcat_id"] = data.get("FK_GLCAT_MCAT_ID") or payload["mcat_id"]
 
     price = data.get("ETO_OFR_APPROX_ORDER_VALUE")
     if price in (None, ""):

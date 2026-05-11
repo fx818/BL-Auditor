@@ -51,8 +51,9 @@
       <table class="check-table records-table" id="records-table">
         <thead>
           <tr>
+            <th style="width:64px;">View</th>
             {% for key in rows[0].keys() %}
-            {% if not key.endswith('_raw_json') and not key.endswith('_json') %}
+            {% if key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') %}
             <th>{{ key.replace('_', ' ').title() }}</th>
             {% endif %}
             {% endfor %}
@@ -61,8 +62,15 @@
         <tbody>
           {% for row in rows %}
           <tr class="records-row" data-offer-id="{{ row.get('offer_id', '') }}">
+            <td style="white-space:nowrap;">
+              {% if row.get('trace_id') %}
+              <a href="/traces/{{ row.get('trace_id') }}/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>
+              {% else %}
+              <span style="color:var(--text-muted);font-size:0.72rem;">—</span>
+              {% endif %}
+            </td>
             {% for key, value in row.items() %}
-            {% if not key.endswith('_raw_json') and not key.endswith('_json') %}
+            {% if key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') %}
             <td
               class="{% if key == 'offer_id' %}check-key records-offer-cell{% else %}check-reason{% endif %}"
               data-column="{{ key }}"

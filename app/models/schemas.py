@@ -25,7 +25,7 @@ class AuditPayload(BaseModel):
     mcat_id: str = ""
     mcat_name: str = ""
     mcat_pool: List[McatPoolItem] = []
-    modid: str = "GLADMIN"
+    modid: str = "BL-Testing"
     pc_item_id: int = 0
     price: float = 0
     rejection_code: int = 0

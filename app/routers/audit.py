@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import time
+from typing import Any, Dict
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
@@ -19,6 +20,7 @@ from app.services.buylead_service import (
 from app.services.trace_service import AuditTrace, get_trace, list_traces
 from app.retail_agent import run_retail_agent
 from app.price_agent import run_price_agent
+from app.buyer_profile_agent import run_buyer_profile_agent
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -64,6 +66,10 @@ async def audit(request: Request):
         raise HTTPException(status_code=400, detail="Offer ID must be numeric")
 
     trace = AuditTrace(offer_id)
+    buylead_response = {}
+    payload = {}
+    failed_step = None
+    fatal_exc = None
     try:
         # Step 1: BuyLead API
         t0 = time.monotonic()
@@ -82,22 +88,30 @@ async def audit(request: Request):
                 error=exc,
                 duration_ms=int((time.monotonic() - t0) * 1000),
             )
+            failed_step = "BuyLead API"
+            fatal_exc = exc
             raise
 
         # Step 2: Payload Build
-        payload = build_audit_payload_from_buylead(offer_id, buylead_response)
-        bl_data = buylead_response.get("RESPONSE", {}).get("DATA", {})
-        trace.add_step("Payload Build", "transform",
-            input_={
-                "ETO_OFR_TITLE": bl_data.get("ETO_OFR_TITLE"),
-                "PRIME_MCAT_NAME": bl_data.get("PRIME_MCAT_NAME"),
-                "MCAT_IDS": bl_data.get("MCAT_IDS"),
-                "ETO_OFR_APPROX_ORDER_VALUE": bl_data.get("ETO_OFR_APPROX_ORDER_VALUE"),
-                "ETO_OFR_DESC": bl_data.get("ETO_OFR_DESC"),
-                "ENRICHMENTINFO": bl_data.get("ENRICHMENTINFO"),
-            },
-            output=payload,
-        )
+        try:
+            payload = build_audit_payload_from_buylead(offer_id, buylead_response)
+            bl_data = buylead_response.get("RESPONSE", {}).get("DATA", {})
+            trace.add_step("Payload Build", "transform",
+                input_={
+                    "ETO_OFR_TITLE": bl_data.get("ETO_OFR_TITLE"),
+                    "PRIME_MCAT_NAME": bl_data.get("PRIME_MCAT_NAME"),
+                    "FK_GLCAT_MCAT_ID": bl_data.get("FK_GLCAT_MCAT_ID"),
+                    "ETO_OFR_APPROX_ORDER_VALUE": bl_data.get("ETO_OFR_APPROX_ORDER_VALUE"),
+                    "ETO_OFR_DESC": bl_data.get("ETO_OFR_DESC"),
+                    "ENRICHMENTINFO": bl_data.get("ENRICHMENTINFO"),
+                },
+                output=payload,
+            )
+        except Exception as exc:
+            trace.add_step("Payload Build", "transform", error=exc)
+            failed_step = "Payload Build"
+            fatal_exc = exc
+            raise
 
         # Step 3: Audit API
         t0 = time.monotonic()
@@ -116,6 +130,8 @@ async def audit(request: Request):
                 error=exc,
                 duration_ms=int((time.monotonic() - t0) * 1000),
             )
+            failed_step = "Audit API"
+            fatal_exc = exc
             raise
 
         # Step 4: Retail Agent
@@ -132,7 +148,6 @@ async def audit(request: Request):
                     "system": retail_state.get("system_prompt", ""),
                     "user": retail_state.get("user_message", ""),
                 },
-                sub_steps=retail_state.get("sub_steps", []),
             )
         except Exception as retail_exc:
             retail_result = {
@@ -176,7 +191,36 @@ async def audit(request: Request):
                 duration_ms=int((time.monotonic() - t0) * 1000),
             )
 
-        csv_path = append_audit_dashboard_row(offer_id, payload, result, retail_result, price_result)
+        # Step 6: Buyer Profile Agent
+        t0 = time.monotonic()
+        try:
+            buyer_state = await run_buyer_profile_agent(offer_id, buylead_response, _trace=True)
+            buyer_result = buyer_state["result"]
+            trace.add_step("Buyer Profile Agent", "llm_agent",
+                input_=buyer_state.get("agent_input", {}),
+                raw_output=buyer_state.get("raw_output", ""),
+                parsed=buyer_result,
+                duration_ms=int((time.monotonic() - t0) * 1000),
+                llm_messages={
+                    "system": buyer_state.get("system_prompt", ""),
+                    "user": buyer_state.get("user_message", ""),
+                },
+                sub_steps=buyer_state.get("sub_steps", []),
+            )
+        except Exception as buyer_exc:
+            buyer_result = {
+                "Display_id": offer_id,
+                "Genuineness": "Unverifiable",
+                "Profile_Score": None,
+                "Confidence": "None",
+                "Profile_Reason": "Buyer profile classification failed; see buyer_error.",
+                "error": str(buyer_exc),
+            }
+            trace.add_step("Buyer Profile Agent", "llm_agent",
+                error=buyer_exc,
+                duration_ms=int((time.monotonic() - t0) * 1000),
+            )
+
         try:
             trace_id = trace.save(
                 item_name=result.get("item_name") or payload.get("item_name", ""),
@@ -184,8 +228,31 @@ async def audit(request: Request):
             )
         except Exception:
             trace_id = None
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=_friendly_error(exc))
+        csv_path = append_audit_dashboard_row(offer_id, payload, result, retail_result, price_result, buyer_result, trace_id=trace_id)
+    except Exception:
+        try:
+            trace_id = trace.save(
+                item_name=(payload or {}).get("item_name", ""),
+                mcat_name=(payload or {}).get("mcat_name", ""),
+            )
+        except Exception:
+            trace_id = None
+        return templates.TemplateResponse(
+            "audit_error.html",
+            {
+                "request": request,
+                "offer_id": offer_id,
+                "failed_step": failed_step or "Unknown",
+                "error_message": str(fatal_exc) if fatal_exc else "Unknown error",
+                "friendly_error": _friendly_error(fatal_exc) if fatal_exc else "Audit pipeline error",
+                "steps": trace.steps,
+                "trace_id": trace_id,
+                "buylead_response": buylead_response,
+                "buylead_raw_json": json.dumps(buylead_response, indent=2, ensure_ascii=False) if buylead_response else "",
+                "payload": payload or {},
+                "payload_json": json.dumps(payload, indent=2, ensure_ascii=False) if payload else "",
+            },
+        )
 
     return templates.TemplateResponse(
         "result.html",
@@ -202,6 +269,8 @@ async def audit(request: Request):
             "retail_raw_json": json.dumps(retail_result, indent=2, ensure_ascii=False),
             "price_result": price_result,
             "price_raw_json": json.dumps(price_result, indent=2, ensure_ascii=False),
+            "buyer_result": buyer_result,
+            "buyer_raw_json": json.dumps(buyer_result, indent=2, ensure_ascii=False),
             "trace_id": trace_id,
         },
     )
@@ -226,6 +295,119 @@ async def trace_detail(request: Request, trace_id: str):
     })
 
 
+_RETAIL_FAIL = {
+    "Classification": "UNCLASSIFIED", "Classi_Score": None, "Confidence": "None",
+    "Override_Applied": "No", "Reason": "Retail agent did not run for this trace.",
+}
+_PRICE_FAIL = {
+    "Price_Results": "Unverifiable", "Price_Score": None, "Confidence": "None",
+    "Price_Value_By_AI": "", "Price_Reason": "Price agent did not run for this trace.",
+}
+_BUYER_FAIL = {
+    "Genuineness": "Unverifiable", "Profile_Score": None, "Confidence": "None",
+    "Profile_Reason": "Buyer profile agent did not run for this trace.",
+}
+
+
+def _agent_result_from_step(step: Dict[str, Any], offer_id: str, fallback: Dict[str, Any]) -> Dict[str, Any]:
+    parsed = step.get("parsed") if isinstance(step, dict) else None
+    if isinstance(parsed, dict) and parsed:
+        return parsed
+    err = step.get("error") if isinstance(step, dict) else None
+    base = {"Display_id": offer_id, **fallback}
+    if err:
+        base["error"] = str(err)
+    return base
+
+
+@router.get("/traces/{trace_id}/detail", response_class=HTMLResponse)
+async def trace_detail_view(request: Request, trace_id: str):
+    """Re-renders the single-audit dashboard from a saved trace."""
+    trace = get_trace(trace_id)
+    if not trace:
+        raise HTTPException(status_code=404, detail="Trace not found")
+
+    steps_by_name: Dict[str, Dict[str, Any]] = {}
+    for step in trace.get("steps", []) or []:
+        if isinstance(step, dict) and step.get("name"):
+            steps_by_name[step["name"]] = step
+
+    bl_step = steps_by_name.get("BuyLead API", {})
+    payload_step = steps_by_name.get("Payload Build", {})
+    audit_step = steps_by_name.get("Audit API", {})
+    retail_step = steps_by_name.get("Retail Agent", {})
+    price_step = steps_by_name.get("Price Agent", {})
+    buyer_step = steps_by_name.get("Buyer Profile Agent", {})
+
+    offer_id = trace.get("offer_id", "")
+    buylead_response = bl_step.get("output") if isinstance(bl_step.get("output"), dict) else {}
+    payload = payload_step.get("output") if isinstance(payload_step.get("output"), dict) else {}
+    audit_result = audit_step.get("output") if isinstance(audit_step.get("output"), dict) else {}
+
+    fatal_step = None
+    fatal_error = None
+    for name in ("BuyLead API", "Payload Build", "Audit API"):
+        s = steps_by_name.get(name)
+        if isinstance(s, dict) and s.get("status") == "error":
+            fatal_step = name
+            fatal_error = s.get("error", "")
+            break
+
+    if fatal_step:
+        return templates.TemplateResponse(
+            "audit_error.html",
+            {
+                "request": request,
+                "offer_id": offer_id,
+                "failed_step": fatal_step,
+                "error_message": fatal_error or "Unknown error",
+                "friendly_error": f"{fatal_step} failed for this trace.",
+                "steps": trace.get("steps", []),
+                "trace_id": trace_id,
+                "buylead_response": buylead_response,
+                "buylead_raw_json": "",
+                "payload": payload or {},
+                "payload_json": "",
+            },
+        )
+
+    retail_result = _agent_result_from_step(retail_step, offer_id, _RETAIL_FAIL)
+    price_result = _agent_result_from_step(price_step, offer_id, _PRICE_FAIL)
+    buyer_result = _agent_result_from_step(buyer_step, offer_id, _BUYER_FAIL)
+
+    def _dump(value: Any) -> str:
+        if value in (None, ""):
+            return ""
+        if isinstance(value, str):
+            return value
+        try:
+            return json.dumps(value, indent=2, ensure_ascii=False)
+        except (TypeError, ValueError):
+            return str(value)
+
+    return templates.TemplateResponse(
+        "result.html",
+        {
+            "request": request,
+            "data": audit_result,
+            "payload": payload,
+            "offer_id": offer_id,
+            "buylead_response": buylead_response,
+            "csv_path": "",
+            "retail_result": retail_result,
+            "price_result": price_result,
+            "buyer_result": buyer_result,
+            "trace_id": trace_id,
+            "is_detail_view": True,
+            "buylead_raw_json": _dump(buylead_response),
+            "raw_json": _dump(audit_result),
+            "retail_raw_json": _dump(retail_result),
+            "price_raw_json": _dump(price_result),
+            "buyer_raw_json": _dump(buyer_result),
+        },
+    )
+
+
 @router.get("/batch", response_class=HTMLResponse)
 async def batch_page(request: Request):
     return templates.TemplateResponse("batch.html", {"request": request})
@@ -241,20 +423,64 @@ async def batch_stream(offer_ids: str = ""):
         for i, offer_id in enumerate(ids, 1):
             if not offer_id.isdigit():
                 errors += 1
-                yield _sse({"index": i, "total": total, "offer_id": offer_id, "error": "Invalid offer ID — must be numeric"})
+                yield _sse({"index": i, "total": total, "offer_id": offer_id, "error": "Invalid offer ID — must be numeric", "failed_step": "Validation", "steps": []})
                 continue
+            trace = AuditTrace(offer_id)
+            buylead_response = {}
+            payload = {}
+            failed_step = None
             try:
-                buylead_response = await fetch_buylead_detail(offer_id)
-                payload = build_audit_payload_from_buylead(offer_id, buylead_response)
-                result, retail_raw, price_raw = await asyncio.gather(
+                t0 = time.monotonic()
+                try:
+                    buylead_response = await fetch_buylead_detail(offer_id)
+                    trace.add_step("BuyLead API", "api_call",
+                        endpoint=BUYLEAD_API_URL,
+                        input_={"offer_id": offer_id},
+                        output=buylead_response,
+                        duration_ms=int((time.monotonic() - t0) * 1000),
+                    )
+                except Exception as exc:
+                    trace.add_step("BuyLead API", "api_call",
+                        endpoint=BUYLEAD_API_URL,
+                        input_={"offer_id": offer_id},
+                        error=exc,
+                        duration_ms=int((time.monotonic() - t0) * 1000),
+                    )
+                    failed_step = "BuyLead API"
+                    raise
+
+                try:
+                    payload = build_audit_payload_from_buylead(offer_id, buylead_response)
+                    trace.add_step("Payload Build", "transform", output=payload)
+                except Exception as exc:
+                    trace.add_step("Payload Build", "transform", error=exc)
+                    failed_step = "Payload Build"
+                    raise
+
+                t0 = time.monotonic()
+                result, retail_raw, price_raw, buyer_raw = await asyncio.gather(
                     call_auditor_api(payload),
                     run_retail_agent(offer_id, buylead_response),
                     run_price_agent(offer_id, buylead_response),
+                    run_buyer_profile_agent(offer_id, buylead_response),
                     return_exceptions=True,
                 )
 
                 if isinstance(result, Exception):
+                    trace.add_step("Audit API", "api_call",
+                        endpoint=AUDITOR_API_URL,
+                        input_=payload,
+                        error=result,
+                        duration_ms=int((time.monotonic() - t0) * 1000),
+                    )
+                    failed_step = "Audit API"
                     raise result
+                trace.add_step("Audit API", "api_call",
+                    endpoint=AUDITOR_API_URL,
+                    input_=payload,
+                    output=result,
+                    duration_ms=int((time.monotonic() - t0) * 1000),
+                )
 
                 retail_result = retail_raw if isinstance(retail_raw, dict) else {
                     "Display_id": offer_id, "Classification": "UNCLASSIFIED",
@@ -268,8 +494,23 @@ async def batch_stream(offer_ids: str = ""):
                     "Price_Value_By_AI": "",
                     "Price_Reason": "Price agent failed.", "error": str(price_raw),
                 }
+                buyer_result = buyer_raw if isinstance(buyer_raw, dict) else {
+                    "Display_id": offer_id,
+                    "Genuineness": "Unverifiable",
+                    "Profile_Score": None, "Confidence": "None",
+                    "Profile_Reason": "Buyer profile agent failed.",
+                    "error": str(buyer_raw),
+                }
 
-                append_audit_dashboard_row(offer_id, payload, result, retail_result, price_result)
+                try:
+                    ok_trace_id = trace.save(
+                        item_name=result.get("item_name") or payload.get("item_name", ""),
+                        mcat_name=payload.get("mcat_name", ""),
+                    )
+                except Exception:
+                    ok_trace_id = None
+
+                append_audit_dashboard_row(offer_id, payload, result, retail_result, price_result, buyer_result, trace_id=ok_trace_id)
 
                 def _nested(src, *keys):
                     v = src
@@ -281,6 +522,7 @@ async def batch_stream(offer_ids: str = ""):
                     "index": i,
                     "total": total,
                     "offer_id": offer_id,
+                    "trace_id": ok_trace_id,
                     "item_name": result.get("item_name") or payload.get("item_name", ""),
                     "mcat_name": payload.get("mcat_name", ""),
                     "price": payload.get("price", ""),
@@ -308,10 +550,30 @@ async def batch_stream(offer_ids: str = ""):
                     "price_value_by_ai": price_result.get("Price_Value_By_AI", ""),
                     "price_agent_reason": price_result.get("Price_Reason", ""),
                     "price_error": price_result.get("error", ""),
+                    "buyer_profile_genuineness": buyer_result.get("Genuineness", ""),
+                    "buyer_profile_score": buyer_result.get("Profile_Score", ""),
+                    "buyer_profile_confidence": buyer_result.get("Confidence", ""),
+                    "buyer_profile_reason": buyer_result.get("Profile_Reason", ""),
+                    "buyer_error": buyer_result.get("error", ""),
                 })
             except Exception as exc:
                 errors += 1
-                yield _sse({"index": i, "total": total, "offer_id": offer_id, "error": str(exc)})
+                try:
+                    err_trace_id = trace.save(
+                        item_name=(payload or {}).get("item_name", ""),
+                        mcat_name=(payload or {}).get("mcat_name", ""),
+                    )
+                except Exception:
+                    err_trace_id = None
+                yield _sse({
+                    "index": i,
+                    "total": total,
+                    "offer_id": offer_id,
+                    "error": str(exc),
+                    "failed_step": failed_step or "Unknown",
+                    "steps": trace.steps,
+                    "trace_id": err_trace_id,
+                })
 
             await asyncio.sleep(0)
 
@@ -385,6 +647,13 @@ async def demo(request: Request):
         "Price_Value_By_AI": "",
         "Price_Reason": "Demo page does not call the price agent.",
     }
+    buyer_result = {
+        "Display_id": "142764424452",
+        "Genuineness": "Unverifiable",
+        "Profile_Score": None,
+        "Confidence": "None",
+        "Profile_Reason": "Demo page does not call the buyer profile agent.",
+    }
 
     return templates.TemplateResponse(
         "result.html",
@@ -401,5 +670,7 @@ async def demo(request: Request):
             "retail_raw_json": json.dumps(retail_result, indent=2),
             "price_result": price_result,
             "price_raw_json": json.dumps(price_result, indent=2),
+            "buyer_result": buyer_result,
+            "buyer_raw_json": json.dumps(buyer_result, indent=2),
         },
     )

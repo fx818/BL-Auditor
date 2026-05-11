@@ -56,6 +56,10 @@ class AuditTrace:
             step["sub_steps"] = sub_steps
         self._steps.append(step)
 
+    @property
+    def steps(self) -> List[Dict[str, Any]]:
+        return self._steps
+
     def save(self, item_name: str = "", mcat_name: str = "") -> str:
         TRACES_DIR.mkdir(exist_ok=True)
         ts = self.started_at.strftime("%Y%m%d_%H%M%S")

@@ -25,8 +25,6 @@ class RetailState(TypedDict, total=False):
     user_message: str
     raw_output: str
     result: Dict[str, Any]
-    prepare_sub_steps: List[Dict[str, Any]]
-    classify_sub_steps: List[Dict[str, Any]]
 
 
 def _clean(value: Any) -> str:
@@ -181,7 +179,7 @@ def _build_offer_source(offer_id: str, buylead_response: Dict[str, Any]) -> Dict
         "Display_id": data.get("ETO_OFR_DISPLAY_ID") or offer_id,
         "Title": data.get("ETO_OFR_TITLE") or "",
         "MCAT": data.get("PRIME_MCAT_NAME") or data.get("ETO_OFR_GLCAT_MCAT_NAME") or "",
-        "MCAT_id": data.get("MCAT_IDS") or data.get("FK_GLCAT_MCAT_ID") or "",
+        "MCAT_id": data.get("FK_GLCAT_MCAT_ID") or "",
         "ISQ_info": isq_info,
         "BL_Type": data.get("BY_LEAD_TYPE") or data.get("FK_ETO_OFR_TYPE_ID"),
         "Buyer_profile": buyer_profile,
@@ -421,37 +419,27 @@ def _find_price_data(norm_unit: str) -> Dict[str, float] | None:
 
 
 def _clean_classifier_output(raw: str) -> Dict[str, Any]:
-    raw = (raw or "").replace("```json", "").replace("```", "").strip()
-    return json.loads(raw)
+    text = (raw or "").replace("```json", "").replace("```", "").strip()
+    if not text:
+        raise ValueError("LLM returned empty response")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r"\{[\s\S]*\}", text)
+        if not match:
+            raise ValueError(f"No JSON object found in LLM output: {text[:300]}")
+        return json.loads(match.group(0))
 
 
 async def _prepare_input(state: RetailState) -> RetailState:
-    sub: List[Dict[str, Any]] = []
     offer_id = state["offer_id"]
-
     source = _build_offer_source(offer_id, state["buylead_response"])
-    sub.append({"seq": 1, "node": "prepare_input", "fn": "_build_offer_source",
-                "input": {"offer_id": offer_id}, "output": source})
-
     offer = _bl_detail_and_keys(source)
-    sub.append({"seq": 2, "node": "prepare_input", "fn": "_bl_detail_and_keys",
-                "input": source, "output": offer})
 
-    qty_raw = offer.get("Qty")
-    qty = _extract_qty(qty_raw)
-    sub.append({"seq": 3, "node": "prepare_input", "fn": "_extract_qty",
-                "input": {"qty_str": qty_raw}, "output": qty})
-
+    qty = _extract_qty(offer.get("Qty"))
     slab = _get_slab(qty)
-    sub.append({"seq": 4, "node": "prepare_input", "fn": "_get_slab",
-                "input": {"qty": qty}, "output": slab})
-
     norm_unit = _normalize_mcat_unit(offer.get("MCAT_Unit"))
-    sub.append({"seq": 5, "node": "prepare_input", "fn": "_normalize_mcat_unit",
-                "input": {"value": offer.get("MCAT_Unit")}, "output": norm_unit})
 
-    # Evidence lookup with fallback chain:
-    # exact slab → unit-only cross-slab aggregate → no_data
     by_slab, by_unit = _load_evidence_metrics()
     metrics: Dict[str, Any] | None = None
     evidence_match = "no_data"
@@ -466,20 +454,13 @@ async def _prepare_input(state: RetailState) -> RetailState:
             evidence_match = "unit_only"
     if metrics is None:
         metrics = _empty_evidence_metrics()
-    sub.append({"seq": 6, "node": "prepare_input", "fn": "_load_evidence_metrics",
-                "input": {"slab_key": slab_key or "(skipped)", "unit_key": norm_unit},
-                "output": {"match_level": evidence_match, "metrics": metrics}})
 
-    # Price lookup
     price = _find_price_data(norm_unit)
     if price is None:
         price = {"q1": 0, "median": 0, "q3": 0}
         price_match = "no_data"
     else:
         price_match = "exact"
-    sub.append({"seq": 7, "node": "prepare_input", "fn": "_find_price_data",
-                "input": {"norm_unit": norm_unit},
-                "output": {"match_level": price_match, "price": price}})
 
     agent_input: Dict[str, Any] = {
         **offer,
@@ -498,10 +479,8 @@ async def _prepare_input(state: RetailState) -> RetailState:
         "q3": price["q3"],
         "price_match": price_match,
     }
-    sub.append({"seq": 8, "node": "prepare_input", "fn": "_merge_inputs[result]",
-                "input": {"offer_keys": list(offer.keys())}, "output": agent_input})
 
-    return {"agent_input": agent_input, "prepare_sub_steps": sub}
+    return {"agent_input": agent_input}
 
 
 async def _classify(state: RetailState) -> RetailState:
@@ -513,18 +492,9 @@ async def _classify(state: RetailState) -> RetailState:
     if not api_key or not model:
         raise RuntimeError("Missing RETAIL_LLM_API_KEY or RETAIL_LLM_MODEL")
 
-    sub: List[Dict[str, Any]] = []
     agent_input = state["agent_input"]
-
     raw_prompt = _read_prompt()
-    sub.append({"seq": 1, "node": "classify", "fn": "_read_prompt",
-                "input": {"path": str(PROMPT_PATH)},
-                "output": {"char_count": len(raw_prompt)}})
-
     system_prompt = _render_template(raw_prompt, agent_input)
-    sub.append({"seq": 2, "node": "classify", "fn": "_render_template",
-                "input": {"variables": list(agent_input.keys())},
-                "output": {"char_count": len(system_prompt)}})
 
     _msg_keys = [
         "Display_id", "MCAT", "MCAT_id", "MCAT_Unit", "Retail_Flag",
@@ -534,30 +504,20 @@ async def _classify(state: RetailState) -> RetailState:
         "evidence_match", "evidence_count",
     ]
     user_text = "\n".join(f"{k}: {agent_input.get(k, '')}" for k in _msg_keys)
-    sub.append({"seq": 3, "node": "classify", "fn": "build_user_message",
-                "input": {"keys": _msg_keys},
-                "output": user_text})
 
     llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
-    sub.append({"seq": 4, "node": "classify", "fn": "ChatOpenAI.ainvoke",
-                "input": {"model": model, "base_url": base_url,
-                          "system_chars": len(system_prompt), "user_chars": len(user_text)},
-                "output": None})
     response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
     raw_output = str(response.content)
-    sub[-1]["output"] = {"response_chars": len(raw_output), "preview": raw_output[:300]}
-
-    result = _clean_classifier_output(raw_output)
-    sub.append({"seq": 5, "node": "classify", "fn": "_clean_classifier_output",
-                "input": {"raw_chars": len(raw_output)},
-                "output": result})
+    try:
+        result = _clean_classifier_output(raw_output)
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Retail LLM output parse failed: {exc}. Raw: {raw_output[:500]!r}") from exc
 
     return {
         "system_prompt": system_prompt,
         "user_message": user_text,
         "raw_output": raw_output,
         "result": result,
-        "classify_sub_steps": sub,
     }
 
 
@@ -594,6 +554,5 @@ async def run_retail_agent(
             "raw_output": state.get("raw_output", ""),
             "system_prompt": state.get("system_prompt", ""),
             "user_message": state.get("user_message", ""),
-            "sub_steps": state.get("prepare_sub_steps", []) + state.get("classify_sub_steps", []),
         }
     return state["result"]

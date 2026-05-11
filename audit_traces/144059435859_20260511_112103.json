@@ -1,0 +1,1265 @@
+{
+  "trace_id": "144059435859_20260511_112103",
+  "offer_id": "144059435859",
+  "item_name": "Soffit Panel",
+  "mcat_name": "Soffit Panel",
+  "started_at": "2026-05-11T11:21:03.744449",
+  "completed_at": "2026-05-11T11:23:48.694816",
+  "total_steps": 6,
+  "has_error": true,
+  "steps": [
+    {
+      "step": 1,
+      "name": "BuyLead API",
+      "type": "api_call",
+      "timestamp": "2026-05-11T11:21:04.944162",
+      "status": "success",
+      "duration_ms": 1199,
+      "endpoint": "https://leads.imutils.com/wservce/buyleads/detail/",
+      "input": {
+        "offer_id": "144059435859"
+      },
+      "output": {
+        "RESPONSE": {
+          "CODE": "200",
+          "STATUS": "1",
+          "DATA": {
+            "REJECT": "1",
+            "ETO_OFR_DISPLAY_ID": "144059435859",
+            "ETO_OFR_DATE": "11-MAY-26",
+            "OFR_DATE": "20260511110839",
+            "ETO_OFR_QTY": null,
+            "ETO_OFR_QTY_UNIT": null,
+            "ETO_OFR_VERIFIED": "3",
+            "FK_GLUSR_USR_ID": "3KsNnJ7dsg==",
+            "IS_WHATSAPP_ACTIVE": null,
+            "ETO_OFR_APPROV": "A",
+            "PROD_SERV": "P",
+            "FK_GLCAT_MCAT_ID": "116782",
+            "ETO_ENQ_TYP": null,
+            "FK_GL_COUNTRY_ISO": "IN",
+            "ETO_OFR_TITLE": "Soffit Panel",
+            "ETO_OFR_LAST_UPDATED": "11-MAY-26",
+            "ETO_OFR_GLCAT_MCAT_NAME": "Soffit Panel",
+            "ETO_OFR_APPROX_ORDER_VALUE": null,
+            "ETO_OFR_KEYWORDS": null,
+            "GLUSR_USR_STATE": "Rajasthan",
+            "ETO_OFR_SMALL_IMAGE": null,
+            "ETO_OFR_MEDIUM_IMAGE": null,
+            "ETO_OFR_LARGE_IMAGE": null,
+            "ETO_OFR_SMALL_IMAGE_WH": null,
+            "ETO_OFR_MEDIUM_IMAGE_WH": null,
+            "ETO_OFR_LARGE_IMAGE_WH": null,
+            "ETO_OFR_ORIGINAL_IMAGE_WH": null,
+            "ETO_OFR_MODREF_TYPE": null,
+            "ETO_OFR_MODREFID": "2858509562112",
+            "ETO_OFR_DESC": "",
+            "DAY_DIFF_CEIL": "0",
+            "DAY_DIFF": "0",
+            "HR_DIFF": "0",
+            "MIN_DIFF": "12",
+            "GL_COUNTRY_FLAG_SMALL": "https://1.imimg.com/country-flags/small/in_flag_s.png",
+            "GLUSR_USR_FAX_COUNTRY": "91",
+            "GLUSR_USR_PH_COUNTRY": "91",
+            "GLUSR_COMPANY": "loo",
+            "GLUSR_NAME": "Kl Gupta",
+            "NAME_AVAILABLE": "1",
+            "GLUSR_DESIGNATION": null,
+            "FK_GL_CITY_ID": "70672",
+            "GLUSR_CITY": "Jaipur",
+            "FK_GL_STATE_ID": "6496",
+            "GLUSR_STATE": "Rajasthan",
+            "GLUSR_DISTRICT": "Jaipur",
+            "GL_CITY_DISTRICT_HQ": "70672",
+            "GLUSR_ADDRESS": null,
+            "ADDRESS_AVAILABLE": "0",
+            "GLUSR_USR_FAX_NUMBER": null,
+            "GLUSR_USR_FAX_AREA": null,
+            "GLUSR_ZIP": null,
+            "GLUSR_URL": null,
+            "GLUSR_COUNTRY": "India",
+            "GLUSR_COUNTRY_BUY": "India",
+            "ETO_OFR_IMAGE_PATH1": null,
+            "ETO_OFR_IMAGE_PATH2": null,
+            "ETO_OFR_IMAGE_PATH3": null,
+            "USER_IDENTIFIER_FLAG": "94",
+            "GLUSR_MOBILE": null,
+            "FK_GLCAT_CAT_ID": "191",
+            "ETO_OFR_DOC_PATH": null,
+            "GLUSR_USR_PH_NUMBER": null,
+            "GLUSR_USR_PH_AREA": null,
+            "GLUSR_USR_PH_MOBILE_ALT": null,
+            "GLUSR_USR_EMAIL": null,
+            "BUSINESS_TYPE": null,
+            "YEAR_OF_ESTABLISHMENT": null,
+            "INDIAMART_MEMBER_SINCE": "17-SEP-11",
+            "GLUSR_USR_MEMBERSINCE": "14+ years",
+            "GL_LEGAL_STATUS_VAL": null,
+            "GLUSR_USR_EMAIL_ALT": null,
+            "FK_ETO_OFR_TYPE_ID": "2",
+            "FK_GL_MODULE_ID": "IMOB",
+            "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"500 Square Feet\"},{\"DESC\":\"Length\",\"RESPONSE\":\"10 ft\"},{\"DESC\":\"Brand\",\"RESPONSE\":\"Vox\"},{\"DESC\":\"Material\",\"RESPONSE\":\"PVC\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 40,000 - 52,000\"}]}",
+            "IS_ATTACHMENT": null,
+            "ADDITIONALINFO": null,
+            "ATTACHMENT_DETAIL": null,
+            "ETO_OFR_POSTDATE_ORIG": "11-MAY-26",
+            "ETO_OFR_EXP_DATE": "14-MAY-26",
+            "ETO_OFR_DELETIONDATE": null,
+            "BY_LEAD_TYPE": "3",
+            "PURCHASE_STATUS": "OPEN",
+            "LOGO_TYPE": "{\"0\":\"Updated Only\"}",
+            "PRIME_MCAT_NAME": "Soffit Panel",
+            "ETO_ENQ_PURPOSE": null,
+            "ETO_OFR_REQ_APP_USAGE": null,
+            "ETO_OFR_REQ_FREQ": null,
+            "ETO_OFR_GEOGRAPHY_ID": null,
+            "ETO_OFR_GEO_CITY1_ID": null,
+            "ETO_OFR_GEO_CITY2_ID": null,
+            "ETO_OFR_GEO_CITY3_ID": null,
+            "ETO_OFR_BUYER_LEADS_CNT": "0",
+            "ETO_OFR_BUYER_IS_MOB_VERF": "1",
+            "ETO_OFR_BUYER_IS_GST_VERF": "0",
+            "ETO_OFR_BUYER_PRIME_MCATS": "Groundnut Oil,Refined Groundnut Oil",
+            "ETO_OFR_BUYER_PAST_SEARCH_MCAT": "Soffit Panel",
+            "ETO_OFR_BUYER_SELL_MCATS": null,
+            "ETO_OFR_BUYER_TOT_REQUIREMENT": "2",
+            "ETO_OFR_BUYER_TOT_UNQ_CALLS_CNT": "0",
+            "ETO_OFR_BUYER_REPLY_CNT": "0",
+            "ETO_OFR_EMAIL_VERIFIED": "0",
+            "MCAT_IDS": "116782",
+            "GL_CITY_DISTRICT_HQ_NAME": "Jaipur",
+            "ORDER_VAL": "500",
+            "IS_INDEX": "index,follow",
+            "BREADCRUMB_DETAILS": {
+              "GLCAT_MCAT_ID": null,
+              "GLCAT_MCAT_FLNAME": null,
+              "GLCAT_MCAT_NAME": null
+            },
+            "PRODUCTS_ENQUIRED": [],
+            "UNAVAILABLE_AFTER": "Thursday, 13-Aug-26 00:00:00 EST",
+            "TITLE": "Soffit Panel buyer and buylead in Jaipur,Rajasthan | ID: 144059435859",
+            "DESC": "Buyer is looking for Soffit Panel in Jaipur,Rajasthan. Find buyers, buyleads, buying requirements and RFQs for Soffit Panel from India and abroad.",
+            "SUPPLIER_COUNT": 0,
+            "SUPPLIER_DETAIL": [],
+            "GLCAT_ALLCAT_GRP_ETOFNME": "builders-hardware",
+            "GLCAT_ALLCAT_ETOFNME": "buliding-construction-material",
+            "GLCAT_ALLCAT_GRP_ETOSNME": "Building & Construction",
+            "GLCAT_ALLCAT_DEFSHORTNAME": "Building Panels & Cladding Materials",
+            "ETO_CREDITS": 200
+          },
+          "MESSAGE": "THE OFFER IS VALID"
+        },
+        "unique_id": "6a016e49a39ec"
+      }
+    },
+    {
+      "step": 2,
+      "name": "Payload Build",
+      "type": "transform",
+      "timestamp": "2026-05-11T11:21:04.944350",
+      "status": "success",
+      "duration_ms": 0,
+      "input": {
+        "ETO_OFR_TITLE": "Soffit Panel",
+        "PRIME_MCAT_NAME": "Soffit Panel",
+        "FK_GLCAT_MCAT_ID": "116782",
+        "ETO_OFR_APPROX_ORDER_VALUE": null,
+        "ETO_OFR_DESC": "",
+        "ENRICHMENTINFO": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"500 Square Feet\"},{\"DESC\":\"Length\",\"RESPONSE\":\"10 ft\"},{\"DESC\":\"Brand\",\"RESPONSE\":\"Vox\"},{\"DESC\":\"Material\",\"RESPONSE\":\"PVC\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 40,000 - 52,000\"}]}"
+      },
+      "output": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "500 Square Feet"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Length",
+            "ISQ_RESPONSE": "10 ft"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "Vox"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Material",
+            "ISQ_RESPONSE": "PVC"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 40,000 - 52,000"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Soffit Panel",
+        "mcat_flag": "-1",
+        "mcat_id": "116782",
+        "mcat_name": "Soffit Panel",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 144059435859,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 3,
+      "name": "Audit API",
+      "type": "api_call",
+      "timestamp": "2026-05-11T11:21:16.257973",
+      "status": "success",
+      "duration_ms": 11313,
+      "endpoint": "http://3.108.184.25/categorization_outlier",
+      "input": {
+        "ISQ": [
+          {
+            "IM_SPEC_MASTER_DESC": "Quantity",
+            "ISQ_RESPONSE": "500 Square Feet"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Length",
+            "ISQ_RESPONSE": "10 ft"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Brand",
+            "ISQ_RESPONSE": "Vox"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Material",
+            "ISQ_RESPONSE": "PVC"
+          },
+          {
+            "IM_SPEC_MASTER_DESC": "Probable Order Value",
+            "ISQ_RESPONSE": "Rs. 40,000 - 52,000"
+          }
+        ],
+        "approval_status": 10,
+        "custtype": "53",
+        "display_name": "",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": 1,
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_desc": "",
+        "item_name": "Soffit Panel",
+        "mcat_flag": "-1",
+        "mcat_id": "116782",
+        "mcat_name": "Soffit Panel",
+        "mcat_pool": [],
+        "modid": "GLADMIN",
+        "pc_item_id": 144059435859,
+        "price": 0,
+        "rejection_code": 0,
+        "screen_name": "live_product_approval",
+        "secondary_mcats": [],
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      },
+      "output": {
+        "GLUSERID": "187147894",
+        "Generic_Category_Outlier_Flag": "False",
+        "ISQs": "[{'IM_SPEC_MASTER_DESC': 'Quantity', 'ISQ_RESPONSE': '500 Square Feet'}, {'IM_SPEC_MASTER_DESC': 'Length', 'ISQ_RESPONSE': '10 ft'}, {'IM_SPEC_MASTER_DESC': 'Brand', 'ISQ_RESPONSE': 'Vox'}, {'IM_SPEC_MASTER_DESC': 'Material', 'ISQ_RESPONSE': 'PVC'}, {'IM_SPEC_MASTER_DESC': 'Probable Order Value', 'ISQ_RESPONSE': 'Rs. 40,000 - 52,000'}]",
+        "MAPPED_CATEGORY_ID": "116782",
+        "MCAT_GENERIC_FLAG": "None",
+        "PII_modified": {
+          "error_msg": "",
+          "status": "selected",
+          "tile_msg": ""
+        },
+        "PRODUCT_ITEM_ID": "144059435859",
+        "Service_mcat": "False",
+        "auditor_1_2_raw_response": {
+          "category": "Soffit Panel",
+          "category_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "",
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "skip_reason": "Skipped: no category_pool provided.",
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "category_agent_result": {
+            "new_category": "",
+            "new_category_id": "",
+            "new_category_reason": "rank_1_missing"
+          },
+          "category_pool": [],
+          "cross_entity_result": {
+            "data": {
+              "cost": 0.053487,
+              "cross_modal_api_raw_response": {
+                "task_1": {
+                  "primary_object": "Soffit panel"
+                },
+                "task_2": {
+                  "ocr_text": "VOX"
+                },
+                "task_3": {
+                  "product_search_query": "Soffit panel Vox PVC"
+                },
+                "task_4": {
+                  "primary_object_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Soffit panel' is consistent with the specifications mentioning Quantity, Length, Brand, and Material (PVC).",
+                    "status": "not_outlier"
+                  },
+                  "primary_object_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Soffit panel' directly matches the product title 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product photo depicts a soffit panel, which is consistent with the provided specifications for quantity, length, brand, and material.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_product_title": {
+                    "confidence": "high",
+                    "reason": "The product photo shows a soffit panel, which aligns with the product title 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_product_specifications": {
+                    "confidence": "high",
+                    "reason": "The product title 'Soffit Panel' is consistent with the specifications, which describe a quantity, length, brand, and material for soffit panels.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_5": {
+                  "primary_object_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The primary object 'Soffit panel' directly matches the category name 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  },
+                  "product_photo_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product photo shows a soffit panel, which is consistent with the category name 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  },
+                  "product_specifications_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product specifications (quantity, length, brand, material) are consistent with the product class represented by the category name 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  },
+                  "product_title_vs_category_name": {
+                    "confidence": "high",
+                    "reason": "The product title 'Soffit Panel' aligns with the category name 'Soffit Panel'.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_6": {
+                  "core_alignment_check": {
+                    "confidence": "high",
+                    "reason": "The product, as described by its title, photo, and specifications, is a soffit panel, which directly matches the category 'Soffit Panel' and is not a part, accessory, service, used item, or unrelated product.",
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "photo_category_verdict": {
+                "reason": "The primary object 'Soffit panel' directly matches the category name 'Soffit Panel'.",
+                "status": "not_outlier"
+              },
+              "photo_spec_verdict": {
+                "reason": "The primary object 'Soffit panel' is consistent with the specifications mentioning Quantity, Length, Brand, and Material (PVC).",
+                "status": "not_outlier"
+              },
+              "photo_title_verdict": {
+                "reason": "The primary object 'Soffit panel' directly matches the product title 'Soffit Panel'.",
+                "status": "not_outlier"
+              },
+              "prompt_used": "\nYou are a product catalog quality reviewer. You will analyze a product listing across image, text fields, and a category mapping, and return a strict JSON verdict for each defined task \n\nTwo images are attached to this request, in this exact order:\n  1) IMAGE 1 - Product Photo. The actual product being listed.\n  2) IMAGE 2 - Category Photo. A generic reference showing the type of product the category sells.\nDo not confuse the two images. \n\nIsolation rule for task 1 and task 2.\nFor Task 1 (Primary Object) and Task 2 (OCR), use ONLY the Product Photo above.\nDo NOT read, peek at, or use any of the Text Inputs declared further below in this prompt \n \nInstructions:\nTask 1:\n  Image Analysis: Carefully Detect the primary object from IMAGE 1 (Product Photo). \n  Avoid generic terms, unless no specific object can be inferred. Do not invent features not visible.\n\nTask 2:\n  - OCR (Optical Character Recognition): Carefully Extract text from the IMAGE 1 (Product Photo). \n  - Include only unique, clearly readable, product-related text (deduplicate repeated words/logos).\n  - Exclude watermarks, overlays, background patterns, decorative text, reflections, serials on wires/cables, partial or uncertain characters, repeated branding, and noise.\n  - Strictly base all OCR on the visible text and components in the provided image. Do not infer, normalize, correct, or hallucinate text. Preserve visible casing and spelling.\n  - If the image is noisy, include only confidently readable text.\n  - Max length: 200 characters.\n  - Do NOT read text from IMAGE 2 (attached to this request)\n\nProduct Title: Soffit Panel\nProduct Specifications: Quantity: 500 Square Feet, Length: 10 ft, Brand: Vox, Material: PVC, Probable Order Value: Rs. 40,000 - 52,000\nCategory Name: Soffit Panel\nCategory Photo: provided as IMAGE 2 \n\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). \n\nTreat the Task 1 and Task 2 answers as fixed inputs . Do NOT revise them at this stage even if the text inputs suggest otherwise. \n\nTask 3:\nProduct Search Query : Generate a query using Primary Object (from Task 1) + OCR Extracted text (from Task 2) + Product Title + Product Specifications to represent the product.\n - Maximum word limit: 5.\n - Query should be relevant, grammatically correct, SEO-friendly for ecommerce search and should be able to represent the product. \n   Example: 1) bosch gsb550 power drill. \n            2) 5 ton hydraulic floor jack\n            3) 200 litre stainless storage tank\n            4) red cordless handheld vacuum\n - Recheck the query to make sure that it is meaningful.\n\nTask 4: Contradiction Check\nIdentify if there is contradiction in each pair below.\nAnalyze each pair independently. An \"outlier\" here requires a mismatch between the two listed sources. If the sources agree on the core fact, it is \"not outlier,\" even if one source is poorly formatted or has internal errors.\nIf the product title describes a service (e.g., 'Printing Services', 'Repair Service', 'Installation Service') and the photo shows the physical subject or substrate of that service, this is NOT a contradiction. Such photos are standard practice for service listings.\n  4a) Primary Object of IMAGE 1 (Product Photo) - Product Title\n   Only flag as outlier when the photo shows a fundamentally different product type - e.g., photo shows a motorcycle when title says 'bicycle', or photo shows a ceiling fan when title says 'table fan'. Specificity gaps (photo more specific than title) are never contradictions - e.g., a red cordless handheld vacuum cleaner photographed under the title 'Vacuum Cleaner' is not a contradiction.\n  4b) IMAGE 1 (Product Photo)  -  Product Title\n  4c) Primary Object of IMAGE 1 (Product Photo) -  Product Specifications\n  4d) IMAGE 1 (Product Photo)  - Product Specifications\n  4e) Product Title - Product Specifications \n\nTask 5: Category Analysis\nAnalyze the Category Name: Soffit Panel  and identify the type of products it represents. Refer to IMAGE 2 (Category Photo) for product class only. Refer to Category Photo IMAGE 2 Disclaimer below.\nCategory Photo IMAGE 2 Disclaimer: The Category Photo IMAGE 2 is a generic reference showing the type of product sold in this category — not a visual standard. Products may differ in  color, shape, size, design, or model and still belong to the category. Use it only to understand the product class (e.g., \"this category sells pumps\"). If image is missing, use Category Name for analysis.\nOnly flag as \"outlier\" if the entity does not belong in the category. Ignore spelling/formatting errors in the entities. \nA product being a specific variant, design, or themed version of the category product still belongs to the category. Only flag as outlier if the product is from a completely different product class. A character-themed keychain belongs in 'Fashion Keychain'. A holographic sticker belongs in 'PVC Stickers'. A specific institutional badge belongs in 'Corporate/School Event Badges'. An enamel coated wooden tray belongs in 'Wooden Tray'.\nUse the Category understanding from above to identify if there is a contradiction in:\n  5a) Primary Object of IMAGE 1 (Product Photo) - Category\n  5b) IMAGE 1 (Product Photo)  - Category\n  5c) Product Title - Category\n  5d) Product Specifications - Category\n\nTask 6: \nCore Alignment Check: Determine whether the Product (based on Title, Specifications, and IMAGE 1 (Product Photo) ) is any of the following relative to the mapped Category: \n- A Part or Component of the category product \n- An Accessory of the category product \n- A Service related to the category product \n- A Used / Second-Hand version of the category product \n- An entirely different / unrelated product \nIf ANY of the above conditions are true, mark as \"Outlier.\" \nIf the product IS the category product (new, whole, and complete), mark as \"Not Outlier.\"\n\nOutlier Examples (mark as Outlier): \n1. Car Vent Clip → Car AC Category [Reason: Clip is an accessory used near AC, not the AC unit itself] \n2. Blasting Machine Valve → Blasting Machine Category [Reason: Valve is a component/part of the machine] \n3. JCB Backhoe Loader Service → JCB Backhoe Loader Category [Reason: Service offering, not the physical machine] \n4. Second Hand Tractor → Tractor Category [Reason: Used/second-hand condition, not a new product] \n5. Generator Battery Cable → Generator Category [Reason: Cable is an accessory, not the generator itself]\n6. Washing Machine Repair Service → Washing Machine Category [Reason: Service, not a physical product] \n\nNot Outlier Examples (mark as Not Outlier): \n1. Adidas Unisex Trainers Samba OG Shoes → Adidas Shoes Category [Reason: Product is the complete shoe, directly matching the category] \n2. 4 Way Wooden Pallet 45X22X6 → Wooden Pallet Category [Reason: Product is a complete pallet unit as defined by the category] \n3. 5 Ton Hydraulic Floor Jack → Hydraulic Jack Category [Reason: Product is the complete jack unit, not a part or accessory] \n4. Komatsu PC200 Excavator (New) → Excavator Category [Reason: Product is a new, complete machine matching the category] \n5. Bosch GSB 550 Power Drill → Power Drill Category [Reason: Product is the complete drill unit, directly matching the category] \n\nEdge Case Guidance: - If a product name includes the category name but is still a part/service/accessory, mark as Outlier (e.g., \"Tractor Engine\" in Category \"Tractor\" = Outlier).\n\nConfidence and Verdict Definitions : Every verdict you return MUST be paired with a confidence level. There are no exceptions.\n\nConfidence value MUST be one of: high, medium, low,\n  high - Evidence is clear. No inference needed.\n  medium - Minor ambiguity or small inference needed, but the verdict is likely correct.\n  low - Significant uncertainty, weak evidence, or conflicting signals. \nYour verdict status MUST be directly consistent with your stated reason. If your reason contains words like 'aligns', 'matches', 'consistent', 'supports', or 'corresponds' - the status must be 'not_outlier'. If your reason contains 'contradicts', 'mismatch', 'inconsistent', 'different product', 'does not match' - the status must be 'outlier'. Never output a verdict that contradicts your own reasoning.\n\nGive all output in JSON format.\nGive response for task and subtasks of  task 4, task 5 and task 6 as outlier / not outlier / can't say for each subtask and its confidence (high/medium/low). Give one line reason for each subtask of task 4, task 5 and task 6.\n\n{\n    \"task_1\": {\n      \"primary_object\": \"\"\n    },\n    \"task_2\": {\n      \"ocr_text\": \"\"\n    },\n    \"task_3\": {\n      \"product_search_query\": \"\"\n    },\n    \"task_4\": {\n      \"primary_object_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product title are not available, so consistency between them cannot be verified.\"\n      },\n      \"product_photo_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product title are not available to confirm alignment.\"\n      },\n      \"primary_object_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and product specifications are missing, preventing alignment validation.\"\n      },\n      \"product_photo_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and product specifications are not available to assess alignment.\"\n      },\n      \"product_title_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and product specifications are unavailable to confirm consistency.\"\n      }\n    },\n    \"task_5\": {\n      \"primary_object_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Primary object and category name are not available to verify category alignment.\"\n      },\n      \"product_photo_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product photo and category name are not available to confirm alignment.\"\n      },\n      \"product_title_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product title and category name are not available to assess alignment.\"\n      },\n      \"product_specifications_vs_category_name\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Product specifications and category name are missing, preventing category validation.\"\n      }\n    },\n    \"task_6\": {\n      \"core_alignment_check\": {\n        \"status\": \"not_outlier\",\n        \"confidence\": \"high\",\n        \"reason\": \"Insufficient information to verify whether the product is a complete unit matching the category definition.\"\n      }\n    }\n  }\n",
+              "response_time": 2.553,
+              "retry_token": false,
+              "specs_category_verdict": {
+                "reason": "The product specifications (quantity, length, brand, material) are consistent with the product class represented by the category name 'Soffit Panel'.",
+                "status": "not_outlier"
+              },
+              "title_category_verdict": {
+                "reason": "The product title 'Soffit Panel' aligns with the category name 'Soffit Panel'.",
+                "status": "not_outlier"
+              },
+              "title_spec_verdict": {
+                "reason": "The product title 'Soffit Panel' is consistent with the specifications, which describe a quantity, length, brand, and material for soffit panels.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 793,
+                "prompt_tokens": 2771,
+                "total_tokens": 3564
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "Soffit Panel",
+          "photo_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "model": "google/gemini-3-flash-preview",
+              "photo_api_raw_response": {
+                "task_1": {
+                  "image_visibility_assessment": {
+                    "checks": {
+                      "generally_unclear_or_incomplete": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "human_blocking_product": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_cut_off": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "severely_obscured_or_blocked": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      },
+                      "unidentifiable_blur_or_pixelation": {
+                        "reason": "Photo is missing",
+                        "status": "not_outlier"
+                      }
+                    },
+                    "status": "not_outlier"
+                  }
+                }
+              },
+              "photo_quality_check": {
+                "reason": "",
+                "status": "not_outlier"
+              },
+              "prompt_used": "",
+              "response_time": 0.0,
+              "retry_token": false,
+              "status": "skipped",
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "pii_agent_output": {
+            "data": {
+              "cost": 0.0,
+              "fallback_model_flag": false,
+              "model": "",
+              "pii_analysis": {
+                "aadhaar_id": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "email_address": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "overall_status": "APPROVED",
+                "pan_card": {
+                  "status": "Not Detected",
+                  "value": null
+                },
+                "phone_number": {
+                  "status": "Not Detected",
+                  "type": null,
+                  "value": null
+                },
+                "upi_id": {
+                  "status": "Not Detected",
+                  "value": null
+                }
+              },
+              "pii_status": {
+                "overall_status": "APPROVED",
+                "reason": ""
+              },
+              "prompt_used": "PII Agent:\n\nInput:\n  Image: provided alongside this prompt.\n  Use it to visually confirm INTRINSIC vs EXTRINSIC\n  for every detected value. Image context takes\n  priority over text-based CONTEXT_TYPE inference.\n  OCR Text: VOX\n  Product Title: Soffit Panel\n  Product Description: (none)\n  Product Specifications: Quantity: 500 Square Feet\nLength: 10 ft\nBrand: Vox\nMaterial: PVC\nProbable Order Value: Rs. 40,000 - 52,000\n\nPre-filtered Candidates (from code layer):\n  email_candidates   : none\n  numeric_candidates : detected by digit-pattern filter — LLM confirms if phone\n  social_candidates  : detected by LLM scan\n\n════════════════════════════════════════\nSTEP 1 — PRE-PROCESSING\n════════════════════════════════════════\nExtract and store before scanning:\n  - BRAND_NAME      : Seller/brand name from title or description\n  - PRODUCT_TOKENS  : Any value labeled as model no, SKU, item code,\n                      part no, barcode, HSN, GST, EAN, batch, serial,\n                      invoice, ref, order id\n  - CONTEXT_LABELS  : Section heading nearest to each detected value\n  - CONTEXT_TYPE    : For each detected value, classify source as:\n                      INTRINSIC → printed on physical product /\n                                  manufacturer packaging / engraved label\n                      EXTRINSIC → digital overlay, banner, watermark,\n                                  business card, screenshot element\n                      UNKNOWN   → cannot determine\n  - CONTACT_INTENT  : Look at the image and answer:\n                      \"Does this image show a phone number that a buyer\n                       would call or WhatsApp to reach the seller?\"\n                      SELLER_CONTACT → yes, number is for buyer to reach seller\n                                       (label, banner, business card, packaging\n                                        with contact info, promotional graphic)\n                      CS_ONLY        → only toll-free / customer care numbers\n                      NONE           → no contact number visible\n                      UNKNOWN        → cannot determine from image\n  - IS_TEMPLATE     : Set True if the listing is a product template,\n                      sample design, mock-up, or blank form\n                      (e.g. ID card template, visiting card sample,\n                      letterhead design, label template)\n                      Signal words: \"template\", \"sample\", \"mock\",\n                      \"design\", \"blank\", \"dummy\", \"specimen\",\n                      \"id card\", \"visiting card\", \"business card design\",\n                      \"brochure design\", \"pamphlet design\", \"flyer design\",\n                      \"product brochure\", \"lorem ipsum\"\n\nTEMPLATE RULE: If IS_TEMPLATE is True, all detected PII values are\ntreated as sample/placeholder data — mark all fields Not Detected.\nSample names (John Smith, Jane Doe), sample phones, sample emails\non a template product are not real PII.\n\n════════════════════════════════════════\nSTEP 2 — FIELD SCANNING\n════════════════════════════════════════\nFields not listed below were cleared by the code layer\nand are already decided as Not Detected. Only evaluate\nthe fields explicitly listed here.\n\n\n\n════════════════════════════════════════\nSTEP 3 — OUTPUT\n════════════════════════════════════════\nReturn ONLY valid JSON for the fields listed above.\nNo explanation, no markdown fences.\n\n{\n\n}",
+              "response_time": 0.0,
+              "retry_token": false,
+              "usage": {
+                "completion_tokens": 0,
+                "prompt_tokens": 0,
+                "total_tokens": 0
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "predicted_titles": [
+            "Soffit panel installation guide",
+            "Vox PVC 500 sq ft",
+            "Soffit panel Vox PVC"
+          ],
+          "response_time": "10.04s",
+          "specs": [
+            {
+              "IM_SPEC_MASTER_DESC": "Quantity",
+              "ISQ_RESPONSE": "500 Square Feet"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Length",
+              "ISQ_RESPONSE": "10 ft"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Brand",
+              "ISQ_RESPONSE": "Vox"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Material",
+              "ISQ_RESPONSE": "PVC"
+            },
+            {
+              "IM_SPEC_MASTER_DESC": "Probable Order Value",
+              "ISQ_RESPONSE": "Rs. 40,000 - 52,000"
+            }
+          ],
+          "specs_agent_output": {
+            "data": {
+              "contradiction_in_specs": {
+                "reason": "No internal contradictions detected in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "cost": 0.008847,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Specifications: Quantity: 500 Square Feet, Length: 10 ft, Brand: Vox, Material: PVC, Probable Order Value: Rs. 40,000 - 52,000\n\n    Instructions:\n\n    Task 1: \n    Product Specifications: Quantity: 500 Square Feet, Length: 10 ft, Brand: Vox, Material: PVC, Probable Order Value: Rs. 40,000 - 52,000 Assessment:\n        a) Spelling Error in Product Specifications: \n           - Flag words that are contextually incorrect for an industrial listing.\n           - Flag only clear typos in common dictionary words (e.g., \"Steel\" vs \"Stel\").\n           - Guardrail: DO NOT flag brand names, model numbers (e.g., \"L805\", \"GGT\"), or unit concatenations (e.g., \"70ltr\", \"20inch\", \"400kg.up\"). These are standard in industrial listings.\n\n        b) Contradiction/ Redundancy in Product Specifications: Flag as \"outlier\" only if values are physically impossible to coexist (e.g., Material: Wood and Material: Stainless Steel). \n           (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Specification Based Query: Generate a  query using Product Specifications. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1 as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"specification_based_query\": \"\"\n    }\n    }\n    ",
+              "response_time": 0.94,
+              "retry_token": false,
+              "specs_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "No internal contradictions detected in the provided product specifications.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "No spelling errors detected in the provided product specifications.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "specification_based_query": "Vox PVC 500 sq ft"
+                }
+              },
+              "spell_error_in_specs": {
+                "reason": "No spelling errors detected in the provided product specifications.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 121,
+                "prompt_tokens": 499,
+                "total_tokens": 620
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "text_agent_output": {
+            "data": {
+              "cost": 0.007767,
+              "fallback_model_flag": false,
+              "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+              "prompt_used": "\n    Product Title: Soffit Panel\n\n    Instructions:\n\n    Task 1: \n    Product Title: Soffit Panel Assessment:\n        a) Spelling Error in Title: Flag words that are contextually incorrect for an industrial listing.\n        b) Contradiction in Product Title: Flag logical conflicts (e.g., \"Manual Automatic Machine\").\n        Constraint: Do NOT flag If title contains multiple product nouns, verify category supports kits/sets.(e.g., \" Pump and Motor Set,  Razor with Blade set.”)\n        (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Title Based Query: Generate a  query enhancing Product Title. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Give all output in JSON format.\n    Give response for task and subtasks of task 1  as outlier / not outlier / can't say for each subtask. Give one line reason for each subtask of task 1.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"title_based_query\": \"\"\n    }\n}\n",
+              "response_time": 1.212,
+              "retry_token": false,
+              "textual_api_raw_response": {
+                "task_1": {
+                  "internal_contradiction": {
+                    "reason": "The product title 'Soffit Panel' does not present any internal contradictions.",
+                    "status": "not_outlier"
+                  },
+                  "spell_error": {
+                    "reason": "The product title 'Soffit Panel' does not contain any spelling errors.",
+                    "status": "not_outlier"
+                  }
+                },
+                "task_2": {
+                  "title_based_query": "Soffit panel installation guide"
+                }
+              },
+              "title_contradiction_outlier": {
+                "reason": "The product title 'Soffit Panel' does not present any internal contradictions.",
+                "status": "not_outlier"
+              },
+              "title_spell_outlier": {
+                "reason": "The product title 'Soffit Panel' does not contain any spelling errors.",
+                "status": "not_outlier"
+              },
+              "usage": {
+                "completion_tokens": 131,
+                "prompt_tokens": 339,
+                "total_tokens": 470
+              }
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "total_cost": 0.070101
+        },
+        "base_suggestion": [
+          {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "reason": "",
+            "source": ""
+          }
+        ],
+        "cataloging_error": true,
+        "categorization_error": false,
+        "custtype": "53",
+        "datetime": "2026-05-11 11:21:06 AM",
+        "display_name": "",
+        "ensemble_confidence": null,
+        "error": "cannot unpack non-iterable bool object",
+        "fk_mcat_type_id": "",
+        "glcat_mcat_image_display": "1",
+        "glid": 187147894,
+        "image_id": "-1",
+        "img_url": "",
+        "item_name": "Soffit Panel",
+        "location_flag": {
+          "biztype": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          },
+          "location": {
+            "error_msg": "",
+            "status": "",
+            "tile_msg": ""
+          }
+        },
+        "log_type": "Auditor",
+        "mcat_flag": "-1",
+        "mcat_is_generic_flag": null,
+        "mcat_name": "Soffit Panel",
+        "mcat_pool": "[]",
+        "missing_img": "True",
+        "modid": "GLADMIN",
+        "no_category_found": "False",
+        "non_llm_raw_response": {
+          "category": "Soffit Panel",
+          "duplicate_title_output": {
+            "data": {
+              "duplicate_title_raw_response": {},
+              "response_time": 10.01
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "item_name": "Soffit Panel",
+          "location_biztype_output": {
+            "data": {
+              "location_biztype_raw_response": {},
+              "response_time": 10.01
+            },
+            "error": null,
+            "status_code": 200
+          },
+          "response_time": 20.02
+        },
+        "pc_item_id": 144059435859,
+        "photo_category_outlier": {
+          "reason": "The primary object 'Soffit panel' directly matches the category name 'Soffit Panel'.",
+          "status": "not_outlier"
+        },
+        "photo_quality_verdict": "not_outlier",
+        "photo_qualtiy_reason": "",
+        "photo_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_spec_verdict_reason": "",
+        "photo_title_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "photo_title_verdict_reason": "",
+        "pii_flag": "selected",
+        "price": "0",
+        "price_flag": {
+          "final_verdict": "outlier",
+          "price_raw_response": "{'absurd_flag': '1', 'err_text': 'Absurd Unit entered', 'in_product_id': 0, 'absurd_price_unit_flag': '6', 'response_time_ms': 0.03759, 'status_code': 200}",
+          "reason": "Unit Absurd"
+        },
+        "process_name": "Multiagent Auditor New Arch 1.2",
+        "product_search_query": [
+          "Soffit panel installation guide",
+          "Vox PVC 500 sq ft",
+          "Soffit panel Vox PVC"
+        ],
+        "response_time": 10.04,
+        "screen_name": "live_product_approval",
+        "secondary_image": "False",
+        "secondary_mcats": [],
+        "specs_category_outlier": {
+          "reason": "The product specifications (quantity, length, brand, material) are consistent with the product class represented by the category name 'Soffit Panel'.",
+          "status": "not_outlier"
+        },
+        "specs_contradiction_verdict": "not_outlier",
+        "specs_contradiction_verdict_reason": "No internal contradictions detected in the provided product specifications.",
+        "specs_quality_reason": "No spelling errors detected in the provided product specifications.",
+        "specs_quality_verdict": "not_outlier",
+        "status": 500,
+        "suggested_mcat": {
+          "suggested_mcats": [
+            {
+              "confidence": "",
+              "id": "",
+              "name": "",
+              "rank": "",
+              "source": ""
+            }
+          ]
+        },
+        "title_category_outlier": {
+          "reason": "The product title 'Soffit Panel' aligns with the category name 'Soffit Panel'.",
+          "status": "not_outlier"
+        },
+        "title_contradiction_verdict": "not_outlier",
+        "title_contradiction_verdict_reason": "The product title 'Soffit Panel' does not present any internal contradictions.",
+        "title_quality_reason": "The product title 'Soffit Panel' does not contain any spelling errors.",
+        "title_quality_verdict": "not_outlier",
+        "title_spec_verdict": {
+          "final_verdict": "not_outlier"
+        },
+        "title_spec_verdict_reason": "The product title 'Soffit Panel' is consistent with the specifications, which describe a quantity, length, brand, and material for soffit panels.",
+        "unit": "Piece",
+        "worker_name": "Product_Approval_Auditor_1.2"
+      }
+    },
+    {
+      "step": 4,
+      "name": "Retail Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-11T11:22:31.603404",
+      "status": "error",
+      "duration_ms": 75345,
+      "error": "Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "step": 5,
+      "name": "Price Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-11T11:23:47.647028",
+      "status": "success",
+      "duration_ms": 76043,
+      "input": {
+        "Display_id": "144059435859",
+        "Title": "Soffit Panel",
+        "MCAT": "Soffit Panel",
+        "MCAT_id": "116782",
+        "MCAT_Unit": "116782-SQUARE FEET",
+        "Retail_Flag": "Yes",
+        "ISQ": {
+          "Length": "10 ft",
+          "Brand": "Vox",
+          "Material": "PVC"
+        },
+        "Qty": "500 Square Feet",
+        "Order_Value": "Rs. 40,000 - 52,000",
+        "Buyer_profile": {
+          "Sells": "No Selling Activity",
+          "Buys": "Groundnut Oil,Refined Groundnut Oil"
+        },
+        "BL_card": [],
+        "Slab": "200+",
+        "bl_apprvd": 0,
+        "pur": 0,
+        "pur_retailer": 0,
+        "pur_wholesaler": 0,
+        "retail_ni": 0,
+        "ni_retailer": 0,
+        "ni_wholesaler": 0,
+        "evidence_count": 0,
+        "evidence_match": "no_data",
+        "q1": 0,
+        "median": 0,
+        "q3": 0,
+        "price_match": "no_data"
+      },
+      "raw_output": "```json\n{\n  \"Display_id\": \"144059435859\",\n  \"Price_Results\": \"Unverifiable\",\n  \"Price_Score\": 0.0,\n  \"Confidence\": \"Low\",\n  \"Quantity\": \"500 Square Feet\",\n  \"Qty_Normalized\": \"500 Square Feet\",\n  \"Price_Value\": \"Rs. 40,000 - 52,000\",\n  \"Price_Value_By_AI\": \"N/A\",\n  \"Unit_Price_Used\": \"N/A\",\n  \"Unit_Price_Logic\": \"N/A\",\n  \"BL_Data_Quality\": \"Absent\",\n  \"BL_Items_Used\": [],\n  \"Tolerance_Applied\": \"N/A\",\n  \"Deviation_Pct\": \"N/A\",\n  \"Price_Reason\": \"No reference price data available for this category and unit.\"\n}\n```",
+      "parsed": {
+        "Display_id": "144059435859",
+        "Price_Results": "Unverifiable",
+        "Price_Score": 0.0,
+        "Confidence": "Low",
+        "Quantity": "500 Square Feet",
+        "Qty_Normalized": "500 Square Feet",
+        "Price_Value": "Rs. 40,000 - 52,000",
+        "Price_Value_By_AI": "N/A",
+        "Unit_Price_Used": "N/A",
+        "Unit_Price_Logic": "N/A",
+        "BL_Data_Quality": "Absent",
+        "BL_Items_Used": [],
+        "Tolerance_Applied": "N/A",
+        "Deviation_Pct": "N/A",
+        "Price_Reason": "No reference price data available for this category and unit."
+      },
+      "llm_messages": {
+        "system": "You are an expert Pricing Audit Agent for Indian B2B buyer requirements.\nYou have deep knowledge of Indian wholesale pricing, commodity markets, B2B trade norms,\nunit conversions, and realistic price bands across product categories.\n\n===========================================\nINPUT\n===========================================\n- Display_id    : 144059435859\n- Title         : Soffit Panel\n- MCAT          : Soffit Panel\n- Qty           : 500 Square Feet\n- Order_Value   : Rs. 40,000 - 52,000\n- Median_Price  : 0   ← per unit median price (most trusted anchor)\n- Q3_Price      : 0 ← per unit Q3 price (outlier filter only)\n- BL_card       : []\n\nReference-Data Provenance:\n- Price Match     : no_data\n    \"exact\"   = Median_Price and Q3_Price came from a real mcat_data row for this (Category, Unit)\n    \"no_data\" = no row matched; Median_Price/Q3_Price are ZEROS and CANNOT be used as anchors\n- Evidence Match  : no_data\n    \"exact\"     = matched the same (Category, Unit, Slab) historical bucket\n    \"unit_only\" = aggregated across all slabs of this (Category, Unit)\n    \"no_data\"   = no historical buylead data for this (Category, Unit)\n- Evidence Count  : 0   (sample size behind the evidence aggregates above)\n\n===========================================\nSTEP 1 — NORMALIZE QTY & UNIT\n===========================================\nExtract the numeric quantity and unit from Qty field.\n\nApply these standard normalizations:\n\n  Weight  : g, gm, gram → G  |  kg, kilo, kilogram → KG  |  ton, tonne, MT → TON\n  Volume  : ml, millilitre → ML  |  l, ltr, litre → LITRE\n  Count   : piece, pieces, pcs, pc, nos → PIECE  |  bottle, bottles, btl → BOTTLE\n             box, boxes → BOX  |  pack, packet, packets → PACK  |  bag, bags → BAG\n             roll, rolls → ROLL  |  sheet, sheets → SHEET  |  set, sets → SET\n             dozen → DOZEN (= 12 pieces)\nif required Apply unit conversions BEFORE any calculation:\n  1000 G    = 1 KG\n  1000 KG   = 1 TON\n  1000 ML   = 1 LITRE\n  1 DOZEN   = 12 PIECES\n\nIf unit is ambiguous or missing → flag in Confidence as Low and use Median_Price directly.\n\n===========================================\nSTEP 2 — FILTER RELEVANT BL_CARD ITEMS\n===========================================\nFrom the BL_card list, retain ONLY items where:\n\n  a) The product is relevant to MCAT or Title (same category or close subcategory)\n  b) The price unit is compatible with the normalized Qty unit\n  c) The price is a valid numeric value (ignore \"On Request\", \"Call for Price\", etc.)\n\nExtract numeric price per unit from BL_card price strings.\nHandle formats like: \"₹ 8 / Piece\", \"Rs. 120/kg\", \"INR 5 per bottle\"\n\nIf fewer than 2 BL_card items pass filtering → treat BL data as Weak.\nIf 2 or more pass → treat BL data as Valid.\n\n===========================================\nSTEP 3 — CLEAN BL PRICE DATA\n===========================================\nFrom the filtered BL prices, apply:\n\n  Remove if price > Q3_Price  (overpriced outlier — not market representative)\n  Remove if price < Median_Price × 0.5  (suspiciously low — likely data noise)\n\nKeep only prices within:\n  ( Median_Price × 0.5 )  ≤  BL_price  ≤  Q3_Price\n\nAfter cleaning:\n  If ≥ 2 prices remain → BL data is Usable, compute BL_Avg = average of cleaned prices\n  If < 2 prices remain → BL data is Weak, discard BL entirely\n\n===========================================\nSTEP 4 — DETERMINE FINAL UNIT PRICE\n===========================================\n\n  IF BL data is Usable:\n    Unit_Price_Used = ( Median_Price × 0.7 ) + ( BL_Avg × 0.3 )\n    (Median is dominant anchor, BL provides mild market adjustment)\n\n  IF BL data is Weak or absent:\n    Unit_Price_Used = Median_Price\n    (Fall back fully to platform median)\n\nAlways round Unit_Price_Used to 2 decimal places.\n\n===========================================\nSTEP 5 — DYNAMIC RANGE CALCULATION\n===========================================\n\n  Base_Value = Normalized_Qty × Unit_Price_Used\n\nDetermine tolerance band based on BL data quality:\n\n  BL Usable + prices are tightly clustered (std dev < 15% of mean) → tolerance = ±10%\n  BL Usable + prices are moderately spread                         → tolerance = ±15%\n  BL Weak or absent                                                → tolerance = ±20%\n\nApply category-level override for high-volatility commodities\n(e.g., agri produce, metals, fuel-linked products):\n  → Always use ±25% regardless of BL quality\n\nFinal AI Range:\n  Lower_Bound = Base_Value × ( 1 - tolerance )\n  Upper_Bound = Base_Value × ( 1 + tolerance )\n\n  Price_Value_By_AI = \"₹ {Lower_Bound} - ₹ {Upper_Bound}\"\n\n===========================================\nSTEP 6 — PARSE ORDER_VALUE\n===========================================\nExtract numeric bounds from Order_Value field.\n\nHandle formats like:\n  \"Rs. 5,000 - 10,000\"  →  Buyer_Low = 5000,  Buyer_High = 10000\n  \"₹10000 - ₹15000\"    →  Buyer_Low = 10000, Buyer_High = 15000\n  \"Around 8000\"         →  Buyer_Low = 7200,  Buyer_High = 8800  (±10% assumed)\n  \"Less than 5000\"      →  Buyer_Low = 0,     Buyer_High = 5000\n  \"Above 10000\"         →  Buyer_Low = 10000, Buyer_High = null\n\nIf Order_Value is missing, null, or unparseable → set Price_Results = \"Unverifiable\"\nand skip Steps 6 and 7.\n\n===========================================\nSTEP 7 — DECISION LOGIC\n===========================================\nCalculate overlap between buyer range and AI range:\n\n  Overlap exists IF:\n    Buyer_Low  ≤ Upper_Bound\n    AND Buyer_High ≥ Lower_Bound  (or Buyer_High is null and Buyer_Low ≤ Upper_Bound)\n\n  Deviation % = ABS( midpoint(Buyer) - midpoint(AI) ) / midpoint(AI) × 100\n\nVERDICT:\n\n  \"Correct\"     → Overlap exists  OR  Deviation ≤ 25%\n  \"Not-Correct\" → No overlap AND Deviation > 25%\n  \"Review\"      → Deviation between 25%–40% with partial overlap (borderline case)\n\n===========================================\nSCORING LOGIC\n===========================================\n\n  Price_Score:\n    1.0  → Full overlap, deviation < 10%\n    0.8  → Partial overlap, deviation 10–20%\n    0.6  → Slight miss, deviation 20–30%\n    0.4  → Moderate miss, deviation 30–50%\n    0.2  → Large miss, deviation 50–75%\n    0.0  → Extreme mismatch, deviation > 75% or clearly unrealistic\n\n  Confidence:\n    High   → BL Usable + Median_Price present + Order_Value clearly parsed\n    Medium → BL Weak OR unit required inference OR Order_Value partially parsed\n    Low    → No BL data + unit ambiguous + Order_Value vague or missing\n\nDATA-PROVENANCE OVERRIDES on Verdict & Confidence:\n  - If Price Match == \"no_data\" → Median_Price and Q3_Price are zeros and have NO meaning.\n    You CANNOT compute a meaningful AI range from them. Set Price_Results = \"Unverifiable\",\n    Confidence = \"Low\", and explain in Price_Reason that no reference price data exists for this category-unit.\n  - If Evidence Match == \"no_data\" or \"unit_only\" → cap Confidence at \"Medium\" even if BL_card is Usable\n    (the broader market-evidence context is missing or aggregated across slabs).\n  - If Evidence Count < 3 → reduce Confidence by one level.\n\n===========================================\nOUTPUT FORMAT (STRICT JSON ONLY)\n===========================================\n{\n  \"Display_id\"          : \"144059435859\",\n  \"Price_Results\"       : \"Correct | Not-Correct | Review | Unverifiable\",\n  \"Price_Score\"         : <0.0 to 1.0>,\n  \"Confidence\"          : \"High | Medium | Low\",\n  \"Quantity\"            : \"500 Square Feet\",\n  \"Qty_Normalized\"      : \"<normalized numeric qty + standard unit>\",\n  \"Price_Value\"         : \"Rs. 40,000 - 52,000\",\n  \"Price_Value_By_AI\"   : \"₹ <Lower_Bound> - ₹ <Upper_Bound>\",\n  \"Unit_Price_Used\"     : \"<final INR per unit>\",\n  \"Unit_Price_Logic\"    : \"<which inputs were used and how — max 20 words>\",\n  \"BL_Data_Quality\"     : \"Usable | Weak | Absent\",\n  \"BL_Items_Used\"       : [\"<item name> @ ₹<price>/<unit>\"],\n  \"Tolerance_Applied\"   : \"<±X% — reason in max 8 words>\",\n  \"Deviation_Pct\"       : \"<calculated % deviation between midpoints>\",\n  \"Price_Reason\"        : \"<max 20 words explaining the final verdict>\"\n}\n\n===========================================\nIMPORTANT RULES\n===========================================\n- Median_Price is the primary anchor — always trust it most\n- Q3_Price is ONLY used to filter BL outliers — never use it to set the upper range directly\n- BL_card prices are supporting signals only — never let them override Median\n- Always Normalize units before ANY price or quantity calculation\n- Never fabricate prices — if data is insufficient, lower confidence and use Median only\n- \"Review\" verdict exists for borderline cases — use it instead of forcing Correct/Not-Correct\n- Return STRICT valid JSON only — no markdown, no explanation outside the JSON block\n",
+        "user": "Display_id: 144059435859\nMCAT: Soffit Panel\nQty: 500 Square Feet\nOrder_Value: Rs. 40,000 - 52,000\nBL_card: []\nmedian: 0\nq3: 0\nprice_match: no_data\nevidence_match: no_data\nevidence_count: 0"
+      },
+      "sub_steps": [
+        {
+          "seq": 1,
+          "node": "prepare_input",
+          "fn": "_build_offer_source",
+          "input": {
+            "offer_id": "144059435859"
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"500 Square Feet\"},{\"DESC\":\"Length\",\"RESPONSE\":\"10 ft\"},{\"DESC\":\"Brand\",\"RESPONSE\":\"Vox\"},{\"DESC\":\"Material\",\"RESPONSE\":\"PVC\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 40,000 - 52,000\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "Groundnut Oil,Refined Groundnut Oil"
+              }
+            ],
+            "BL_card_data": []
+          }
+        },
+        {
+          "seq": 2,
+          "node": "prepare_input",
+          "fn": "_bl_detail_and_keys",
+          "input": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "ISQ_info": "{\"1\":[{\"DESC\":\"Quantity\",\"RESPONSE\":\"500 Square Feet\"},{\"DESC\":\"Length\",\"RESPONSE\":\"10 ft\"},{\"DESC\":\"Brand\",\"RESPONSE\":\"Vox\"},{\"DESC\":\"Material\",\"RESPONSE\":\"PVC\"},{\"DESC\":\"Probable Order Value\",\"RESPONSE\":\"Rs. 40,000 - 52,000\"}]}",
+            "BL_Type": "3",
+            "Buyer_profile": [
+              {
+                "eto_ofr_buyer_sell_mcats": null,
+                "eto_ofr_buyer_prime_mcats": "Groundnut Oil,Refined Groundnut Oil"
+              }
+            ],
+            "BL_card_data": []
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "MCAT_Unit": "116782-SQUARE FEET",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Length": "10 ft",
+              "Brand": "Vox",
+              "Material": "PVC"
+            },
+            "Qty": "500 Square Feet",
+            "Order_Value": "Rs. 40,000 - 52,000",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "Groundnut Oil,Refined Groundnut Oil"
+            },
+            "BL_card": []
+          }
+        },
+        {
+          "seq": 3,
+          "node": "prepare_input",
+          "fn": "_extract_qty",
+          "input": {
+            "qty_str": "500 Square Feet"
+          },
+          "output": 500.0
+        },
+        {
+          "seq": 4,
+          "node": "prepare_input",
+          "fn": "_get_slab",
+          "input": {
+            "qty": 500.0
+          },
+          "output": "200+"
+        },
+        {
+          "seq": 5,
+          "node": "prepare_input",
+          "fn": "_normalize_mcat_unit",
+          "input": {
+            "value": "116782-SQUARE FEET"
+          },
+          "output": "116782-SQUARE FEET"
+        },
+        {
+          "seq": 6,
+          "node": "prepare_input",
+          "fn": "_load_evidence_metrics",
+          "input": {
+            "slab_key": "116782-SQUARE FEET_200+",
+            "unit_key": "116782-SQUARE FEET"
+          },
+          "output": {
+            "match_level": "no_data",
+            "metrics": {
+              "bl_apprvd": 0,
+              "pur": 0,
+              "pur_retailer": 0,
+              "pur_wholesaler": 0,
+              "retail_ni": 0,
+              "ni_retailer": 0,
+              "ni_wholesaler": 0,
+              "bucket_count": 0
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "node": "prepare_input",
+          "fn": "_find_price_data",
+          "input": {
+            "norm_unit": "116782-SQUARE FEET"
+          },
+          "output": {
+            "match_level": "no_data",
+            "price": {
+              "q1": 0,
+              "median": 0,
+              "q3": 0
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "node": "prepare_input",
+          "fn": "_merge_inputs[result]",
+          "input": {
+            "offer_keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card"
+            ]
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "MCAT_Unit": "116782-SQUARE FEET",
+            "Retail_Flag": "Yes",
+            "ISQ": {
+              "Length": "10 ft",
+              "Brand": "Vox",
+              "Material": "PVC"
+            },
+            "Qty": "500 Square Feet",
+            "Order_Value": "Rs. 40,000 - 52,000",
+            "Buyer_profile": {
+              "Sells": "No Selling Activity",
+              "Buys": "Groundnut Oil,Refined Groundnut Oil"
+            },
+            "BL_card": [],
+            "Slab": "200+",
+            "bl_apprvd": 0,
+            "pur": 0,
+            "pur_retailer": 0,
+            "pur_wholesaler": 0,
+            "retail_ni": 0,
+            "ni_retailer": 0,
+            "ni_wholesaler": 0,
+            "evidence_count": 0,
+            "evidence_match": "no_data",
+            "q1": 0,
+            "median": 0,
+            "q3": 0,
+            "price_match": "no_data"
+          }
+        },
+        {
+          "seq": 1,
+          "node": "price_classify",
+          "fn": "_read_prompt",
+          "input": {
+            "path": "C:\\Users\\Imart\\Documents\\GitHub\\BL-Auditor\\app\\price_agent\\prompt.md"
+          },
+          "output": {
+            "char_count": 8722
+          }
+        },
+        {
+          "seq": 2,
+          "node": "price_classify",
+          "fn": "_render_template",
+          "input": {
+            "variables": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "MCAT_Unit",
+              "Retail_Flag",
+              "ISQ",
+              "Qty",
+              "Order_Value",
+              "Buyer_profile",
+              "BL_card",
+              "Slab",
+              "bl_apprvd",
+              "pur",
+              "pur_retailer",
+              "pur_wholesaler",
+              "retail_ni",
+              "ni_retailer",
+              "ni_wholesaler",
+              "evidence_count",
+              "evidence_match",
+              "q1",
+              "median",
+              "q3",
+              "price_match"
+            ]
+          },
+          "output": {
+            "char_count": 8662
+          }
+        },
+        {
+          "seq": 3,
+          "node": "price_classify",
+          "fn": "build_user_message",
+          "input": {
+            "keys": [
+              "Display_id",
+              "MCAT",
+              "Qty",
+              "Order_Value",
+              "BL_card",
+              "median",
+              "q3",
+              "price_match",
+              "evidence_match",
+              "evidence_count"
+            ]
+          },
+          "output": "Display_id: 144059435859\nMCAT: Soffit Panel\nQty: 500 Square Feet\nOrder_Value: Rs. 40,000 - 52,000\nBL_card: []\nmedian: 0\nq3: 0\nprice_match: no_data\nevidence_match: no_data\nevidence_count: 0"
+        },
+        {
+          "seq": 4,
+          "node": "price_classify",
+          "fn": "ChatOpenAI.ainvoke",
+          "input": {
+            "model": "google/gemini-2.5-flash-lite",
+            "base_url": "https://imllm.intermesh.net",
+            "system_chars": 8662,
+            "user_chars": 188
+          },
+          "output": {
+            "response_chars": 518,
+            "preview": "```json\n{\n  \"Display_id\": \"144059435859\",\n  \"Price_Results\": \"Unverifiable\",\n  \"Price_Score\": 0.0,\n  \"Confidence\": \"Low\",\n  \"Quantity\": \"500 Square Feet\",\n  \"Qty_Normalized\": \"500 Square Feet\",\n  \"Price_Value\": \"Rs. 40,000 - 52,000\",\n  \"Price_Value_By_AI\": \"N/A\",\n  \"Unit_Price_Used\": \"N/A\",\n  \"Unit_"
+          }
+        },
+        {
+          "seq": 5,
+          "node": "price_classify",
+          "fn": "_clean_price_output",
+          "input": {
+            "raw_chars": 518
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Price_Results": "Unverifiable",
+            "Price_Score": 0.0,
+            "Confidence": "Low",
+            "Quantity": "500 Square Feet",
+            "Qty_Normalized": "500 Square Feet",
+            "Price_Value": "Rs. 40,000 - 52,000",
+            "Price_Value_By_AI": "N/A",
+            "Unit_Price_Used": "N/A",
+            "Unit_Price_Logic": "N/A",
+            "BL_Data_Quality": "Absent",
+            "BL_Items_Used": [],
+            "Tolerance_Applied": "N/A",
+            "Deviation_Pct": "N/A",
+            "Price_Reason": "No reference price data available for this category and unit."
+          }
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "name": "Buyer Profile Agent",
+      "type": "llm_agent",
+      "timestamp": "2026-05-11T11:23:48.693779",
+      "status": "success",
+      "duration_ms": 1046,
+      "input": {
+        "Display_id": "144059435859",
+        "Title": "Soffit Panel",
+        "MCAT": "Soffit Panel",
+        "MCAT_id": "116782",
+        "PRODUCTS_ENQUIRED": [],
+        "Products_Enquired_Count": 0
+      },
+      "raw_output": "{\n  \"Display_id\": 144059435859,\n  \"Genuineness\": \"Unverifiable\",\n  \"Profile_Score\": null,\n  \"Confidence\": \"None\",\n  \"Profile_Reason\": \"No prior product enquiries available — cannot assess relatedness to the current BuyLead.\"\n}",
+      "parsed": {
+        "Display_id": 144059435859,
+        "Genuineness": "Unverifiable",
+        "Profile_Score": null,
+        "Confidence": "None",
+        "Profile_Reason": "No prior product enquiries available — cannot assess relatedness to the current BuyLead."
+      },
+      "llm_messages": {
+        "system": "You are an Expert Buyer Genuineness Agent for an Indian B2B marketplace.\nYour ONLY job is to assess whether the products this buyer has previously enquired about (PRODUCTS_ENQUIRED)\nare related to the current BuyLead they have just posted — using the BuyLead's Title and Category (MCAT)\nas the only points of comparison. You are NOT classifying the buyer as a persona. You are NOT scoring trust\nbased on verifications, activity, or identity. You are ONLY checking: do the buyer's past enquiries make\nsense given what they are asking for right now?\n\n===========================================\nINPUT\n===========================================\n- Display ID                 : 144059435859\n- BuyLead Title              : Soffit Panel\n- Category Name (MCAT)       : Soffit Panel\n- Category ID                : 116782\n\nPRODUCTS_ENQUIRED (other products this buyer has enquired about — JSON list of {FK_PC_ITEM_NAME, PRODUCT_PRICE}):\n[]\n- Products Enquired Count    : 0\n\n===========================================\nGUARDRAIL — INSUFFICIENT DATA (HARD STOP)\n===========================================\nIF PRODUCTS_ENQUIRED is empty (Products_Enquired_Count == 0):\n  → Do NOT classify. Return immediately:\n\n{\n  \"Display_id\"      : 144059435859,\n  \"Genuineness\"     : \"Unverifiable\",\n  \"Profile_Score\"   : null,\n  \"Confidence\"      : \"None\",\n  \"Profile_Reason\"  : \"No prior product enquiries available — cannot assess relatedness to the current BuyLead.\"\n}\n\n===========================================\nASSESSMENT FRAMEWORK\n===========================================\nEvaluate each entry in PRODUCTS_ENQUIRED for relatedness to the current BuyLead, using ONLY:\n  - The BuyLead Title\n  - The BuyLead Category Name (MCAT)\n\nFor each enquired product, decide whether it is:\n  - SAME CATEGORY    : product is in the same MCAT or a near-synonym category (e.g. \"LED Bulb\" vs \"LED Lights\")\n  - ADJACENT         : product is in a category that buyers of the current MCAT commonly purchase together\n                        (e.g. Fasteners ↔ Tools, Wires ↔ Switches, Bricks ↔ Cement). Indian B2B context applies.\n  - UNRELATED        : product belongs to a fundamentally different industry or use-case\n                        (e.g. current MCAT is \"Red Brick\" but enquired product is \"Lipstick\").\n\nCompute:\n  - related_count   = SAME CATEGORY count + ADJACENT count\n  - unrelated_count = UNRELATED count\n  - related_share   = related_count / Products_Enquired_Count\n\nDecision:\n  - related_share ≥ 0.7  → Genuineness = \"Genuine\"     (most enquiries align with the current ask)\n  - 0.3 ≤ related_share < 0.7 → Genuineness = \"Genuine\" but with reduced score / lower confidence\n                                  (mixed basket; lean Genuine because some alignment exists)\n  - related_share < 0.3  → Genuineness = \"Suspicious\"  (basket is overwhelmingly unrelated)\n  - Products_Enquired_Count > 0 but ALL entries are clearly UNRELATED → Genuineness = \"Suspicious\"\n\nSpecial cases:\n  - If Products_Enquired_Count is small (1 or 2) and at least one is SAME CATEGORY → Genuine, but cap Confidence at \"Medium\".\n  - If Products_Enquired_Count is small (1 or 2) and the entries are UNRELATED → Genuineness = \"Suspicious\" only when\n    the unrelatedness is unambiguous; otherwise \"Unverifiable\" with Confidence = \"Low\".\n  - Never invoke trust signals, identity, GST, mobile verification, or activity counts. They are NOT inputs here.\n\n===========================================\nSCORING LOGIC\n===========================================\nProfile_Score reflects the strength of the relatedness verdict (0.0 to 1.0):\n\n  1.0  → All enquired products are SAME CATEGORY as the current MCAT\n  0.85 → All enquired products are SAME CATEGORY or ADJACENT\n  0.7  → Majority SAME/ADJACENT, a few UNRELATED\n  0.5  → Roughly half related, half unrelated (mixed basket)\n  0.3  → Most products UNRELATED, only one or two related\n  0.1  → All products UNRELATED to the current Title + MCAT\n  null → Hard guardrail triggered (PRODUCTS_ENQUIRED empty)\n\nConfidence:\n  High    → Products_Enquired_Count ≥ 5 AND related_share is clearly ≥0.8 or ≤0.2 (decisive evidence both ways)\n  Medium  → Products_Enquired_Count between 2 and 4, OR larger basket with mixed signals\n  Low     → Products_Enquired_Count == 1, OR ambiguous category mappings\n  None    → Hard guardrail triggered (PRODUCTS_ENQUIRED empty)\n\n===========================================\nOUTPUT FORMAT (STRICT JSON ONLY)\n===========================================\n{\n  \"Display_id\"      : 144059435859,\n  \"Genuineness\"     : \"Genuine | Suspicious | Unverifiable\",\n  \"Profile_Score\"   : <0.0 to 1.0 or null>,\n  \"Confidence\"      : \"High | Medium | Low | None\",\n  \"Profile_Reason\"  : \"<Max 30 words — cite the related vs unrelated split. Reference 1–2 enquired item names if useful.>\"\n}\n\n===========================================\nIMPORTANT GUIDELINES\n===========================================\n- ONLY compare PRODUCTS_ENQUIRED against the current BuyLead Title + MCAT. Nothing else is relevant.\n- Do NOT output Buyer_Profile_Type, persona labels, or trust verdicts beyond Genuineness.\n- Apply Indian B2B category common-sense for ADJACENT relationships.\n- Profile_Reason must cite the actual split or give 1–2 example items — keep it concrete, not generic.\n- Return STRICT valid JSON only — no markdown, no commentary outside the JSON block.\n",
+        "user": "Display_id: 144059435859\nTitle: Soffit Panel\nMCAT: Soffit Panel\nMCAT_id: 116782\nPRODUCTS_ENQUIRED: []\nProducts_Enquired_Count: 0"
+      },
+      "sub_steps": [
+        {
+          "seq": 1,
+          "node": "prepare_input",
+          "fn": "_build_offer_source",
+          "input": {
+            "offer_id": "144059435859"
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "PRODUCTS_ENQUIRED": []
+          }
+        },
+        {
+          "seq": 2,
+          "node": "prepare_input",
+          "fn": "_merge_inputs[result]",
+          "input": {
+            "offer_keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED"
+            ]
+          },
+          "output": {
+            "Display_id": "144059435859",
+            "Title": "Soffit Panel",
+            "MCAT": "Soffit Panel",
+            "MCAT_id": "116782",
+            "PRODUCTS_ENQUIRED": [],
+            "Products_Enquired_Count": 0
+          }
+        },
+        {
+          "seq": 1,
+          "node": "buyer_classify",
+          "fn": "_read_prompt",
+          "input": {
+            "path": "C:\\Users\\Imart\\Documents\\GitHub\\BL-Auditor\\app\\buyer_profile_agent\\prompt.md"
+          },
+          "output": {
+            "char_count": 5413
+          }
+        },
+        {
+          "seq": 2,
+          "node": "buyer_classify",
+          "fn": "_render_template",
+          "input": {
+            "variables": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED",
+              "Products_Enquired_Count"
+            ]
+          },
+          "output": {
+            "char_count": 5348
+          }
+        },
+        {
+          "seq": 3,
+          "node": "buyer_classify",
+          "fn": "build_user_message",
+          "input": {
+            "keys": [
+              "Display_id",
+              "Title",
+              "MCAT",
+              "MCAT_id",
+              "PRODUCTS_ENQUIRED",
+              "Products_Enquired_Count"
+            ]
+          },
+          "output": "Display_id: 144059435859\nTitle: Soffit Panel\nMCAT: Soffit Panel\nMCAT_id: 116782\nPRODUCTS_ENQUIRED: []\nProducts_Enquired_Count: 0"
+        },
+        {
+          "seq": 4,
+          "node": "buyer_classify",
+          "fn": "ChatOpenAI.ainvoke",
+          "input": {
+            "model": "google/gemini-2.5-flash-lite",
+            "base_url": "https://imllm.intermesh.net",
+            "system_chars": 5348,
+            "user_chars": 128
+          },
+          "output": {
+            "response_chars": 226,
+            "preview": "{\n  \"Display_id\": 144059435859,\n  \"Genuineness\": \"Unverifiable\",\n  \"Profile_Score\": null,\n  \"Confidence\": \"None\",\n  \"Profile_Reason\": \"No prior product enquiries available — cannot assess relatedness to the current BuyLead.\"\n}"
+          }
+        },
+        {
+          "seq": 5,
+          "node": "buyer_classify",
+          "fn": "_clean_classifier_output",
+          "input": {
+            "raw_chars": 226
+          },
+          "output": {
+            "Display_id": 144059435859,
+            "Genuineness": "Unverifiable",
+            "Profile_Score": null,
+            "Confidence": "None",
+            "Profile_Reason": "No prior product enquiries available — cannot assess relatedness to the current BuyLead."
+          }
+        }
+      ]
+    }
+  ]
+}

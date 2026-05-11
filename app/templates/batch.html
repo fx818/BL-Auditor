@@ -57,6 +57,7 @@
           <thead>
             <tr>
               <th style="width:28px;">#</th>
+              <th style="width:60px;">View</th>
               <th>Offer ID</th>
               <th>Item Name</th>
               <th>MCAT</th>
@@ -85,6 +86,11 @@
               <th>AI Price Range</th>
               <th>Price Reason</th>
               <th>Price Error</th>
+              <th>Genuineness</th>
+              <th>Profile Score</th>
+              <th>Profile Confidence</th>
+              <th>Profile Reason</th>
+              <th>Buyer Error</th>
               <th>Saved</th>
             </tr>
           </thead>
@@ -158,9 +164,9 @@
     if (s === '-') return '<span style="color:var(--text-muted)">-</span>';
     const low = s.toLowerCase();
     let color = 'var(--text-secondary)';
-    if (low.includes('not_outlier') || low === 'correct' || low === 'retail') color = 'var(--accent-green)';
-    else if (low.includes('outlier') || low === 'not-correct' || low === 'non-retail') color = 'var(--accent-red)';
-    else if (low.includes('review') || low.includes('unclassified') || low.includes('unverifiable')) color = 'var(--accent-orange)';
+    if (low.includes('not_outlier') || low === 'correct' || low === 'retail' || low === 'genuine') color = 'var(--accent-green)';
+    else if (low.includes('outlier') || low === 'not-correct' || low === 'non-retail' || low === 'suspicious') color = 'var(--accent-red)';
+    else if (low.includes('review') || low.includes('unclassified') || low.includes('unverifiable') || low === 'unknown') color = 'var(--accent-orange)';
     return '<span style="color:' + color + ';font-weight:600;">' + s + '</span>';
   }
 
@@ -172,17 +178,87 @@
     return '<td>' + badge(val) + '</td>';
   }
 
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function renderStepBlock(step) {
+    const isErr = step.status === 'error';
+    const color = isErr ? 'var(--accent-red)' : 'var(--accent-green)';
+    const bg = isErr ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)';
+    let html = '<div style="border-left:3px solid ' + color + ';background:' + bg +
+      ';padding:6px 10px;margin-bottom:6px;border-radius:4px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px;">' +
+      '<b style="font-size:0.78rem;color:var(--text-primary);">' + escapeHtml(step.step) + '. ' + escapeHtml(step.name) + '</b>' +
+      '<span style="font-size:0.7rem;font-weight:600;color:' + color + ';">' + escapeHtml((step.status||'').toUpperCase()) +
+      ' · ' + escapeHtml(step.duration_ms || 0) + 'ms</span>' +
+      '</div>';
+    if (step.endpoint) html += '<div style="font-size:0.7rem;font-family:monospace;color:var(--text-muted);margin-bottom:3px;">→ ' + escapeHtml(step.endpoint) + '</div>';
+    if (step.error) html += '<div style="font-size:0.72rem;font-family:monospace;color:var(--accent-red);white-space:pre-wrap;margin-bottom:4px;">' + escapeHtml(step.error) + '</div>';
+    const blocks = [
+      ['Input', step.input],
+      ['Output', step.output],
+      ['Raw Output', step.raw_output],
+      ['Parsed', step.parsed],
+    ];
+    blocks.forEach(function (kv) {
+      if (kv[1] === undefined || kv[1] === null || kv[1] === '') return;
+      const txt = (typeof kv[1] === 'string') ? kv[1] : JSON.stringify(kv[1], null, 2);
+      html += '<details style="margin-top:4px;"><summary style="cursor:pointer;font-size:0.72rem;color:var(--text-secondary);">' + kv[0] + '</summary>' +
+        '<pre style="background:var(--bg-primary);border:1px solid var(--border);border-radius:4px;padding:6px;font-size:0.7rem;white-space:pre-wrap;max-height:280px;overflow:auto;margin:4px 0 0;">' + escapeHtml(txt) + '</pre></details>';
+    });
+    html += '</div>';
+    return html;
+  }
+
   function appendRow(d) {
     const tbody = document.getElementById('batch-tbody');
     const tr = document.createElement('tr');
     if (d.error) {
+      const stepCount = (d.steps && d.steps.length) || 0;
+      const detailId = 'err-detail-' + d.index;
+      const btnId = 'err-btn-' + d.index;
+      const traceLink = d.trace_id ? ' · <a href="/traces/' + escapeHtml(d.trace_id) + '" style="color:var(--accent-blue);">View Trace</a>' : '';
+      const showLabel = 'Show steps (' + stepCount + ')';
+      const errViewBtn = d.trace_id
+        ? '<a href="/traces/' + escapeHtml(d.trace_id) + '/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>'
+        : '<span style="color:var(--text-muted);font-size:0.72rem;">—</span>';
       tr.innerHTML =
         '<td>' + d.index + '</td>' +
-        '<td class="check-key">' + d.offer_id + '</td>' +
-        '<td colspan="28" style="color:var(--accent-red);font-size:0.75rem;">' + d.error + '</td>';
+        '<td>' + errViewBtn + '</td>' +
+        '<td class="check-key">' + escapeHtml(d.offer_id) + '</td>' +
+        '<td colspan="33" style="font-size:0.75rem;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">' +
+            '<div style="color:var(--accent-red);font-weight:600;">' +
+              '✗ ' + escapeHtml(d.failed_step || 'Error') + ': ' + escapeHtml(d.error) +
+            '</div>' +
+            '<button type="button" id="' + btnId + '" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">' + escapeHtml(showLabel) + '</button>' +
+          '</div>' +
+          '<div id="' + detailId + '" style="display:none;margin-top:8px;">' +
+            (stepCount ? d.steps.map(renderStepBlock).join('') : '<div style="color:var(--text-muted);font-size:0.72rem;">No steps recorded.</div>') +
+            '<div style="margin-top:6px;font-size:0.7rem;color:var(--text-muted);">Trace ID: ' + escapeHtml(d.trace_id || '—') + traceLink + '</div>' +
+          '</div>' +
+        '</td>';
+      tbody.appendChild(tr);
+      const btn = document.getElementById(btnId);
+      const detailEl = document.getElementById(detailId);
+      if (btn && detailEl) {
+        btn.addEventListener('click', function () {
+          const open = detailEl.style.display !== 'none';
+          detailEl.style.display = open ? 'none' : 'block';
+          btn.textContent = open ? showLabel : 'Hide steps';
+        });
+      }
+      return;
     } else {
+      const okViewBtn = d.trace_id
+        ? '<a href="/traces/' + escapeHtml(d.trace_id) + '/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>'
+        : '<span style="color:var(--text-muted);font-size:0.72rem;">—</span>';
       tr.innerHTML =
         '<td>' + d.index + '</td>' +
+        '<td>' + okViewBtn + '</td>' +
         '<td class="check-key">' + v(d.offer_id) + '</td>' +
         cell(d.item_name) +
         cell(d.mcat_name) +
@@ -211,6 +287,11 @@
         cell(d.price_value_by_ai) +
         cell(d.price_agent_reason) +
         cell(d.price_error) +
+        badgeCell(d.buyer_profile_genuineness) +
+        cell(d.buyer_profile_score) +
+        cell(d.buyer_profile_confidence) +
+        cell(d.buyer_profile_reason) +
+        cell(d.buyer_error) +
         '<td><span style="color:var(--accent-green);font-size:0.72rem;font-weight:600;">✓</span></td>';
     }
     tbody.appendChild(tr);

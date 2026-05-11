@@ -23,6 +23,7 @@
     <table class="check-table" id="traces-table" style="width:100%;">
       <thead>
         <tr>
+          <th style="width:140px;">Actions</th>
           <th>Offer ID</th>
           <th>Item Name</th>
           <th>MCAT</th>
@@ -34,7 +35,11 @@
       </thead>
       <tbody>
         {% for t in traces %}
-        <tr class="trace-row" style="cursor:pointer;" onclick="window.location='/traces/{{ t.trace_id }}'">
+        <tr class="trace-row">
+          <td style="white-space:nowrap;">
+            <a href="/traces/{{ t.trace_id }}/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;margin-right:4px;">Detail</a>
+            <a href="/traces/{{ t.trace_id }}" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">Steps</a>
+          </td>
           <td class="check-key" style="color:var(--accent-blue);font-weight:600;">{{ t.offer_id }}</td>
           <td style="font-weight:500;color:var(--text-primary);max-width:220px;">{{ t.item_name or '—' }}</td>
           <td style="color:var(--text-secondary);">{{ t.mcat_name or '—' }}</td>

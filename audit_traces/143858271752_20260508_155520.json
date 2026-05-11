@@ -1,0 +1,25 @@
+{
+  "trace_id": "143858271752_20260508_155520",
+  "offer_id": "143858271752",
+  "item_name": "",
+  "mcat_name": "",
+  "started_at": "2026-05-08T15:55:20.336398",
+  "completed_at": "2026-05-08T15:55:42.243533",
+  "total_steps": 1,
+  "has_error": true,
+  "steps": [
+    {
+      "step": 1,
+      "name": "BuyLead API",
+      "type": "api_call",
+      "timestamp": "2026-05-08T15:55:42.241893",
+      "status": "error",
+      "duration_ms": 21905,
+      "endpoint": "https://leads.imutils.com/wservce/buyleads/detail/",
+      "input": {
+        "offer_id": "143858271752"
+      },
+      "error": "All connection attempts failed"
+    }
+  ]
+}
