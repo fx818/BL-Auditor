@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from app.routers import audit
 
 app = FastAPI(
-    title="BL Auditor 2",
+    title="BL Auditor",
     description="BuyLead Product Auditor Dashboard",
     version="2.0.0",
 )

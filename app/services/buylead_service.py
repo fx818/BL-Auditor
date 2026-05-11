@@ -23,7 +23,7 @@ DEFAULT_AUDIT_PAYLOAD: Dict[str, Any] = {
     "mcat_id": "39596",
     "mcat_name": "Terminal Block Connectors",
     "mcat_pool": [],
-    "modid": "GLADMIN",
+    "modid": "BL-Testing",
     "pc_item_id": 326487619,
     "price": 350,
     "rejection_code": 0,

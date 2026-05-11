@@ -70,7 +70,7 @@
               {% endif %}
             </td>
             {% for key, value in row.items() %}
-            {% if key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') %}
+            {% if key and key is string and key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') %}
             <td
               class="{% if key == 'offer_id' %}check-key records-offer-cell{% else %}check-reason{% endif %}"
               data-column="{{ key }}"

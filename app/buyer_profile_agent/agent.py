@@ -21,8 +21,6 @@ class BuyerProfileState(TypedDict, total=False):
     user_message: str
     raw_output: str
     result: Dict[str, Any]
-    prepare_sub_steps: List[Dict[str, Any]]
-    classify_sub_steps: List[Dict[str, Any]]
 
 
 def _clean(value: Any) -> str:
@@ -91,13 +89,8 @@ def _clean_classifier_output(raw: str) -> Dict[str, Any]:
 
 
 async def _prepare_input(state: BuyerProfileState) -> BuyerProfileState:
-    sub: List[Dict[str, Any]] = []
     offer_id = state["offer_id"]
-
     source = _build_offer_source(offer_id, state["buylead_response"])
-    sub.append({"seq": 1, "node": "prepare_input", "fn": "_build_offer_source",
-                "input": {"offer_id": offer_id}, "output": source})
-
     products = source["PRODUCTS_ENQUIRED"]
     agent_input: Dict[str, Any] = {
         "Display_id": source["Display_id"],
@@ -107,10 +100,7 @@ async def _prepare_input(state: BuyerProfileState) -> BuyerProfileState:
         "PRODUCTS_ENQUIRED": products,
         "Products_Enquired_Count": len(products),
     }
-    sub.append({"seq": 2, "node": "prepare_input", "fn": "_merge_inputs[result]",
-                "input": {"offer_keys": list(source.keys())}, "output": agent_input})
-
-    return {"agent_input": agent_input, "prepare_sub_steps": sub}
+    return {"agent_input": agent_input}
 
 
 async def _buyer_classify(state: BuyerProfileState) -> BuyerProfileState:
@@ -122,18 +112,9 @@ async def _buyer_classify(state: BuyerProfileState) -> BuyerProfileState:
     if not api_key or not model:
         raise RuntimeError("Missing BUYER_PROFILE_LLM_API_KEY or BUYER_PROFILE_LLM_MODEL")
 
-    sub: List[Dict[str, Any]] = []
     agent_input = state["agent_input"]
-
     raw_prompt = _read_prompt()
-    sub.append({"seq": 1, "node": "buyer_classify", "fn": "_read_prompt",
-                "input": {"path": str(PROMPT_PATH)},
-                "output": {"char_count": len(raw_prompt)}})
-
     system_prompt = _render_template(raw_prompt, agent_input)
-    sub.append({"seq": 2, "node": "buyer_classify", "fn": "_render_template",
-                "input": {"variables": list(agent_input.keys())},
-                "output": {"char_count": len(system_prompt)}})
 
     user_text = "\n".join([
         f"Display_id: {agent_input.get('Display_id', '')}",
@@ -143,30 +124,17 @@ async def _buyer_classify(state: BuyerProfileState) -> BuyerProfileState:
         f"PRODUCTS_ENQUIRED: {json.dumps(agent_input.get('PRODUCTS_ENQUIRED', []), ensure_ascii=False)}",
         f"Products_Enquired_Count: {agent_input.get('Products_Enquired_Count', 0)}",
     ])
-    sub.append({"seq": 3, "node": "buyer_classify", "fn": "build_user_message",
-                "input": {"keys": list(agent_input.keys())},
-                "output": user_text})
 
     llm = ChatOpenAI(model=model, api_key=api_key, base_url=base_url, timeout=timeout)
-    sub.append({"seq": 4, "node": "buyer_classify", "fn": "ChatOpenAI.ainvoke",
-                "input": {"model": model, "base_url": base_url,
-                          "system_chars": len(system_prompt), "user_chars": len(user_text)},
-                "output": None})
     response = await llm.ainvoke([SystemMessage(content=system_prompt), HumanMessage(content=user_text)])
     raw_output = str(response.content)
-    sub[-1]["output"] = {"response_chars": len(raw_output), "preview": raw_output[:300]}
-
     result = _clean_classifier_output(raw_output)
-    sub.append({"seq": 5, "node": "buyer_classify", "fn": "_clean_classifier_output",
-                "input": {"raw_chars": len(raw_output)},
-                "output": result})
 
     return {
         "system_prompt": system_prompt,
         "user_message": user_text,
         "raw_output": raw_output,
         "result": result,
-        "classify_sub_steps": sub,
     }
 
 
@@ -203,6 +171,5 @@ async def run_buyer_profile_agent(
             "raw_output": state.get("raw_output", ""),
             "system_prompt": state.get("system_prompt", ""),
             "user_message": state.get("user_message", ""),
-            "sub_steps": state.get("prepare_sub_steps", []) + state.get("classify_sub_steps", []),
         }
     return state["result"]

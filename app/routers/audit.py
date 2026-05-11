@@ -113,43 +113,57 @@ async def audit(request: Request):
             fatal_exc = exc
             raise
 
-        # Step 3: Audit API
-        t0 = time.monotonic()
-        try:
-            result = await call_auditor_api(payload)
+        # Steps 3–6 run concurrently: Audit API + Retail + Price + Buyer Profile.
+        # BuyLead response + payload are ready; none of the four depend on each other.
+        async def _timed(coro):
+            t = time.monotonic()
+            try:
+                return ("ok", await coro, int((time.monotonic() - t) * 1000))
+            except Exception as e:
+                return ("err", e, int((time.monotonic() - t) * 1000))
+
+        audit_outcome, retail_outcome, price_outcome, buyer_outcome = await asyncio.gather(
+            _timed(call_auditor_api(payload)),
+            _timed(run_retail_agent(offer_id, buylead_response, _trace=True)),
+            _timed(run_price_agent(offer_id, buylead_response, _trace=True)),
+            _timed(run_buyer_profile_agent(offer_id, buylead_response, _trace=True)),
+        )
+
+        # Step 3: Audit API — record first (fatal step if it failed)
+        audit_status, audit_value, audit_ms = audit_outcome
+        if audit_status == "ok":
+            result = audit_value
             trace.add_step("Audit API", "api_call",
                 endpoint=AUDITOR_API_URL,
                 input_=payload,
                 output=result,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=audit_ms,
             )
-        except Exception as exc:
+        else:
             trace.add_step("Audit API", "api_call",
                 endpoint=AUDITOR_API_URL,
                 input_=payload,
-                error=exc,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                error=audit_value,
+                duration_ms=audit_ms,
             )
-            failed_step = "Audit API"
-            fatal_exc = exc
-            raise
 
         # Step 4: Retail Agent
-        t0 = time.monotonic()
-        try:
-            retail_state = await run_retail_agent(offer_id, buylead_response, _trace=True)
+        retail_status, retail_value, retail_ms = retail_outcome
+        if retail_status == "ok":
+            retail_state = retail_value
             retail_result = retail_state["result"]
             trace.add_step("Retail Agent", "llm_agent",
                 input_=retail_state.get("agent_input", {}),
                 raw_output=retail_state.get("raw_output", ""),
                 parsed=retail_result,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=retail_ms,
                 llm_messages={
                     "system": retail_state.get("system_prompt", ""),
                     "user": retail_state.get("user_message", ""),
                 },
             )
-        except Exception as retail_exc:
+        else:
+            retail_exc = retail_value
             retail_result = {
                 "Display_id": offer_id, "Classification": "UNCLASSIFIED",
                 "Classi_Score": None, "Confidence": "None",
@@ -159,25 +173,26 @@ async def audit(request: Request):
             }
             trace.add_step("Retail Agent", "llm_agent",
                 error=retail_exc,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=retail_ms,
             )
 
         # Step 5: Price Agent
-        t0 = time.monotonic()
-        try:
-            price_state = await run_price_agent(offer_id, buylead_response, _trace=True)
+        price_status, price_value, price_ms = price_outcome
+        if price_status == "ok":
+            price_state = price_value
             price_result = price_state["result"]
             trace.add_step("Price Agent", "llm_agent",
                 input_=price_state.get("agent_input", {}),
                 raw_output=price_state.get("raw_output", ""),
                 parsed=price_result,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=price_ms,
                 llm_messages={
                     "system": price_state.get("system_prompt", ""),
                     "user": price_state.get("user_message", ""),
                 },
             )
-        except Exception as price_exc:
+        else:
+            price_exc = price_value
             price_result = {
                 "Display_id": offer_id, "Price_Results": "Unverifiable",
                 "Price_Score": None, "Confidence": "None",
@@ -187,26 +202,26 @@ async def audit(request: Request):
             }
             trace.add_step("Price Agent", "llm_agent",
                 error=price_exc,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=price_ms,
             )
 
         # Step 6: Buyer Profile Agent
-        t0 = time.monotonic()
-        try:
-            buyer_state = await run_buyer_profile_agent(offer_id, buylead_response, _trace=True)
+        buyer_status, buyer_value, buyer_ms = buyer_outcome
+        if buyer_status == "ok":
+            buyer_state = buyer_value
             buyer_result = buyer_state["result"]
             trace.add_step("Buyer Profile Agent", "llm_agent",
                 input_=buyer_state.get("agent_input", {}),
                 raw_output=buyer_state.get("raw_output", ""),
                 parsed=buyer_result,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=buyer_ms,
                 llm_messages={
                     "system": buyer_state.get("system_prompt", ""),
                     "user": buyer_state.get("user_message", ""),
                 },
-                sub_steps=buyer_state.get("sub_steps", []),
             )
-        except Exception as buyer_exc:
+        else:
+            buyer_exc = buyer_value
             buyer_result = {
                 "Display_id": offer_id,
                 "Genuineness": "Unverifiable",
@@ -217,8 +232,15 @@ async def audit(request: Request):
             }
             trace.add_step("Buyer Profile Agent", "llm_agent",
                 error=buyer_exc,
-                duration_ms=int((time.monotonic() - t0) * 1000),
+                duration_ms=buyer_ms,
             )
+
+        # Audit API is the only fatal step among the four — surface its failure
+        # AFTER all trace steps are recorded so the saved trace stays complete.
+        if audit_status != "ok":
+            failed_step = "Audit API"
+            fatal_exc = audit_value
+            raise audit_value
 
         try:
             trace_id = trace.save(
@@ -456,50 +478,134 @@ async def batch_stream(offer_ids: str = ""):
                     failed_step = "Payload Build"
                     raise
 
-                t0 = time.monotonic()
-                result, retail_raw, price_raw, buyer_raw = await asyncio.gather(
-                    call_auditor_api(payload),
-                    run_retail_agent(offer_id, buylead_response),
-                    run_price_agent(offer_id, buylead_response),
-                    run_buyer_profile_agent(offer_id, buylead_response),
-                    return_exceptions=True,
+                # Steps 3–6 run concurrently: Audit API + Retail + Price + Buyer.
+                # Mirrors the /audit handler so the saved trace has all 6 steps
+                # with full agent state (system_prompt, user_message, raw_output).
+                async def _timed(coro):
+                    t = time.monotonic()
+                    try:
+                        return ("ok", await coro, int((time.monotonic() - t) * 1000))
+                    except Exception as e:
+                        return ("err", e, int((time.monotonic() - t) * 1000))
+
+                audit_outcome, retail_outcome, price_outcome, buyer_outcome = await asyncio.gather(
+                    _timed(call_auditor_api(payload)),
+                    _timed(run_retail_agent(offer_id, buylead_response, _trace=True)),
+                    _timed(run_price_agent(offer_id, buylead_response, _trace=True)),
+                    _timed(run_buyer_profile_agent(offer_id, buylead_response, _trace=True)),
                 )
 
-                if isinstance(result, Exception):
+                # Step 3: Audit API
+                audit_status, audit_value, audit_ms = audit_outcome
+                if audit_status == "ok":
+                    result = audit_value
                     trace.add_step("Audit API", "api_call",
                         endpoint=AUDITOR_API_URL,
                         input_=payload,
-                        error=result,
-                        duration_ms=int((time.monotonic() - t0) * 1000),
+                        output=result,
+                        duration_ms=audit_ms,
                     )
-                    failed_step = "Audit API"
-                    raise result
-                trace.add_step("Audit API", "api_call",
-                    endpoint=AUDITOR_API_URL,
-                    input_=payload,
-                    output=result,
-                    duration_ms=int((time.monotonic() - t0) * 1000),
-                )
+                else:
+                    trace.add_step("Audit API", "api_call",
+                        endpoint=AUDITOR_API_URL,
+                        input_=payload,
+                        error=audit_value,
+                        duration_ms=audit_ms,
+                    )
 
-                retail_result = retail_raw if isinstance(retail_raw, dict) else {
-                    "Display_id": offer_id, "Classification": "UNCLASSIFIED",
-                    "Classi_Score": None, "Confidence": "None",
-                    "Override_Applied": "No",
-                    "Reason": "Retail agent failed.", "error": str(retail_raw),
-                }
-                price_result = price_raw if isinstance(price_raw, dict) else {
-                    "Display_id": offer_id, "Price_Results": "Unverifiable",
-                    "Price_Score": None, "Confidence": "None",
-                    "Price_Value_By_AI": "",
-                    "Price_Reason": "Price agent failed.", "error": str(price_raw),
-                }
-                buyer_result = buyer_raw if isinstance(buyer_raw, dict) else {
-                    "Display_id": offer_id,
-                    "Genuineness": "Unverifiable",
-                    "Profile_Score": None, "Confidence": "None",
-                    "Profile_Reason": "Buyer profile agent failed.",
-                    "error": str(buyer_raw),
-                }
+                # Step 4: Retail Agent
+                retail_status, retail_value, retail_ms = retail_outcome
+                if retail_status == "ok":
+                    retail_state = retail_value
+                    retail_result = retail_state["result"]
+                    trace.add_step("Retail Agent", "llm_agent",
+                        input_=retail_state.get("agent_input", {}),
+                        raw_output=retail_state.get("raw_output", ""),
+                        parsed=retail_result,
+                        duration_ms=retail_ms,
+                        llm_messages={
+                            "system": retail_state.get("system_prompt", ""),
+                            "user": retail_state.get("user_message", ""),
+                        },
+                    )
+                else:
+                    retail_exc = retail_value
+                    retail_result = {
+                        "Display_id": offer_id, "Classification": "UNCLASSIFIED",
+                        "Classi_Score": None, "Confidence": "None",
+                        "Override_Applied": "No",
+                        "Reason": "Retail classification failed; see retail_error.",
+                        "error": str(retail_exc),
+                    }
+                    trace.add_step("Retail Agent", "llm_agent",
+                        error=retail_exc,
+                        duration_ms=retail_ms,
+                    )
+
+                # Step 5: Price Agent
+                price_status, price_value, price_ms = price_outcome
+                if price_status == "ok":
+                    price_state = price_value
+                    price_result = price_state["result"]
+                    trace.add_step("Price Agent", "llm_agent",
+                        input_=price_state.get("agent_input", {}),
+                        raw_output=price_state.get("raw_output", ""),
+                        parsed=price_result,
+                        duration_ms=price_ms,
+                        llm_messages={
+                            "system": price_state.get("system_prompt", ""),
+                            "user": price_state.get("user_message", ""),
+                        },
+                    )
+                else:
+                    price_exc = price_value
+                    price_result = {
+                        "Display_id": offer_id, "Price_Results": "Unverifiable",
+                        "Price_Score": None, "Confidence": "None",
+                        "Price_Value_By_AI": "",
+                        "Price_Reason": "Price agent failed; see price_error.",
+                        "error": str(price_exc),
+                    }
+                    trace.add_step("Price Agent", "llm_agent",
+                        error=price_exc,
+                        duration_ms=price_ms,
+                    )
+
+                # Step 6: Buyer Profile Agent
+                buyer_status, buyer_value, buyer_ms = buyer_outcome
+                if buyer_status == "ok":
+                    buyer_state = buyer_value
+                    buyer_result = buyer_state["result"]
+                    trace.add_step("Buyer Profile Agent", "llm_agent",
+                        input_=buyer_state.get("agent_input", {}),
+                        raw_output=buyer_state.get("raw_output", ""),
+                        parsed=buyer_result,
+                        duration_ms=buyer_ms,
+                        llm_messages={
+                            "system": buyer_state.get("system_prompt", ""),
+                            "user": buyer_state.get("user_message", ""),
+                        },
+                    )
+                else:
+                    buyer_exc = buyer_value
+                    buyer_result = {
+                        "Display_id": offer_id,
+                        "Genuineness": "Unverifiable",
+                        "Profile_Score": None,
+                        "Confidence": "None",
+                        "Profile_Reason": "Buyer profile classification failed; see buyer_error.",
+                        "error": str(buyer_exc),
+                    }
+                    trace.add_step("Buyer Profile Agent", "llm_agent",
+                        error=buyer_exc,
+                        duration_ms=buyer_ms,
+                    )
+
+                # Audit API is the only fatal step — surface its failure after
+                # all four trace steps are recorded so the saved trace stays complete.
+                if audit_status != "ok":
+                    failed_step = "Audit API"
+                    raise audit_value
 
                 try:
                     ok_trace_id = trace.save(
@@ -592,10 +698,14 @@ def _friendly_error(exc: Exception) -> str:
     msg = str(exc)
     if "codec can't encode" in msg or "charmap" in msg:
         return "A character encoding error occurred while saving the trace. The audit result was processed — please retry."
-    if "Connection" in msg or "ConnectError" in msg or "ConnectTimeout" in msg:
+    if "timed out" in msg.lower() or "Timeout" in msg:
+        return f"Upstream API timed out. Detail: {msg[:300]}"
+    if "Connection" in msg or "ConnectError" in msg:
         return "Could not reach an upstream API. Check network connectivity and try again."
-    if "HTTPStatusError" in msg or "status_code" in msg:
-        return f"Upstream API returned an error response. Detail: {msg[:200]}"
+    if "HTTP " in msg or "HTTPStatusError" in msg or "status_code" in msg:
+        return f"Upstream API returned an error response. Detail: {msg[:300]}"
+    if "non-JSON" in msg:
+        return f"Upstream API returned a non-JSON body. Detail: {msg[:300]}"
     if "Missing" in msg and "LLM" in msg:
         return msg
     return f"Audit pipeline error: {msg[:300]}"

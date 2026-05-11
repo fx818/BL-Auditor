@@ -11,7 +11,7 @@
 
   <div class="form-card" style="margin-bottom:1.25rem;">
     <div class="form-group" style="margin-bottom:0.75rem;">
-      <label class="form-label" for="batch-input">Offer IDs (comma-separated)</label>
+      <label class="form-label" for="batch-input">Offer IDs (comma-separated or one per line)</label>
       <textarea
         id="batch-input"
         class="form-control"
@@ -23,6 +23,8 @@
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
       <button id="batch-btn" class="btn btn-primary" onclick="startBatch()">Run Batch</button>
       <a href="/records" class="btn btn-outline btn-sm">See Previous Records</a>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('batch-file').click()">Upload .txt</button>
+      <input id="batch-file" type="file" accept=".txt,text/plain" style="display:none;">
       <button class="btn btn-outline btn-sm" onclick="document.getElementById('batch-input').value='';document.getElementById('batch-count').textContent=''">Clear</button>
       <span id="batch-count" style="font-size:0.78rem;color:var(--text-muted);"></span>
     </div>
@@ -107,7 +109,7 @@
 
   window.startBatch = function () {
     const raw = document.getElementById('batch-input').value;
-    const ids = raw.split(',').map(s => s.trim()).filter(Boolean);
+    const ids = raw.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
     if (!ids.length) return;
 
     document.getElementById('batch-tbody').innerHTML = '';
@@ -298,8 +300,26 @@
   }
 
   document.getElementById('batch-input').addEventListener('input', function () {
-    const ids = this.value.split(',').map(s => s.trim()).filter(Boolean);
+    const ids = this.value.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
     document.getElementById('batch-count').textContent = ids.length ? ids.length + ' offer ID(s)' : '';
+  });
+
+  // Read offer IDs from an uploaded .txt file. Accepts any mix of commas,
+  // spaces, tabs, or newlines as separators — splits on /[,\s]+/.
+  document.getElementById('batch-file').addEventListener('change', function (evt) {
+    const file = evt.target.files && evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const text = String(e.target.result || '');
+      const ids = text.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+      const textarea = document.getElementById('batch-input');
+      textarea.value = ids.join(', ');
+      textarea.dispatchEvent(new Event('input'));
+    };
+    reader.readAsText(file);
+    // Reset so re-selecting the same file still fires `change`.
+    evt.target.value = '';
   });
 })();
 </script>

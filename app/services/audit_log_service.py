@@ -142,6 +142,11 @@ def read_audit_dashboard_rows() -> list[Dict[str, str]]:
 
     with open(CSV_PATH, "r", newline="", encoding="utf-8") as csv_file:
         reader = csv.DictReader(csv_file)
-        rows = list(reader)
+        rows = []
+        for raw in reader:
+            # csv.DictReader puts any extra values (when a row has more fields
+            # than the header — e.g. an embedded unescaped comma) under key
+            # None. Drop those so callers / templates only see real columns.
+            rows.append({k: v for k, v in raw.items() if isinstance(k, str)})
     rows.reverse()
     return rows

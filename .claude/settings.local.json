@@ -4,7 +4,9 @@
       "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
       "mcp__plugin_context-mode_context-mode__ctx_execute_file",
       "mcp__plugin_context-mode_context-mode__ctx_search",
-      "mcp__plugin_context-mode_context-mode__ctx_execute"
+      "mcp__plugin_context-mode_context-mode__ctx_execute",
+      "Bash(PYTHONIOENCODING=utf-8 python -m py_compile \"C:/Users/Imart/Documents/GitHub/BL-Auditor/app/routers/audit.py\")",
+      "Bash(PYTHONIOENCODING=utf-8 python *)"
     ]
   }
 }
