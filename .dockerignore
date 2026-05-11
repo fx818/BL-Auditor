@@ -1,0 +1,53 @@
+# VCS
+.git
+.gitignore
+.gitattributes
+
+# Python bytecode / envs
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.venv
+venv
+env
+.Python
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+.~lock.*
+
+# Tooling state
+.claude
+.dual-graph
+CONTEXT.md
+CLAUDE.md
+
+# Docs / scratch (not needed at runtime)
+README.md
+plan.md
+plan2.md
+retail_agent_latency_analysis.md
+image.png
+
+# Runtime-generated data (mount a volume on GKE)
+audit_dashboard_log.csv
+audit_traces.csv
+
+# Dev fixtures / agent dumps not loaded by code
+payload.txt
+offer.txt
+retail_agent.json
+price_agent.json
+
+# Docker itself
+Dockerfile
+.dockerignore
