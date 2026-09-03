@@ -1,0 +1,1040 @@
+{
+  "timestamp": "2026-08-05 16:38:22",
+  "results": [
+    {
+      "usr_id": "147478644",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "260179817",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "36810708",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 741900,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "General",
+                  "query": "Is this your number on WhatsApp? (WhatsApp hai to?)",
+                  "sequence": 3
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Specifications",
+                  "query": "What will be the size of the spring? (Size kya hogi spring ki?)",
+                  "sequence": 1
+                },
+                {
+                  "category": "Contact",
+                  "query": "Please tell me your WhatsApp number? (WhatsApp number bolo na sir?)",
+                  "sequence": 2
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_conclusion": {
+              "category": "Pending",
+              "conclusion_notes": "Exchange of contact numbers to share product details on WhatsApp (WhatsApp karo mujhe)"
+            },
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants to purchase industrial-grade springs with specific thickness and length dimensions.",
+              "reasoning": "The buyer provided exact measurements (8-10mm diameter and 20-inch length) and actively swapped phone numbers to move the conversation to WhatsApp for catalog/details."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": "Industrial User",
+                "keywords": [
+                  "8 to 10 mm",
+                  "20 inch length"
+                ],
+                "order_type": "Commercial",
+                "quantity_scale": "High"
+              },
+              "reason": "The discussion revolves around specific industrial-grade spring dimensions (8-10mm thickness, 20-inch length) which are typically used in B2B manufacturing or mechanical applications.",
+              "type": "B2B"
+            },
+            "intended_application": "Industrial Production",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=0X zqPZ52NGC qxpWmLi6TI8eFMmxZOojob4Q0FGz8Bkoi9v6nL5piVoGrjs29Cp1KTMg6YqBnPm LVXdX9tLdF1RSaMbu06lUxVgwyMmmXEWVyLj3a1ynw cCS8nrCT"
+        },
+        {
+          "file_id": 314543,
+          "extracted_data": {
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": "Manufacturer",
+                "keywords": [
+                  "pellet machine",
+                  "biomass",
+                  "capacity",
+                  "production"
+                ],
+                "order_type": "commercial",
+                "quantity_scale": "High",
+                "repeat_buyer": false
+              },
+              "reason": "The buyer is inquiring about a 'pellet machine' for 'biomass' and discussing 'production capacity' ranging from 10 to 80 (implicitly a high capacity, likely tons/hour or kg/hour), which are characteristics of industrial machinery and bulk production, indicating a business transaction rather than personal use.",
+              "type": "B2B"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=Jr8K5IiyqcibLJBhAQzQOIabIalEuqtJ4CQrnrdx60K Mypd6Bm6iOF4mM6A1sYTgPMCtZUsg/BXhHpNRy3KLRLV2pdzrsK98Rc4Pps9HmMKU2xjB/60BTIEBhdvdZGF"
+        }
+      ]
+    },
+    {
+      "usr_id": "271174821",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "13323946",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "90507043",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "98150452",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "98366058",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "14342326",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 2120795,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [],
+              "seller_queries": [
+                {
+                  "category": "Quantity",
+                  "query": "How many kilograms do you need in a month?",
+                  "sequence": 1
+                }
+              ]
+            },
+            "all_languages": [
+              "English",
+              "Hindi"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants to source 10kg jaggery tea and 5kg jaggery coffee premix weekly for business.",
+              "reasoning": "Provided specific weekly quantities and confirmed the location for receiving samples."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "Sample stage reached; waiting for address to dispatch. (Sahi number hai, address bhej do sample bhejta hoon)"
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "retailer"
+                },
+                "order_type": {
+                  "order_type_category": "recurring"
+                },
+                "quantity_scale": "Low",
+                "repeat_buyer": true
+              },
+              "reason": "The buyer mentions a weekly requirement and is asking for samples for business purposes, typical of a B2B retail or food service setup.",
+              "type": "B2B"
+            },
+            "primary_language": "English"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8C9sp3yqo2 75jsZGyyNwZP9FBuPQndTQQhUijX3TS8Ki0Ismfp8X9o0Zz6kwWh/llW0l8VMBmblWeibqj9zkRu"
+        },
+        {
+          "file_id": 2110920,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Availability",
+                  "query": "Where is it available in Bangalore?",
+                  "sequence": 1
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Other",
+                  "query": "Can you provide your WhatsApp number?",
+                  "sequence": 2
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants weekly supply of 10kg Jaggery tea powder and 5kg coffee powder in Bangalore.",
+              "reasoning": "The buyer provided specific quantities, frequency (weekly), location (Bangalore), and shared two mobile numbers."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "Seller will share details on WhatsApp (WhatsApp par bhejti hoon)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "retailer"
+                },
+                "keywords": [
+                  "Weekly supply",
+                  "Bulk quantity"
+                ],
+                "order_type": {
+                  "order_type_category": "recurring"
+                },
+                "quantity_scale": "High",
+                "repeat_buyer": true
+              },
+              "reason": "The buyer requires bulk quantities (15kg total) on a weekly recurring basis, indicating a commercial/resale requirement.",
+              "type": "B2B"
+            },
+            "intended_application": "Retail Resale",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8DIKDbTYiR8zfCnIW2 ToUfcCCW63/ZZjuRDZQcz4cfVR7gvNM3WpcRJv/4aTRxc2hW0l8VMBmblWeibqj9zkRu"
+        }
+      ]
+    },
+    {
+      "usr_id": "252593792",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 2111685,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Delivery",
+                  "query": "Is home delivery available?",
+                  "sequence": 2
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Other",
+                  "query": "What is your mobile number?",
+                  "sequence": 1
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants to purchase a 2000W ATI power amplifier for delivery in Puri, Odisha.",
+              "reasoning": "Specifically asked for a 2000W machine, confirmed his location, and accepted the price quoted."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "Awaiting local dealer contact for delivery (Dealer call karega)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "end_consumer"
+                },
+                "keywords": [
+                  "ATI machine",
+                  "2000 watt",
+                  "Home delivery"
+                ],
+                "order_type": {
+                  "order_type_category": "one-time"
+                },
+                "quantity_scale": "Low"
+              },
+              "reason": "The buyer is looking for a single unit of a power amplifier for personal or small-scale use with home delivery.",
+              "type": "B2C"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8DkoHqRTv4SdjfWmcFZz4qpsoYfvaIEQyejKHmhR5IkD0GuDBYLLCFogDUQxWYvdyVW0l8VMBmblWeibqj9zkRu"
+        },
+        {
+          "file_id": 2111436,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Pricing",
+                  "query": "What is the price of the ATI Pro 2000 watt machine?",
+                  "sequence": 1
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Other",
+                  "query": "Where are you calling from?",
+                  "sequence": 2
+                },
+                {
+                  "category": "Other",
+                  "query": "What is your mobile number?",
+                  "sequence": 3
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants to know the price of ATI Pro 2000 Watt amplifier machine for delivery in Puri, Odisha.",
+              "reasoning": "The buyer has very specific technical requirements (2000W) and a specific brand (ATI Pro) in mind."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "The call was put on hold after the seller requested the buyer's contact details to check the price."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "end_consumer",
+                  "persona_detail": "Individual looking for specific DJ equipment"
+                },
+                "keywords": [
+                  "2000 watt",
+                  "ATI Pro",
+                  "Price check"
+                ],
+                "order_type": {
+                  "order_type_category": "commercial"
+                },
+                "quantity_scale": "Low"
+              },
+              "reason": "The buyer is inquiring about a single high-power amplifier machine for specific use, likely for professional audio/DJ purposes but in a small-scale retail capacity.",
+              "type": "B2C"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8CAgCSFOJ9mel2n0CF4 R9lelqz4pCQ6yqc43tDFyazTeXQfLj12K8SCbH8WEDthWxW0l8VMBmblWeibqj9zkRu"
+        }
+      ]
+    },
+    {
+      "usr_id": "271174693",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "101383559",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 3277702,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "answer_by_seller": "Yes, we have the long piping bags available. How many do you need?",
+                  "category": "Specifications",
+                  "query": "Do you have disposable piping bags?",
+                  "sequence": 1
+                },
+                {
+                  "answer_by_seller": "The price is 70 rupees per packet for the large size.",
+                  "category": "Pricing",
+                  "query": "What is the price for the large size?",
+                  "sequence": 4
+                },
+                {
+                  "answer_by_seller": "For Hyderabad, the shipping would be approximately 400 to 500 rupees because transporters charge for a minimum of 20 to 40 kg. It will cost you about 75 rupees per packet inclusive of shipping.",
+                  "category": "Delivery",
+                  "query": "How much will be the shipping to Hyderabad?",
+                  "sequence": 5
+                }
+              ],
+              "seller_queries": [
+                {
+                  "answer_by_buyer": "I need medium and large sizes.",
+                  "category": "Specifications",
+                  "query": "What size do you need?",
+                  "sequence": 2
+                },
+                {
+                  "answer_by_buyer": "I need 50 pieces.",
+                  "category": "Quantity",
+                  "query": "How many packets do you want?",
+                  "sequence": 3
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants 100 packets of large disposable piping bags for use/resale in Hyderabad.",
+              "reasoning": "The buyer asked specific questions about sizes, price, and shipping costs to Hyderabad and agreed to buy a full box when the seller's MOQ was mentioned."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "The buyer will message the seller on WhatsApp to proceed with the order (Aap mujhe WhatsApp kariye na please)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "other",
+                  "persona_detail": "Professional Baker"
+                },
+                "keywords": [
+                  "Disposable",
+                  "Piping Bag"
+                ],
+                "order_type": [
+                  "bulk"
+                ],
+                "quantity_scale": "High",
+                "repeat_buyer": false
+              },
+              "reason": "The buyer is ordering a bulk quantity of 10,000 pieces (100 packets) of piping bags, indicating a business-to-business transaction for professional or commercial use.",
+              "type": "B2B"
+            },
+            "intended_application": "Bakery Use",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=zaKFdwffiHDKWVThgkAYnDI8eFMmxZOojob4Q0FGz8BrIzcucv6BNlZRDEvB0f5yQZBIRZEWwiRplOQ19/90lzNUxqAGA1G9mzjDn/iLu VW0l8VMBmblWeibqj9zkRu"
+        },
+        {
+          "file_id": 3141997,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Pricing",
+                  "query": "What is the price?",
+                  "sequence": 2
+                }
+              ],
+              "seller_queries": [
+                {
+                  "answer_by_buyer": "I need 12 packets.",
+                  "category": "Quantity",
+                  "query": "How much quantity do you need?",
+                  "sequence": 1
+                },
+                {
+                  "answer_by_buyer": "12 in medium and 12 in small.",
+                  "category": "Specifications",
+                  "query": "What sizes do you need?",
+                  "sequence": 3
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants to purchase 12 packets of icing bags in small and medium sizes.",
+              "reasoning": "Buyer specified exact quantities (12 packets) and sizes (small, medium), showing clear intent."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "Will confirm the size requirement tomorrow evening before ordering (Kal shaam tak confirm karke batata hoon)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "keywords": [
+                  "Icing Bags",
+                  "Small",
+                  "Medium"
+                ],
+                "order_type": [
+                  "bulk"
+                ],
+                "quantity_scale": "High"
+              },
+              "reason": "The buyer is inquiring about 12 packets of icing bags, which is a bulk requirement suitable for B2B transactions such as bakery supply.",
+              "type": "B2B"
+            },
+            "intended_application": "Bakery Consumption",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=0HC/jWXJyLpyL8uTLbCFg4abIalEuqtJ4CQrnrdx60J8nF1KYcSzQVF7FaTyW5NlotAfuZNwiRlFe7toUhUlJc73tq4Z624cWxAMqm6GM8oKU2xjB/60BTIEBhdvdZGF"
+        },
+        {
+          "file_id": 2659889,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "answer_by_seller": "The minimum order quantity is 300 kg.",
+                  "category": "Quantity",
+                  "query": "What is the minimum quantity?",
+                  "sequence": 1
+                },
+                {
+                  "answer_by_seller": "Please share your design and we will confirm the price based on that.",
+                  "category": "Pricing",
+                  "query": "What is the price per kg?",
+                  "sequence": 2
+                }
+              ],
+              "seller_queries": [
+                {
+                  "answer_by_buyer": "I am looking for pillow pouches.",
+                  "category": "Specifications",
+                  "query": "Which kind of pouch are you looking for?",
+                  "sequence": 3
+                },
+                {
+                  "answer_by_buyer": "I need my company printing, so customized printed.",
+                  "category": "Specifications",
+                  "query": "Plain or printed?",
+                  "sequence": 4
+                },
+                {
+                  "answer_by_buyer": "The number is 8919585497.",
+                  "category": "Other",
+                  "query": "Can you please confirm your WhatsApp number?",
+                  "sequence": 5
+                }
+              ]
+            },
+            "all_languages": [
+              "English",
+              "Hindi"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Buyer wants customized printed pillow pouches for hair dye and mehndi in sizes 15g, 500g, and 1kg.",
+              "reasoning": "Buyer provided specific product variants, sizes, and a mobile number for further coordination."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "Seller will connect on WhatsApp to receive designs and then provide a quote (I will connect through WhatsApp)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "manufacturer",
+                  "persona_detail": "Hair Dye and Mehndi manufacturer"
+                },
+                "keywords": [
+                  "Customized Printed",
+                  "Company Printing"
+                ],
+                "order_type": [
+                  "bulk",
+                  "commercial"
+                ],
+                "quantity_scale": "High",
+                "repeat_buyer": true
+              },
+              "reason": "The buyer is a manufacturer looking for customized packaging with company printing for their own products in bulk (300kg MOQ).",
+              "type": "B2B"
+            },
+            "intended_application": "Product Packaging",
+            "primary_language": "English"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=G/5RrFBe0hVbVYaRllXuY4abIalEuqtJ4CQrnrdx60LbyVHI7XhOiKRjiEBTboPNFnkYR99e82h1w2F4/anaAK32 abAKZ5wrecMDFOP8HgKU2xjB/60BTIEBhdvdZGF"
+        },
+        {
+          "file_id": 2659716,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "answer_by_seller": "Minimum order varies by size: 10,000 pieces for 1kg, 25,000 for 500g, and 1 lakh for 15g.",
+                  "category": "Quantity",
+                  "query": "What is the minimum order for printing pouches?",
+                  "sequence": 1
+                },
+                {
+                  "category": "Pricing",
+                  "query": "What is the price per piece with logo printing?",
+                  "sequence": 2
+                },
+                {
+                  "answer_by_seller": "The price is approximately 300 rupees per kg with a minimum order of 200 kg.",
+                  "category": "Pricing",
+                  "query": "What is the price and MOQ for mehndi cone rolls?",
+                  "sequence": 3
+                }
+              ],
+              "seller_queries": [
+                {
+                  "answer_by_buyer": "I need multiple sizes: 500 grams, 1 kg, and 15 grams.",
+                  "category": "Specifications",
+                  "query": "Which size do you need?",
+                  "sequence": 4
+                },
+                {
+                  "answer_by_buyer": "I need them printed with my company logo.",
+                  "category": "Specifications",
+                  "query": "Do you want printed or plain pouches?",
+                  "sequence": 5
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Seeking printed pouches in 1kg, 500g, and 15g sizes with logo customization, and mehndi cone rolls.",
+              "reasoning": "The buyer provided specific sizes, requested customization with a company logo, and inquired about multiple products."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "The buyer will check and get back after hearing the MOQs and pricing (batati hoon aapko)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "manufacturer",
+                  "persona_detail": "Packaging for own company products"
+                },
+                "keywords": [
+                  "Logo customization",
+                  "Minimum order quantity",
+                  "Printing"
+                ],
+                "order_type": [
+                  "bulk",
+                  "commercial"
+                ],
+                "quantity_scale": "High",
+                "repeat_buyer": false
+              },
+              "reason": "The buyer is looking for customized packaging with a company logo in very high bulk quantities (up to 1,00,000 pieces), indicating a B2B requirement for a business.",
+              "type": "B2B"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=G/5RrFBe0hVbVYaRllXuY4abIalEuqtJ4CQrnrdx60IPhb79h4FsY R5HC3Wm4bZtxoiv9m8pxsX2l2k4Xuse6d486G7ay9ztLDa3WIPM7kKU2xjB/60BTIEBhdvdZGF"
+        },
+        {
+          "file_id": 2351603,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [],
+              "seller_queries": []
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Wants a manual paste filling machine specifically for filling mehndi cones.",
+              "reasoning": "The buyer provided a specific technical requirement for a specialized application and shared his WhatsApp number to receive more details."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "The seller took the buyer's WhatsApp number to share details about the manual paste filling machine (WhatsApp number boliye)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "manufacturer",
+                  "persona_detail": "Mehndi Cone Producer"
+                },
+                "keywords": [
+                  "Manual Paste Filling Machine",
+                  "Mehndi cone filling"
+                ],
+                "order_type": {
+                  "order_type_category": "commercial"
+                },
+                "repeat_buyer": false
+              },
+              "reason": "The requirement for a specialized paste filling machine for producing mehndi cones indicates a commercial/manufacturing business context.",
+              "type": "B2B"
+            },
+            "intended_application": "Mehndi Cone Filling",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=SLZoOS6781Owj2hTXNetnzI8eFMmxZOojob4Q0FGz8DW1XxLUOIRMlSdNc6meNPKax6kAJmxKrtoIlfxkE/g9JzzYmPbwfldAYWZWzCbVmpW0l8VMBmblWeibqj9zkRu"
+        }
+      ]
+    },
+    {
+      "usr_id": "148645637",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 3086871,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Availability",
+                  "query": "Is the HP scanner pickup assembly available for model S2000 S1?",
+                  "sequence": 1
+                },
+                {
+                  "category": "Location",
+                  "query": "Are you speaking from Mumbai or Nashik?",
+                  "sequence": 3
+                }
+              ],
+              "seller_queries": [
+                {
+                  "answer_by_buyer": "S2000 S1",
+                  "category": "Specifications",
+                  "query": "What is the model number?",
+                  "sequence": 2
+                },
+                {
+                  "category": "Location",
+                  "query": "Where are you from?",
+                  "sequence": 5
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Seeking an HP scanner pickup assembly for model S2000 S1.",
+              "reasoning": "The buyer provided a specific model number and is follow-up for availability, indicating high intent."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "The seller asked to connect on WhatsApp for further details. (Iss number pe WhatsApp kar do)"
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "retailer"
+                },
+                "order_type": [
+                  "one-time"
+                ],
+                "repeat_buyer": false
+              },
+              "reason": "The buyer is inquiring about a single part for a specific scanner model, consistent with a retail or service desk need.",
+              "type": "B2C"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=h5w8/kF56Wr8ohBPPL gi4abIalEuqtJ4CQrnrdx60LqmWWCjzFjjFQU77rxnlFuBk 1JaXBG8P333rDXAxKu0Wuj6xIfSV5Yww mOq8SfIKU2xjB/60BTIEBhdvdZGF"
+        }
+      ]
+    },
+    {
+      "usr_id": "271174654",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 2105646,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Pricing",
+                  "query": "What is the rate of sariya today?",
+                  "sequence": 1
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Quantity",
+                  "query": "How much material do you need?",
+                  "sequence": 2
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "Medium",
+              "narrative": "Wants to purchase 20 quintals of TMT bars for use in Moradabad.",
+              "reasoning": "The buyer has a specific quantity (20 quintals) and location but is currently just gathering price information."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "Will check local rates (Khali jankari chahta hoon... aaj ka rate kya hai)"
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "end_consumer"
+                },
+                "order_type": {
+                  "order_type_category": "commercial"
+                },
+                "quantity_scale": "High"
+              },
+              "reason": "The buyer is inquiring about 20 quintals (2 tons) of TMT bars for a project in Moradabad, which is a bulk commercial quantity.",
+              "type": "B2B"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8BlVkT6Q6hAMItXyaNfE4/m mwrPah1vUo/2bkhNaR8m3MsJV7nb23Pw/AlVYxZ7nNW0l8VMBmblWeibqj9zkRu"
+        }
+      ]
+    },
+    {
+      "usr_id": "84177464",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 2106576,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Pricing",
+                  "query": "What are the rates for manual and automatic rollers?",
+                  "sequence": 1
+                },
+                {
+                  "category": "Availability",
+                  "query": "Will the product be available ready in stock?",
+                  "sequence": 2
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Specifications",
+                  "query": "Which capacity do you need, 500kg, 1 ton, 1.5 ton or 2 ton?",
+                  "sequence": 3
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Seeking price and details for manual pitch rollers of various capacities (500kg to 1.5 ton).",
+              "reasoning": "Inquired about specific weights, asked about GST, lead time, and planning a factory visit."
+            },
+            "call_outcome": {
+              "category": "Pending",
+              "conclusion_notes": "Interested in visiting the factory to inspect materials (Aap location bhej do mein aakar dekh leta hoon)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "end_consumer"
+                },
+                "keywords": [
+                  "Manual Roller",
+                  "GST 5%",
+                  "Transportation extra",
+                  "Factory Visit"
+                ],
+                "order_type": {
+                  "order_type_category": "one-time"
+                },
+                "quantity_scale": "Low"
+              },
+              "reason": "Buying a single heavy equipment piece (Pitch Roller) for ground use with specific tax and transport discussions.",
+              "type": "B2C"
+            },
+            "intended_application": "Ground Maintenance",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=7LncsU  umjv3Up/C9j yDI8eFMmxZOojob4Q0FGz8Ce9L2UqwMcETzmo3Fz80R u2UTRK7z/OIucuIlCkh yWqK8KQK4wZw3Cn2AlpjytNW0l8VMBmblWeibqj9zkRu"
+        }
+      ]
+    },
+    {
+      "usr_id": "205562814",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 1932377,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [
+                {
+                  "category": "Specifications",
+                  "query": "How much blasting can be done with 300 kg sand?",
+                  "sequence": 1
+                },
+                {
+                  "category": "Pricing",
+                  "query": "What is the price for both 300kg and 500kg models?",
+                  "sequence": 2
+                }
+              ],
+              "seller_queries": [
+                {
+                  "category": "Specifications",
+                  "query": "What is the length of the channels you work with?",
+                  "sequence": 3
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "High",
+              "narrative": "Looking for a sandblasting machine for fabrication work of 5-6 meter channels.",
+              "reasoning": "Explicit technical discussion about capacity, material (channels), and daily production requirements."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "WhatsApp details shared, comparison will be done (Comparison karke batata hoon)"
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "buyer_persona": {
+                  "persona_category": "manufacturer",
+                  "persona_detail": "Fabrication Unit Owner"
+                },
+                "keywords": [
+                  "Fabrication",
+                  "Industrial Use",
+                  "5 Ton Production"
+                ],
+                "order_type": {
+                  "order_type_category": "commercial"
+                },
+                "quantity_scale": "High"
+              },
+              "reason": "The buyer is looking for industrial machinery for structural fabrication with a daily output of 5 tons, indicating a B2B manufacturing context.",
+              "type": "B2B"
+            },
+            "intended_application": "Structural Fabrication",
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=i5FrOvosSytjnv8B3uWieIabIalEuqtJ4CQrnrdx60JBEvgwz3JPNa6oH3l49Kr8g8d jKw9QmGlz3l9gdU55c/sMFRo1xSvwgSrMkX8DvoKU2xjB/60BTIEBhdvdZGF"
+        }
+      ]
+    },
+    {
+      "usr_id": "135982423",
+      "success": true,
+      "code": 200,
+      "data": []
+    },
+    {
+      "usr_id": "271174771",
+      "success": true,
+      "code": 200,
+      "data": [
+        {
+          "file_id": 2787778,
+          "extracted_data": {
+            "additional_details": {
+              "buyer_queries": [],
+              "seller_queries": [
+                {
+                  "category": "Specifications",
+                  "query": "How can I help you regarding the machine?",
+                  "sequence": 1
+                }
+              ]
+            },
+            "all_languages": [
+              "Hindi",
+              "English"
+            ],
+            "buyer_intent": {
+              "intent_level": "Medium",
+              "narrative": "The buyer is inquiring about a machine.",
+              "reasoning": "The buyer expressed interest in a machine but the call was cut short for a callback from a different number."
+            },
+            "call_outcome": {
+              "category": "Follow-up",
+              "conclusion_notes": "The seller committed to calling back in two minutes from a different number (Do minute se call back karta hoon apne doosre number se)."
+            },
+            "call_purpose": "requirement",
+            "call_type": {
+              "evidence": {
+                "keywords": [
+                  "Machine"
+                ]
+              },
+              "reason": "The buyer is inquiring about a machine, though the conversation was brief; industrial/business equipment like machines typically fall under B2B.",
+              "type": "B2B"
+            },
+            "primary_language": "Hindi"
+          },
+          "call_recording_url": "https://openapi.airtel.in/gateway/airtel-xchange/recordingv2/download?token=K 8FfEXN02oza7nbeA 7WIabIalEuqtJ4CQrnrdx60KebvzOI 1FPuyQ/VxraAnm2k1iuz2v4r0JOo05If9X7dmyPZz6o 498mRaqHboMy0KU2xjB/60BTIEBhdvdZGF"
+        }
+      ]
+    },
+    {
+      "usr_id": "134717701",
+      "success": true,
+      "code": 200,
+      "data": []
+    }
+  ]
+}

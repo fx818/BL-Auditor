@@ -1,0 +1,58 @@
+[
+  {
+    "user_glid": 38869536,
+    "user_role": "BUYER",
+    "src_mcat_id": 147406,
+    "created_at": "2026-07-30 09:35:02.210",
+    "callback": "callback by Friday - To check the details (Main aapko Friday ko call karunga)",
+    "deal_readiness": "Warm",
+    "deal_readiness_reason": "The buyer confirmed an inquiry for a specific product like an oil bath but no immediate transaction was initiated.",
+    "deal_blockers": [],
+    "call_type": "B2B",
+    "call_type_reason": "The inquiry concerns an oil bath, which is specialized laboratory equipment used in research or industrial settings, indicating a B2B transaction.",
+    "repeat_buyer": false,
+    "buyer_intent_level": "High",
+    "buyer_intent_narrative": "The buyer is following up on a specific inquiry for an oil bath from IndiaMART.",
+    "buyer_intent_reasoning": "The buyer proactively identified the caller to verify the source of an IndiaMART message and confirmed a specific equipment requirement.",
+    "call_outcome_category": "Follow-up",
+    "call_outcome_notes": "The buyer confirmed the inquiry was for an oil bath (Oil bath ki inquiry thi).",
+    "call_purpose": "requirement",
+    "primary_language": "Hindi",
+    "all_languages": [
+      "Hindi",
+      "English"
+    ],
+    "intended_application": "Laboratory Heating",
+    "buyer_queries": [
+      {
+        "query": "Who is this that sent a message on IndiaMART?",
+        "category": "Other",
+        "sequence": 1,
+        "answer_by_seller": "I am calling from Gravitate Technology."
+      }
+    ],
+    "seller_queries": [
+      {
+        "query": "Did you have a product inquiry?",
+        "category": "Other",
+        "sequence": 2,
+        "answer_by_buyer": "Yes, the inquiry was for an oil bath."
+      }
+    ],
+    "products": [
+      {
+        "product_name": "Oil Bath",
+        "in_stock": "in stock",
+        "is_buyer_interested": true,
+        "most_specific_category": "High Temperature Oil Bath",
+        "related_categories": [
+          "Laboratory Bath",
+          "Science Laboratory Equipment",
+          "Laboratory Equipment"
+        ]
+      }
+    ],
+    "buyer_next_steps": [],
+    "seller_next_steps": []
+  }
+]

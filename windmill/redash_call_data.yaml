@@ -1,0 +1,231 @@
+summary: Redash-call data
+description: ""
+value:
+  modules:
+    - id: d
+      value:
+        path: u/blauditor/redash-data
+        type: script
+        is_trigger: false
+        input_transforms:
+          api_key:
+            expr: flow_input.api_key
+            type: javascript
+          query_id:
+            expr: flow_input.query_id
+            type: javascript
+          params:
+            expr: flow_input.params
+            type: javascript
+    - id: b
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: "import json\r
+
+          \r
+
+          \r
+
+          def parse_row(row: dict) -> dict:\r
+
+          \    base = {\r
+
+          \        \"user_glid\": row.get(\"user_glid\"),\r
+
+          \        \"user_role\": row.get(\"user_role\"),\r
+
+          \        \"src_mcat_id\": row.get(\"src_mcat_id\"),\r
+
+          \        \"created_at\": row.get(\"fel.created_at\") or
+          row.get(\"created_at\"),\r
+
+          \    }\r
+
+          \r
+
+          \    raw = row.get(\"llm_extracted_json_masked\") or \"\"\r
+
+          \    try:\r
+
+          \        d = json.loads(raw) if isinstance(raw, str) else raw\r
+
+          \    except json.JSONDecodeError:\r
+
+          \        return {**base, \"parse_error\": True}\r
+
+          \r
+
+          \    meta = d.get(\"metadata\") or {}\r
+
+          \    lead_tag = d.get(\"lead_tag\") or {}\r
+
+          \    call_type = meta.get(\"call_type\") or {}\r
+
+          \    buyer_intent = meta.get(\"buyer_intent\") or {}\r
+
+          \    call_outcome = meta.get(\"call_outcome\") or {}\r
+
+          \    additional = meta.get(\"additional_details\") or {}\r
+
+          \    next_steps = d.get(\"next_steps\") or {}\r
+
+          \r
+
+          \    products = [\r
+
+          \        {\r
+
+          \            \"product_name\": p.get(\"product_name\"),\r
+
+          \            \"quantity\": p.get(\"quantity_required\") or
+          p.get(\"quantity\") or p.get(\"Quantity\") or 0,\r
+
+          \            \"specifications\": [\r
+
+          \                {k: v for k, v in s.items() if k not in
+          (\"buyer_requested\", \"seller_mentioned\")}\r
+
+          \                for s in (p.get(\"specifications\") or [])\r
+
+          \            ],\r
+
+          \        }\r
+
+          \        for p in (d.get(\"products\") or [])\r
+
+          \    ]\r
+
+          \r
+
+          \    return {\r
+
+          \        **base,\r
+
+          \        \"callback\": d.get(\"callback\"),\r
+
+          \        \"deal_readiness\": lead_tag.get(\"deal_readiness\"),\r
+
+          \        \"deal_readiness_reason\":
+          lead_tag.get(\"deal_readiness_reason\"),\r
+
+          \        \"deal_blockers\": lead_tag.get(\"deal_blockers\"),\r
+
+          \        \"call_type\": call_type.get(\"type\"),\r
+
+          \        \"call_type_reason\": call_type.get(\"reason\"),\r
+
+          \        \"call_type_reason\": call_type.get(\"reason\"),\r
+
+          \        \"repeat_buyer\": (call_type.get(\"evidence\") or
+          {}).get(\"repeat_buyer\"),\r
+
+          \        \"buyer_intent_level\": buyer_intent.get(\"intent_level\"),\r
+
+          \        \"buyer_intent_narrative\":
+          buyer_intent.get(\"narrative\"),\r
+
+          \        \"buyer_intent_reasoning\":
+          buyer_intent.get(\"reasoning\"),\r
+
+          \        \"call_outcome_category\": call_outcome.get(\"category\"),\r
+
+          \        \"call_outcome_notes\":
+          call_outcome.get(\"conclusion_notes\"),\r
+
+          \        \"call_purpose\": meta.get(\"call_purpose\"),\r
+
+          \        \"primary_language\": meta.get(\"primary_language\"),\r
+
+          \        \"all_languages\": meta.get(\"all_languages\"),\r
+
+          \        \"intended_application\":
+          meta.get(\"intended_application\"),\r
+
+          \        \"buyer_queries\": additional.get(\"buyer_queries\"),\r
+
+          \        \"seller_queries\": additional.get(\"seller_queries\"),\r
+
+          \        \"products\": products,\r
+
+          \        \"buyer_next_steps\": next_steps.get(\"buyer_next_steps\"),\r
+
+          \        \"seller_next_steps\":
+          next_steps.get(\"seller_next_steps\"),\r
+
+          \    }\r
+
+          \r
+
+          \r
+
+          def aggregate_products(parsed_rows: list) -> list:\r
+
+          \    products = []\r
+
+          \    for row in parsed_rows:\r
+
+          \        for p in (row.get(\"products\") or []):\r
+
+          \            products.append(p)\r
+
+          \    return products\r
+
+          \r
+
+          \r
+
+          def main(rows: list = []) -> list:\r
+
+          \    return [parse_row(r) for r in rows]\r\n"
+        language: python3
+        input_transforms:
+          rows:
+            expr: results.d
+            type: javascript
+      summary: Parser for masked json
+    - id: c
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: |
+          def main(parsed_rows: list = []) -> list:
+              products = []
+              for row in parsed_rows:
+                  for p in (row.get("products") or []):
+                      products.append(p)
+              return products
+        language: python3
+        input_transforms:
+          parsed_rows:
+            expr: results.b
+            type: javascript
+      summary: Get product ISQs
+  groups: []
+schema:
+  order:
+    - api_key
+    - query_id
+    - params
+  properties:
+    api_key:
+      type: string
+      description: ""
+      default: ""
+      nullable: false
+    query_id:
+      type: integer
+      description: ""
+      default: 42046
+      nullable: false
+    params:
+      type: object
+      description: ""
+      default: {}
+      nullable: false
+  required:
+    - api_key
+    - query_id
+    - params

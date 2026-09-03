@@ -1,0 +1,111 @@
+{
+    "payment": {},
+    "lead_tag": {
+        "deal_blockers": [],
+        "deal_readiness": "Warm",
+        "deal_readiness_reason": "Discussing winter-specific requirements though next step is to share details on WhatsApp"
+    },
+    "metadata": {
+        "call_type": {
+            "type": "B2B",
+            "reason": "Buyer is inquiring about fabric for winter wear, indicating potential manufacturing or retail use for the upcoming season.",
+            "evidence": {
+                "keywords": [
+                    "Winter Wear",
+                    "Knitted Fabrics",
+                    " राजस्थान",
+                    "MOQ"
+                ],
+                "order_type": [
+                    "commercial"
+                ],
+                "repeat_buyer": false
+            }
+        },
+        "buyer_intent": {
+            "narrative": "Wants to source knitted fabrics specifically for winter wear",
+            "reasoning": "Inquired about MOQ and specific seasonality of fabrics, indicating purchase intent for the upcoming season.",
+            "intent_level": "Medium"
+        },
+        "call_outcome": {
+            "category": "Follow-up",
+            "conclusion_notes": "Moving the discussion to WhatsApp for detailed requirements (WhatsApp par detail bhejo)"
+        },
+        "call_purpose": "requirement",
+        "all_languages": [
+            "Hindi",
+            "English"
+        ],
+        "primary_language": "Hindi",
+        "additional_details": {
+            "buyer_queries": [
+                {
+                    "query": "What is your MOQ?",
+                    "category": "Quantity",
+                    "sequence": 1
+                },
+                {
+                    "query": "What is your name?",
+                    "category": "Other",
+                    "sequence": 4
+                }
+            ],
+            "seller_queries": [
+                {
+                    "query": "Which fabric do you need?",
+                    "category": "Specifications",
+                    "sequence": 2,
+                    "answer_by_buyer": "Winter wear fabrics"
+                },
+                {
+                    "query": "Where are you calling from?",
+                    "category": "Location",
+                    "sequence": 3,
+                    "answer_by_buyer": "Rajasthan"
+                }
+            ]
+        },
+        "intended_application": "Winter Wear Production"
+    },
+    "products": [
+        {
+            "price": {},
+            "product_name": "Knitted Fabrics",
+            "specifications": [
+                {
+                    "name": "Seasonality",
+                    "value": "Winter",
+                    "buyer_requested": false,
+                    "seller_mentioned": false
+                }
+            ],
+            "related_categories": [
+                {
+                    "name": "Thermal Wear Fabric",
+                    "reason": "Mentioned specifically for winter use."
+                }
+            ],
+            "is_buyer_interested": true,
+            "most_specific_category": {
+                "name": "Knitted Fabrics",
+                "reason": "Explicitly mentioned as knitted fabrics for winter wear."
+            }
+        }
+    ],
+    "next_steps": {
+        "buyer_next_steps": [
+            "To share detailed requirements on WhatsApp"
+        ],
+        "seller_next_steps": [
+            "To review requirements once received on WhatsApp"
+        ]
+    },
+    "buyer_details": {
+        "buyer_location": {
+            "buyer_state": "Rajasthan"
+        }
+    },
+    "seller_details": {
+        "seller_name": "66c073943b0f2ddaf07a78dd68225f20db2a5c920ab8c23bdde4e75a163e3ec3"
+    }
+}

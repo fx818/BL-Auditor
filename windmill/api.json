@@ -1,0 +1,96 @@
+{
+  "base_url": "https://windmill.intermesh.net/api/w/indiamart-workspace",
+  "auth": {
+    "header": "Authorization",
+    "value": "Bearer I7dMu3E1U1Yj5iBXnQOFLRHjOd7RlU1O"
+  },
+  "llm_gateway": {
+    "api_key": "sk-4HWlXkjoJ8of6Vzcxxxxx",
+    "allowed_models": [
+      "google/gemini-2.5-flash-lite",
+      "openai/gpt-5.4",
+      "openai/gpt-5.4-mini",
+      "openai/gpt-5.1",
+      "openai/gpt-4.1",
+      "openai/gpt-4.1-mini",
+      "gemini-2.5-flash",
+      "google/gemini-3-pro-preview",
+      "openrouter/google/gemini-3.1-flash-lite-preview",
+      "gpt-4",
+      "deepseek/deepseek-v4-flash",
+      "deepseek/deepseek-v4-pro",
+      "deepinfra/qwen/qwen3-14b"
+    ],
+    "default_model": "google/gemini-2.5-flash-lite"
+  },
+  "endpoints": {
+    "list_scripts": {
+      "method": "GET",
+      "url": "{{base_url}}/scripts/list"
+    },
+    "list_flows": {
+      "method": "GET",
+      "url": "{{base_url}}/flows/list"
+    },
+    "get_flow": {
+      "method": "GET",
+      "url": "{{base_url}}/flows/get/{flow_path}",
+      "note": "flow_path e.g. f/small_agents/title_category_mismatch_agent_flow"
+    },
+    "run_flow_sync": {
+      "method": "POST",
+      "url": "{{base_url}}/jobs/run_wait_result/f/{flow_path}",
+      "note": "Blocks until result is returned"
+    },
+    "run_flow_async": {
+      "method": "POST",
+      "url": "{{base_url}}/jobs/run/f/{flow_path}",
+      "note": "Returns job_id immediately"
+    },
+    "get_job_result": {
+      "method": "GET",
+      "url": "{{base_url}}/jobs/completed/get/{job_id}"
+    }
+  },
+  "flows": {
+    "small_agents": {
+      "title_category_mismatch": {
+        "path": "f/small_agents/title_category_mismatch_agent_flow",
+        "inputs": ["item_name", "mcat_name", "api_key", "model"]
+      },
+      "title_specs_mismatch": {
+        "path": "f/small_agents/title_specs_mismatch_agent_flow",
+        "inputs": ["item_name", "specs", "api_key", "model"]
+      },
+      "specs_category_mismatch": {
+        "path": "f/small_agents/specs_category_mismatch_agent_flow",
+        "inputs": ["specs", "mcat_name", "api_key", "model"]
+      },
+      "photo_category_mismatch": {
+        "path": "f/small_agents/photo_category_mismatch_agent_flow",
+        "inputs": ["img_url", "mcat_name", "api_key", "model"]
+      },
+      "photo_specs_mismatch": {
+        "path": "f/small_agents/photo_specs_mismatch_agent_flow",
+        "inputs": ["img_url", "specs", "api_key", "model"]
+      },
+      "photo_title_mismatch": {
+        "path": "f/small_agents/photo_title_mismatch_agent_flow",
+        "inputs": ["img_url", "item_name", "api_key", "model"]
+      }
+    },
+    "bl_auditor": {
+      "main": "u/anuragupadhyay2/BL_Auditor-Final",
+      "batch": "u/anuragupadhyay2/Auditor_Batch",
+      "description": "u/anuragupadhyay2/description_auditor",
+      "isq": "u/anuragupadhyay2/Inter_ISQ",
+      "retail": "u/anuragupadhyay2/Retail_Agent",
+      "buyer_viewed": "u/anuragupadhyay2/Buyer_Viewed",
+      "buyer_profile": "u/anuragupadhyay2/bl_profile_agent"
+    },
+    "utils": {
+      "redash_call_data": "u/anuragupadhyay2/redash_call_data",
+      "mcat_classifier": "f/Query_Cache/query_mcat"
+    }
+  }
+}

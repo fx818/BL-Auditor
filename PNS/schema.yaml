@@ -1,0 +1,153 @@
+Table "pns_insight.participants" {
+  id bigint [pk]
+  file_id bigint [ref: - "pns_insight.files".id, note: 'FK to the call/file this participant belongs to']
+  user_glid integer [note: 'Global user ID of the participant']
+  user_role varchar(50) [note: 'Role in call: buyer or seller']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.files" {
+  id bigint [pk]
+  src_mcat_id integer [note: 'MCAT from which this call was generated']
+  file_type integer [ref: - "pns_insight.file_types".file_type, note: 'FK to file_types lookup']
+  content_hash varchar(100) [not null, note: 'Hash for deduplication']
+  file_url varchar [note: 'GCS path to the file']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.participant_details" {
+  id bigint [pk]
+  participant_id bigint [ref: - "pns_insight.participants".id, note: 'FK to participants']
+  name varchar [note: 'Full name of the participant']
+  mobile_number integer [note: 'Contact number']
+  locality varchar [note: 'Locality/area within city']
+  city varchar
+  state varchar
+  country varchar
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.products" {
+  id bigint [pk]
+  file_id bigint [ref: - "pns_insight.files".id, note: 'FK to the call/file this product was discussed in']
+  name varchar [note: 'Product name as mentioned in call']
+  in_stock varchar [note: 'Stock availability status']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.product_categories" {
+  id bigint [pk]
+  product_id bigint [ref: > "pns_insight.products".id, note: 'FK to product']
+  category_mcat_id integer [note: 'MCAT ID of the mapped category to the extracted product']
+  category_name varchar [note: 'Category name at this level']
+  is_most_specific_category boolean [note: '=True if this is the Primary/most specific category mapped to the product']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.product_price" {
+  id bigint [pk]
+  product_id bigint [ref: - "pns_insight.products".id, note: 'FK to product']
+  amount varchar [note: 'Price amount as extracted from call']
+  currency varchar [note: 'Currency code e.g. INR, USD']
+  unit varchar [note: 'Pricing unit e.g. per piece, per kg']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.product_quantity" {
+  id bigint [pk]
+  product_id bigint [ref: - "pns_insight.products".id, note: 'FK to product']
+  quantity_value varchar [note: 'Quantity value as mentioned in call']
+  quantity_unit varchar [note: 'Unit of quantity e.g. pieces, kg, tons']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.product_specs" {
+  id bigint [pk]
+  product_id bigint [ref: - "pns_insight.products".id, note: 'FK to product']
+  spec_order int [note: 'Display order of spec within the product']
+  spec_name varchar [note: 'Spec attribute name e.g. Capacity, Material']
+  spec_value varchar [note: 'Extracted value for the spec']
+  spec_unit varchar [note: 'Unit for the spec value e.g. kg, mm, HP']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.actionables" {
+  id bigint [pk]
+  participant_id bigint [ref: - "pns_insight.participants".id, note: 'FK to participant this action belongs to']
+  next_steps text [note: 'Follow-up actions identified from the call']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.file_metadata" {
+  id bigint [pk]
+  file_id bigint [ref: - "pns_insight.files".id, note: 'FK to the file this metadata belongs to']
+  file_duration_sec integer [note: 'Duration of the call in seconds']
+  languages text[] [note: 'Languages detected in the call']
+  file_intent varchar [note: 'Inferred intent of the call e.g. purchase, enquiry']
+  is_b2b boolean [note: 'True if the call is B2B in nature']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.file_extraction_logs" {
+  id bigint [pk]
+  file_id bigint [ref: - "pns_insight.files".id, note: 'FK to the file that was processed']
+  llm_extracted_json jsonb [note: 'Raw JSON output from the LLM extraction']
+  model_version varchar(50) [note: 'LLM model version used for extraction']
+  extracted_at varchar(250) [note: 'Timestamp when extraction was run']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
+
+Table "pns_insight.file_types" {
+  id bigint [pk]
+  file_type integer [note: 'Numeric code for the file type']
+  file_desc varchar [note: 'Human-readable description of the file type']
+  created_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  created_at timestamptz [default: `now()`]
+  updated_by varchar(250) [default: "PNS_CALL_INSIGHTS"]
+  updated_at timestamptz [default: `now()`]
+  is_active boolean [default: true]
+}
