@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content" style="max-width:780px;">
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">Preferences</div>
+    <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);">Audit Settings</h2>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">Stored in your browser. Resets when browser data is cleared. The RabbitMQ consumer always runs all agents.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;padding:0;overflow:hidden;">
+    <div style="padding:0.875rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div style="font-weight:700;font-size:0.9rem;color:var(--text-primary);">Agents to Run</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Deselected agents are skipped. Post-processing (scoring, completeness, quantity) always runs.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectAllAgents()">All</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="deselectAllAgents()">None</button>
+      </div>
+    </div>
+    <div id="agent-list" style="padding:0.75rem 1rem;display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem;padding:0;overflow:hidden;">
+    <div style="padding:0.875rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div style="font-weight:700;font-size:0.9rem;color:var(--text-primary);">Cards to Display</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Hidden cards are collapsed on the audit result page. All columns remain visible in Previous Records.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="selectAllCards()">All</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="deselectAllCards()">None</button>
+      </div>
+    </div>
+    <div id="card-list" style="padding:0.75rem 1rem;display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+
+  <div style="display:flex;gap:8px;">
+    <button type="button" class="btn btn-outline btn-sm" style="color:#dc2626;border-color:#dc2626;" onclick="resetAll()">Reset to Defaults</button>
+  </div>
+
+  <div id="save-banner" style="display:none;margin-top:1rem;" class="alert alert-info">Preferences saved.</div>
+</div>
+
+<script>
+(function () {
+  var S = window.BLSettings;
+
+  function renderList(containerId, items, prefs, onChange) {
+    var el = document.getElementById(containerId);
+    el.innerHTML = '';
+    items.forEach(function (item) {
+      var checked = prefs.has(item.key);
+      var row = document.createElement('label');
+      row.style.cssText = 'display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.82rem;color:var(--text-primary);';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = checked;
+      cb.style.cssText = 'width:15px;height:15px;accent-color:var(--accent-purple);cursor:pointer;flex-shrink:0;';
+      cb.addEventListener('change', function () { onChange(item.key, cb.checked); });
+      var span = document.createElement('span');
+      span.textContent = item.label;
+      row.appendChild(cb);
+      row.appendChild(span);
+      el.appendChild(row);
+    });
+  }
+
+  var agentPrefs = S.getAgentPrefs();
+  var cardPrefs  = S.getCardPrefs();
+
+  function saveAndNotify() {
+    S.setAgentPrefs(agentPrefs);
+    S.setCardPrefs(cardPrefs);
+    var banner = document.getElementById('save-banner');
+    banner.style.display = 'block';
+    clearTimeout(banner._t);
+    banner._t = setTimeout(function () { banner.style.display = 'none'; }, 2000);
+  }
+
+  function onAgentChange(key, on) {
+    if (on) agentPrefs.add(key); else agentPrefs.delete(key);
+    saveAndNotify();
+  }
+
+  function onCardChange(key, on) {
+    if (on) cardPrefs.add(key); else cardPrefs.delete(key);
+    saveAndNotify();
+  }
+
+  function redraw() {
+    renderList('agent-list', S.ALL_AGENTS, agentPrefs, onAgentChange);
+    renderList('card-list',  S.ALL_CARDS,  cardPrefs,  onCardChange);
+  }
+
+  window.selectAllAgents = function () {
+    S.ALL_AGENTS.forEach(function (a) { agentPrefs.add(a.key); });
+    saveAndNotify(); redraw();
+  };
+  window.deselectAllAgents = function () {
+    agentPrefs.clear();
+    saveAndNotify(); redraw();
+  };
+  window.selectAllCards = function () {
+    S.ALL_CARDS.forEach(function (c) { cardPrefs.add(c.key); });
+    saveAndNotify(); redraw();
+  };
+  window.deselectAllCards = function () {
+    cardPrefs.clear();
+    saveAndNotify(); redraw();
+  };
+  window.resetAll = function () {
+    if (!confirm('Reset all preferences to defaults?')) return;
+    localStorage.removeItem('bl_auditor_agent_prefs');
+    localStorage.removeItem('bl_auditor_card_prefs');
+    localStorage.removeItem('bl_auditor_card_prefs_v2');
+    agentPrefs = S.getAgentPrefs();
+    cardPrefs  = S.getCardPrefs();
+    saveAndNotify(); redraw();
+  };
+
+  redraw();
+})();
+</script>
+{% endblock %}

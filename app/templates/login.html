@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in - BL Auditor</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=light-3" />
+</head>
+<body>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div style="text-align:center;padding:40px;border:1px solid var(--border,#333);border-radius:12px;">
+      <div class="navbar-logo" style="margin:0 auto 16px;">BL</div>
+      <h1 style="margin:0 0 8px;">BL Auditor</h1>
+      <p style="color:var(--text-muted,#888);margin:0 0 24px;">
+        Sign in with your IndiaMART account to continue.
+      </p>
+      <a href="/auth/login" class="btn btn-primary">Sign in with Google</a>
+
+      <div style="margin-top:16px;">
+        <button type="button" class="btn" id="admin-toggle"
+                style="background:transparent;border:1px solid var(--border,#333);color:var(--text-muted,#888);">
+          Admin login
+        </button>
+      </div>
+
+      <form method="post" action="/auth/admin" id="admin-form"
+            style="margin-top:16px;display:{% if error %}block{% else %}none{% endif %};">
+        {% if error %}
+        <p style="color:#d33;margin:0 0 8px;">{{ error }}</p>
+        {% endif %}
+        <input type="password" name="password" placeholder="Admin password"
+               required autofocus
+               style="display:block;width:100%;box-sizing:border-box;padding:8px;margin:0 0 8px;
+                      border:1px solid var(--border,#333);border-radius:6px;" />
+        <button type="submit" class="btn btn-primary" style="width:100%;">Log in as admin</button>
+      </form>
+
+      <script>
+        document.getElementById('admin-toggle').addEventListener('click', function () {
+          var f = document.getElementById('admin-form');
+          f.style.display = f.style.display === 'none' ? 'block' : 'none';
+        });
+      </script>
+    </div>
+  </div>
+</body>
+</html>

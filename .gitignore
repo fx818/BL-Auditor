@@ -1,0 +1,19 @@
+.env
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Prompt overrides are local/runtime-only — keep the folder, never commit contents
+data/prompt_overrides/*
+!data/prompt_overrides/.gitkeep
+
+# Consumer daily-budget state — runtime only
+consumer_state.json
+
+PNS
+windmill
+prod.yml
+prod.yml.doff

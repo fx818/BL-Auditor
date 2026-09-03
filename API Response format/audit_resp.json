@@ -1,0 +1,753 @@
+{
+    "GLUSERID": "187147894",
+    "Generic_Category_Outlier_Flag": "False",
+    "ISQs": "[{'IM_SPEC_MASTER_DESC': 'Why do you need this', 'ISQ_RESPONSE': 'For Reselling'}]",
+    "MAPPED_CATEGORY_ID": "137799",
+    "MCAT_GENERIC_FLAG": "None",
+    "PII_modified": {
+        "error_msg": "",
+        "status": "selected",
+        "tile_msg": ""
+    },
+    "PRODUCT_ITEM_ID": "144039503495",
+    "Service_mcat": "False",
+    "auditmate_response": {
+        "PII": "selected",
+        "PII_modified": {
+            "error_msg": "",
+            "status": "selected",
+            "tile_msg": ""
+        },
+        "final_reason": "",
+        "location_biztype_check": {
+            "biztype": {
+                "error_msg": "",
+                "status": "not outlier",
+                "tile_msg": ""
+            },
+            "location": {
+                "error_msg": "",
+                "status": "not outlier",
+                "tile_msg": ""
+            }
+        },
+        "mapping_honor_flag": false,
+        "new_primary_mapping": {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "source": ""
+        },
+        "new_secondary_mapping": {
+            "id": "",
+            "name": ""
+        },
+        "old_primary_mapping": {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "source": ""
+        },
+        "old_secondary_mapping": [],
+        "photo_quality_check": {
+            "reason": "",
+            "status": "not_outlier",
+            "tile_msg": ""
+        },
+        "photo_spec_verdict": {
+            "reason": "",
+            "status": "not_outlier"
+        },
+        "photo_title_verdict": {
+            "reason": "",
+            "status": "not_outlier"
+        },
+        "photo_verdict": {
+            "reason": "",
+            "status": "not_outlier"
+        },
+        "price_unit_absurd": {
+            "error_msg": "Price Absurd",
+            "status": "outlier",
+            "tile_msg": "Price is not correct"
+        },
+        "product_search_query": [
+            "",
+            "FMCG products Chennai",
+            "reselling product specifications",
+            "FMCG Products Chennai Reselling"
+        ],
+        "spell_check": {
+            "Product_Title_Data_Quality_Check": {
+                "contradiction_in_title": {
+                    "error_msg": "",
+                    "status": "correct",
+                    "tile_msg": ""
+                },
+                "spelling_errors": {
+                    "error_msg": "",
+                    "status": "correct",
+                    "tile_msg": ""
+                }
+            },
+            "Specification_Data_Integrity_Check": {
+                "contradiction_in_specs": {
+                    "error_msg": "",
+                    "status": "correct",
+                    "tile_msg": ""
+                },
+                "spelling_errors": {
+                    "error_msg": "",
+                    "status": "correct",
+                    "tile_msg": ""
+                }
+            }
+        },
+        "status_code": 200,
+        "suggested_mcat": [],
+        "tile_msg": "",
+        "title_spec_verdict": {
+            "reason": "",
+            "status": "not_outlier"
+        },
+        "title_verdict": {
+            "reason": "",
+            "status": "not_outlier"
+        }
+    },
+    "auditor_1_2_raw_response": {
+        "category": "FMCG Products",
+        "category_agent_output": {
+            "data": {
+                "cost": 0.0,
+                "model": "",
+                "prompt_used": "",
+                "response_time": 0.0,
+                "retry_token": false,
+                "skip_reason": "Skipped: no category_pool provided.",
+                "status": "skipped",
+                "usage": {
+                    "completion_tokens": 0,
+                    "prompt_tokens": 0,
+                    "total_tokens": 0
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "category_agent_result": {
+            "new_category": "",
+            "new_category_id": "",
+            "new_category_reason": "rank_1_missing"
+        },
+        "category_pool": [],
+        "condition_agent_output": {
+            "data": {
+                "analysis": {
+                    "confidence_score": "High",
+                    "detected_condition": "NEW",
+                    "supporting_evidence": {
+                        "exclusion_applied": false,
+                        "image_keywords": null,
+                        "specs_keywords": null,
+                        "title_keywords": null
+                    }
+                },
+                "reranking": {
+                    "final_ranked_categories": [],
+                    "recommendation": null,
+                    "reranking_applied": false,
+                    "used_category_found": false
+                },
+                "response_time": 0.0001
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "cross_entity_result": {
+            "data": {
+                "cost": 0.028044,
+                "cross_modal_api_raw_response": {
+                    "task_1": {
+                        "product_search_query": "FMCG Products Chennai Reselling"
+                    },
+                    "task_2": {
+                        "photo_specifications_vs_product_specifications": {
+                            "reason": "Photo specifications are not provided, therefore no comparison can be made with the product specifications.",
+                            "status": "not_outlier"
+                        },
+                        "photo_specifications_vs_product_title": {
+                            "reason": "Photo specifications are not provided, therefore no comparison can be made with the product title.",
+                            "status": "not_outlier"
+                        },
+                        "primary_object_vs_product_specifications": {
+                            "reason": "Primary object is not provided, so no comparison can be made with the product specifications.",
+                            "status": "not_outlier"
+                        },
+                        "primary_object_vs_product_title": {
+                            "reason": "Primary object is not provided, so no comparison can be made with the product title.",
+                            "status": "not_outlier"
+                        },
+                        "product_title_vs_product_specifications": {
+                            "reason": "The product title 'FMCG Products in Chennai' and specifications 'For Reselling' do not provide enough information to determine a clear match or mismatch regarding the core product.",
+                            "status": "not_outlier"
+                        },
+                        "within_product_search_query": {
+                            "reason": "The generated product search query is based on the provided information and does not contain internal contradictions.",
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_3": {
+                        "core_alignment_check": {
+                            "reason": "The product title 'FMCG Products in Chennai' and specifications 'For Reselling' indicate a broad category of goods for resale, which aligns with the general concept of FMCG products without suggesting it's a part, accessory, service, or used item.",
+                            "status": "not_outlier"
+                        }
+                    }
+                },
+                "fallback_model_flag": false,
+                "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+                "photo_spec_verdict": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "photo_title_verdict": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "product_category_outlier": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "prompt_used": "\nProduct Title: FMCG Products in Chennai\nProduct Specifications: Why do you need this: For Reselling\nCategory Name: FMCG Products\nPhoto Agent Output (Textual Only):\n{\n  \"primary_object\": \"\",\n  \"ocr_text\": [],\n  \"photo_specifications\": {}\n}\n\nGeneral Note: If \"photo_specifications\" is not provided, is [ ], or is an empty placeholder, mark Tasks 2e and 2f as \"Not Outlier - Photo Specifications not provided.\"\n\nInstructions:\n\n  Task 1:\nProduct Search Query : Generate a  query  using Primary Object + ocr text + Photo Specifications + Product Title + Product Specifications. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n  Task 2: \n    Identify if there is contradiction in:\nAnalyze each pair independently. An \"outlier\" here requires a mismatch between the two listed sources. If the sources agree on the core fact, it is \"not_outlier,\" even if one source is poorly formatted or has internal errors.\n      a) Primary Object of Product Photo- Product Title\n      b) Primary Object of Product Photo - Product Specifications\n      c) Product Title - Product Specifications \n      d) Within the Product Search Query\n      e) Photo Specifications -  Product Title\n      f) Photo Specifications - Product Specifications\n\n  Task 3: \n    Core Alignment Check: Determine whether the Product (based on Title, Specifications, and Photo) is any of the following relative to the mapped Category: \n    - A Part or Component of the category product \n    - An Accessory of the category product \n    - A Service related to the category product \n    - A Used / Second-Hand version of the category product \n    - An entirely different / unrelated product \n    If ANY of the above conditions are true, mark as \"Outlier.\" \n    If the product IS the category product (new, whole, and complete), mark as \"Not Outlier.\"\n\n    Outlier Examples (mark as Outlier): \n    1. Car Vent Clip → Car AC Category [Reason: Clip is an accessory used near AC, not the AC unit itself] \n    2. Blasting Machine Valve → Blasting Machine Category [Reason: Valve is a component/part of the machine] \n    3. JCB Backhoe Loader Service → JCB Backhoe Loader Category [Reason: Service offering, not the physical machine] \n    4. Second Hand Tractor → Tractor Category [Reason: Used/second-hand condition, not a new product] \n    5. Generator Battery Cable → Generator Category [Reason: Cable is an accessory, not the generator itself]\n    6. Washing Machine Repair Service → Washing Machine Category [Reason: Service, not a physical product]\n\n    Not Outlier Examples (mark as Not Outlier): \n    1. Adidas Unisex Trainers Samba OG Shoes → Adidas Shoes Category [Reason: Product is the complete shoe, directly matching the category] \n    2. 4 Way Wooden Pallet 45X22X6 → Wooden Pallet Category [Reason: Product is a complete pallet unit as defined by the category] \n    3. 5 Ton Hydraulic Floor Jack → Hydraulic Jack Category [Reason: Product is the complete jack unit, not a part or accessory] \n    4. Komatsu PC200 Excavator (New) → Excavator Category [Reason: Product is a new, complete machine matching the category] \n    5. Bosch GSB 550 Power Drill → Power Drill Category [Reason: Product is the complete drill unit, directly matching the category]\n\n    Edge Case Guidance: - If a product name includes the category name but is still a part/service/accessory, mark as Outlier (e.g., \"Tractor Engine\" in \"Tractor\" = Outlier).\n\nGive all output in JSON format.\n\nGive response for task and subtasks of  task 2 and task 3 as outlier / not outlier / can't say for each subtask. Give one reason for each subtask of task 2 and task 3.\n\n{\n  \"task_1\": {\n    \"product_search_query\": \"\"\n  },\n  \"task_2\": {\n    \"primary_object_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Primary object and product title are not available, so consistency between them cannot be verified.\"\n    },\n    \"primary_object_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Primary object and product specifications are missing, preventing alignment validation.\"\n    },\n    \"product_title_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product title and product specifications are unavailable to confirm consistency.\"\n    },\n    \"within_product_search_query\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product search query is empty, so internal consistency cannot be evaluated.\"\n    },\n    \"photo_specifications_vs_product_title\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Photo specifications and product title are not present to assess alignment.\"\n    },\n    \"photo_specifications_vs_product_specifications\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Photo specifications and product specifications are missing, preventing comparison.\"\n    }\n  },\n  \"task_3\": {\n    \"core_alignment_check\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Insufficient information to verify whether the product mechanism matches the category definition.\"\n    },\n  }\n}\n",
+                "response_time": 1.744,
+                "retry_token": false,
+                "title_category_outlier_cross": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "title_spec_verdict": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "usage": {
+                    "completion_tokens": 465,
+                    "prompt_tokens": 1256,
+                    "total_tokens": 1721
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "item_name": "FMCG Products in Chennai",
+        "photo_agent_output": {
+            "data": {
+                "cost": 0.0,
+                "model": "google/gemini-3-flash-preview",
+                "photo_api_raw_response": {
+                    "task_1": {
+                        "primary_object": ""
+                    },
+                    "task_2": {
+                        "ocr_text": []
+                    },
+                    "task_3": {
+                        "photo_specifications": {}
+                    },
+                    "task_4": {
+                        "image_based_query": ""
+                    },
+                    "task_5": {
+                        "image_visibility_assessment": {
+                            "checks": {
+                                "generally_unclear_or_incomplete": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "human_blocking_product": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "severely_cut_off": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "severely_obscured_or_blocked": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "unidentifiable_blur_or_pixelation": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                }
+                            },
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_6": {
+                        "category_analysis": {
+                            "checks": {
+                                "primary_object_vs_category": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "product_photo_vs_category": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                }
+                            },
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_7": {
+                        "product_category_integrity_audit": {
+                            "checks": {
+                                "entity_state_part_vs_machine": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "functional_alignment": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                },
+                                "hierarchy_mismatch": {
+                                    "reason": "Photo is missing",
+                                    "status": "not_outlier"
+                                }
+                            },
+                            "status": "not_outlier"
+                        }
+                    }
+                },
+                "photo_category_outlier": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "photo_quality_check": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "prompt_used": "",
+                "response_time": 0.0,
+                "retry_token": false,
+                "status": "skipped",
+                "usage": {
+                    "completion_tokens": 0,
+                    "prompt_tokens": 0,
+                    "total_tokens": 0
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "pii_agent_output": {
+            "data": {
+                "cost": 0.0,
+                "fallback_model_flag": false,
+                "model": "",
+                "pii_analysis": {
+                    "aadhaar_id": {
+                        "status": "Not Detected",
+                        "value": null
+                    },
+                    "email_address": {
+                        "status": "Not Detected",
+                        "type": null,
+                        "value": null
+                    },
+                    "overall_status": "APPROVED",
+                    "pan_card": {
+                        "status": "Not Detected",
+                        "value": null
+                    },
+                    "phone_number": {
+                        "status": "Not Detected",
+                        "type": null,
+                        "value": null
+                    },
+                    "upi_id": {
+                        "status": "Not Detected",
+                        "value": null
+                    }
+                },
+                "pii_status": {
+                    "overall_status": "APPROVED",
+                    "reason": ""
+                },
+                "prompt_used": "PII Agent:\n\nInput:\n  Image: provided alongside this prompt.\n  Use it to visually confirm INTRINSIC vs EXTRINSIC\n  for every detected value. Image context takes\n  priority over text-based CONTEXT_TYPE inference.\n  OCR Text: (none)\n  Product Title: FMCG Products in Chennai\n  Product Description: (none)\n  Product Specifications: Why do you need this: For Reselling\n\nPre-filtered Candidates (from code layer):\n  email_candidates   : none\n  numeric_candidates : detected by digit-pattern filter — LLM confirms if phone\n  social_candidates  : detected by LLM scan\n\n════════════════════════════════════════\nSTEP 1 — PRE-PROCESSING\n════════════════════════════════════════\nExtract and store before scanning:\n  - BRAND_NAME      : Seller/brand name from title or description\n  - PRODUCT_TOKENS  : Any value labeled as model no, SKU, item code,\n                      part no, barcode, HSN, GST, EAN, batch, serial,\n                      invoice, ref, order id\n  - CONTEXT_LABELS  : Section heading nearest to each detected value\n  - CONTEXT_TYPE    : For each detected value, classify source as:\n                      INTRINSIC → printed on physical product /\n                                  manufacturer packaging / engraved label\n                      EXTRINSIC → digital overlay, banner, watermark,\n                                  business card, screenshot element\n                      UNKNOWN   → cannot determine\n  - CONTACT_INTENT  : Look at the image and answer:\n                      \"Does this image show a phone number that a buyer\n                       would call or WhatsApp to reach the seller?\"\n                      SELLER_CONTACT → yes, number is for buyer to reach seller\n                                       (label, banner, business card, packaging\n                                        with contact info, promotional graphic)\n                      CS_ONLY        → only toll-free / customer care numbers\n                      NONE           → no contact number visible\n                      UNKNOWN        → cannot determine from image\n  - IS_TEMPLATE     : Set True if the listing is a product template,\n                      sample design, mock-up, or blank form\n                      (e.g. ID card template, visiting card sample,\n                      letterhead design, label template)\n                      Signal words: \"template\", \"sample\", \"mock\",\n                      \"design\", \"blank\", \"dummy\", \"specimen\",\n                      \"id card\", \"visiting card\", \"business card design\"\n\nTEMPLATE RULE: If IS_TEMPLATE is True, all detected PII values are\ntreated as sample/placeholder data — mark all fields Not Detected.\nSample names (John Smith, Jane Doe), sample phones, sample emails\non a template product are not real PII.\n\n════════════════════════════════════════\nSTEP 2 — FIELD SCANNING\n════════════════════════════════════════\nFields not listed below were cleared by the code layer\nand are already decided as Not Detected. Only evaluate\nthe fields explicitly listed here.\n\n\n\n════════════════════════════════════════\nSTEP 3 — OUTPUT\n════════════════════════════════════════\nReturn ONLY valid JSON for the fields listed above.\nNo explanation, no markdown fences.\n\n{\n\n}",
+                "response_time": 0.0,
+                "retry_token": false,
+                "usage": {
+                    "completion_tokens": 0,
+                    "prompt_tokens": 0,
+                    "total_tokens": 0
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "predicted_titles": [
+            "",
+            "FMCG products Chennai",
+            "reselling product specifications",
+            "FMCG Products Chennai Reselling"
+        ],
+        "response_time": "4.00s",
+        "specs": [
+            {
+                "IM_SPEC_MASTER_DESC": "Why do you need this",
+                "ISQ_RESPONSE": "For Reselling"
+            }
+        ],
+        "specs_agent_output": {
+            "data": {
+                "contradiction_in_specs": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "cost": 0.017055,
+                "fallback_model_flag": false,
+                "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+                "prompt_used": "\n    Product Specifications: Why do you need this: For Reselling\n\n    Instructions:\n\n    Task 1: \n    Product Specifications: Why do you need this: For Reselling Assessment:\n        a) Spelling Error in Product Specifications: \n        Flag words that are contextually incorrect for an industrial listing.\n        Flag only clear typos in common dictionary words (e.g., \"Steel\" vs \"Stel\").\n        Guardrail: DO NOT flag brand names, model numbers (e.g., \"L805\", \"GGT\"), or unit concatenations (e.g., \"70ltr\", \"20inch\", \"400kg.up\"). These are standard in industrial listings.\n\n    b) Contradiction/ Redundancy in Product Specifications: Flag as \"outlier\" only if values are physically impossible to coexist (e.g., Material: Wood and Material: Stainless Steel). \n        (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n    Task 2:\n    Specification Based Query: Generate a  query using Product Specifications. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n    Task 3:\n    Category Analysis: Analyze the Category Name: FMCG Products and identify the type of products it represents.\n    Only flag as \"outlier\" if the entity does not belong in the category. Ignore spelling/formatting errors in the entities. Use the Category understanding from above to identify if there is a contradiction in:\n        a) Product Specifications - Category Name\n\n    Task 4:\n    Product-Category Integrity Audit Analyze the Product Specifications against Category Name: FMCG Products to identify logical dissonance. Flag as \"outlier\" if any of the following gates fail:\n        a) Entity State (Part vs. Machine): Mark as \"outlier\" if the Product Specifications represents a sub-component/spare (e.g., Nozzle, Valve) but the category is for a complete unit (e.g., Blasting Machine).\n        b) Material Truth: Mark as \"outlier\" if the Product Specifications contradicts the category name (e.g., wooden texture visible for \"SS Table\", or plastic for \"Metallic Gear\").\n        c) Hierarchy Mismatch: Flag as \"outlier\" if a finished product is placed in a \"Raw Material\" category (e.g., a finished bench in \"Teak Wood Lumber\") or if a physical product is placed in a \"Service\" category.\n        d) Functional Alignment: Mark as \"outlier\" if the Product  utility is unrelated to the category's intended purpose.\n    \n    Give all output in JSON format.\n    Give response for task and subtasks of task 1,  task 3 and task 4 as outlier / not outlier / can't say for each subtask. Give one reason for each subtask of task 1,  task 3 and task 4.\n\n    {\n    \"task_1\": {\n        \"spell_error\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications input is not provided, so spelling accuracy cannot be evaluated.\"\n        },\n        \"internal_contradiction\": {\n        \"status\": \"not_outlier\",\n        \"reason\": \"Product specifications content is unavailable to assess internal contradictions.\"\n        }\n    },\n    \"task_2\": {\n        \"specification_based_query\": \"\"\n    },\n    \"task_3\": {\n        \"specifications_vs_category\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product specifications are unavailable to validate alignment with the category.\"\n        }\n    },\n    \"task_4\": {\n        \"entity_state_gate\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product specifications are unavailable to determine if it represents a part or complete unit.\"\n        },\n        \"material_truth_gate\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product specifications are missing, preventing material consistency verification with category.\"\n        },\n        \"hierarchy_mismatch_gate\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Insufficient specifications to verify if the product hierarchy matches the category.\"\n        },\n        \"functional_alignment_gate\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product utility cannot be assessed without valid product specifications.\"\n        }\n    }\n    }\n    ",
+                "response_time": 2.252,
+                "retry_token": false,
+                "specs_api_raw_response": {
+                    "task_1": {
+                        "internal_contradiction": {
+                            "status": "not_outlier"
+                        },
+                        "spell_error": {
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_2": {
+                        "specification_based_query": "reselling product specifications"
+                    },
+                    "task_3": {
+                        "specifications_vs_category": {
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_4": {
+                        "entity_state_gate": {
+                            "status": "not_outlier"
+                        },
+                        "functional_alignment_gate": {
+                            "status": "not_outlier"
+                        },
+                        "hierarchy_mismatch_gate": {
+                            "status": "not_outlier"
+                        },
+                        "material_truth_gate": {
+                            "status": "not_outlier"
+                        }
+                    }
+                },
+                "specs_category_outlier": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "spell_error_in_specs": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "usage": {
+                    "completion_tokens": 229,
+                    "prompt_tokens": 979,
+                    "total_tokens": 1208
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "text_agent_output": {
+            "data": {
+                "cost": 0.016461,
+                "fallback_model_flag": false,
+                "model": "vertex-googleaistudio/gemini-2.5-flash-lite",
+                "prompt_used": "\n        Product Title: FMCG Products in Chennai\n\n        Instructions:\n\n        Task 1: \n        Product Title: FMCG Products in Chennai Assessment:\n            a) Spelling Error in Title: Flag words that are contextually incorrect for an industrial listing.\n            b) Contradiction in Product Title: Flag logical conflicts (e.g., \"Manual Automatic Machine\").\n            Constraint: Do NOT flag If title contains multiple product nouns, verify category supports kits/sets.(e.g., \" Pump and Motor Set,  Razor with Blade set.”)\n            (Conflicts within the Product Title itself do not infer or assume anything else.)\n\n        Task 2:\n        Title Based Query: Generate a  query enhancing Product Title. Maximum word limit 4. Query should be SEO friendly to be used in ecommerce search.\n\n        Task 3:\n        Category Analysis: Analyze the Category Name: FMCG Products and identify the type of products it represents.\n        Only flag as \"outlier\" if the entity does not belong in the category. Ignore spelling/formatting errors in the entities. Use the Category understanding from above to identify if there is a contradiction in:\n            a) Primary Title - Category Name \n            \n\n        Task 4:\n        Product-Category Integrity Audit Analyze the Product Title against Category Name: FMCG Products to identify logical dissonance. Flag as \"outlier\" if any of the following gates fail:\n            a) Entity State (Part vs. Machine): Mark as \"outlier\" if the Product title represents a sub-component/spare (e.g., Nozzle, Valve) but the category is for a complete unit (e.g., Blasting Machine).\n            b) Material Truth: Mark as \"outlier\" if the Product title contradicts the category name (e.g., wooden texture visible for \"SS Table\", or plastic for \"Metallic Gear\").\n            c) Hierarchy Mismatch: Flag as \"outlier\" if a finished product is placed in a \"Raw Material\" category (e.g., a finished bench in \"Teak Wood Lumber\") or if a physical product is placed in a \"Service\" category.\n            d) Functional Alignment: Mark as \"outlier\" if the Product  utility is unrelated to the category's intended purpose.\n        \n        Give all output in JSON format.\n        Give response for task and subtasks of task 1,  task 3 and task 4 as outlier / not outlier / can't say for each subtask. Give one reason for each subtask of task 1,  task 3 and task 4.\n\n        {\n        \"task_1\": {\n            \"spell_error\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title input is not provided, so spelling accuracy cannot be evaluated.\"\n            },\n            \"internal_contradiction\": {\n            \"status\": \"not_outlier\",\n            \"reason\": \"Product title content is unavailable to assess internal contradictions.\"\n            }\n        },\n        \"task_2\": {\n            \"title_based_query\": \"\"\n        },\n        \"task_3\": {\n            \"primary_title_vs_category\": {\n                \"status\": \"not_outlier\",\n                \"reason\": \"Product title and category context are insufficient to assess category alignment.\"\n            }\n        },\n        \"task_4\": {\n            \"entity_state_gate\": {\n                \"status\": \"not_outlier\",\n                \"reason\": \"Product title is unavailable to determine if it represents a part or complete unit.\"\n            },\n            \"material_truth_gate\": {\n                \"status\": \"not_outlier\",\n                \"reason\": \"Product title is missing, preventing material consistency verification with category.\"\n            },\n            \"hierarchy_mismatch_gate\": {\n                \"status\": \"not_outlier\",\n                \"reason\": \"Insufficient information to verify if the product hierarchy matches the category.\"\n            },\n            \"functional_alignment_gate\": {\n                \"status\": \"not_outlier\",\n                \"reason\": \"Product utility cannot be assessed without a valid product title.\"\n            }\n        }\n        }\n    ",
+                "response_time": 1.493,
+                "retry_token": false,
+                "textual_api_raw_response": {
+                    "task_1": {
+                        "internal_contradiction": {
+                            "status": "not_outlier"
+                        },
+                        "spell_error": {
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_2": {
+                        "title_based_query": "FMCG products Chennai"
+                    },
+                    "task_3": {
+                        "primary_title_vs_category": {
+                            "status": "not_outlier"
+                        }
+                    },
+                    "task_4": {
+                        "entity_state_gate": {
+                            "status": "not_outlier"
+                        },
+                        "functional_alignment_gate": {
+                            "status": "not_outlier"
+                        },
+                        "hierarchy_mismatch_gate": {
+                            "status": "not_outlier"
+                        },
+                        "material_truth_gate": {
+                            "status": "not_outlier"
+                        }
+                    }
+                },
+                "title_category_outlier_text": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "title_contradiction_outlier": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "title_spell_outlier": {
+                    "reason": "",
+                    "status": "not_outlier"
+                },
+                "usage": {
+                    "completion_tokens": 231,
+                    "prompt_tokens": 905,
+                    "total_tokens": 1136
+                }
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "total_cost": 0.061560000000000004
+    },
+    "base_suggestion": [
+        {
+            "confidence": "",
+            "id": "",
+            "name": "",
+            "rank": "",
+            "reason": "",
+            "source": ""
+        }
+    ],
+    "bizz_mcat_match": "",
+    "cache_error": "Not written due to response time / input or output token constraints",
+    "cache_write": false,
+    "cataloging_error": true,
+    "categorization_error": false,
+    "custtype": "53",
+    "datetime": "2026-05-25 06:28:44 PM",
+    "display_name": "",
+    "ensemble_confidence": null,
+    "fk_mcat_type_id": "",
+    "glcat_mcat_image_display": "1",
+    "glid": 187147894,
+    "image_id": "-1",
+    "img_url": "",
+    "item_name": "FMCG Products in Chennai",
+    "location_flag": {
+        "biztype": {
+            "error_msg": "",
+            "status": "not outlier",
+            "tile_msg": ""
+        },
+        "location": {
+            "error_msg": "Following location keyword found ['Chennai']",
+            "status": "outlier",
+            "tile_msg": "Banned Content in Title"
+        }
+    },
+    "log_type": "Auditor",
+    "mapping_honor_flag": false,
+    "mcat_flag": "-1",
+    "mcat_is_generic_flag": null,
+    "mcat_name": "FMCG Products",
+    "mcat_pool": "[]",
+    "missing_img": "True",
+    "modid": "BL-Testing",
+    "new_primary_mapping": {
+        "confidence": "",
+        "id": "",
+        "name": "",
+        "rank": "",
+        "source": ""
+    },
+    "new_secondary_mapping": {
+        "id": "",
+        "name": ""
+    },
+    "no_category_found": "False",
+    "non_llm_raw_response": {
+        "category": "FMCG Products",
+        "duplicate_title_output": {
+            "data": {
+                "duplicate_title_raw_response": {
+                    "Code": "200",
+                    "Flag": "correct",
+                    "Msg": "success",
+                    "Words": []
+                },
+                "response_time": 0.007
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "item_name": "FMCG Products in Chennai",
+        "location_biztype_output": {
+            "data": {
+                "location_biztype_raw_response": {
+                    "Code": "200",
+                    "LOG_ID": "317e8278-d4b0-4046-bea0-d6904f34dda5",
+                    "Msg": "success",
+                    "TOTAL_TIME_MS": 3,
+                    "biztype_flag": "correct",
+                    "biztype_reason": "No biztype keyword found",
+                    "biztype_words": [],
+                    "location_flag": "incorrect",
+                    "location_reason": "Location keyword found",
+                    "location_words": [
+                        "Chennai"
+                    ],
+                    "mcat_id": "137799",
+                    "title": "FMCG Products in Chennai"
+                },
+                "response_time": 0.011
+            },
+            "error": null,
+            "status_code": 200
+        },
+        "response_time": 0.018
+    },
+    "old_primary_mapping": {
+        "confidence": "",
+        "id": "",
+        "name": "",
+        "rank": "",
+        "source": ""
+    },
+    "old_secondary_mapping": [],
+    "pc_item_id": 144039503495,
+    "photo_category_outlier": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "photo_quality_verdict": "not_outlier",
+    "photo_qualtiy_reason": "",
+    "photo_spec_verdict": {
+        "final_verdict": "not_outlier"
+    },
+    "photo_spec_verdict_reason": "",
+    "photo_title_verdict": {
+        "final_verdict": "not_outlier"
+    },
+    "photo_title_verdict_reason": "",
+    "pii_flag": "selected",
+    "price": "0",
+    "price_flag": {
+        "final_verdict": "outlier",
+        "price_raw_response": "{'absurd_flag': '1', 'err_text': 'Prod price <= Q1/10', 'in_product_id': 0, 'absurd_price_unit_flag': '3', 'response_time_ms': 0.05059, 'status_code': 200}",
+        "reason": "Price Absurd"
+    },
+    "process_name": "Multiagent Auditor 1.2.1",
+    "product_category_outlier": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "product_search_query": [
+        "",
+        "FMCG products Chennai",
+        "reselling product specifications",
+        "FMCG Products Chennai Reselling"
+    ],
+    "response_time": 4.01,
+    "screen_name": "live_product_approval",
+    "secondary_image": "False",
+    "secondary_mcats": [],
+    "served_from_cache": "False",
+    "specs_category_outlier": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "specs_contradiction_verdict": "not_outlier",
+    "specs_contradiction_verdict_reason": "",
+    "specs_quality_reason": "",
+    "specs_quality_verdict": "not_outlier",
+    "status": 200,
+    "suggested_mcat": [],
+    "title_category_outlier": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "title_category_outlier_cross": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "title_category_outlier_text": {
+        "reason": "",
+        "status": "not_outlier"
+    },
+    "title_contradiction_verdict": "not_outlier",
+    "title_contradiction_verdict_reason": "",
+    "title_quality_reason": "",
+    "title_quality_verdict": "not_outlier",
+    "title_spec_verdict": {
+        "final_verdict": "not_outlier"
+    },
+    "title_spec_verdict_reason": "",
+    "token_use": {
+        "category_agent_usage": {
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "prompt_tokens": 0,
+            "response_time": 0.0,
+            "total_tokens": 0
+        },
+        "completion_tokens": 925,
+        "condition_agent_usage": {
+            "response_time": 0.0001
+        },
+        "cross_modal_agent_usage": {
+            "completion_tokens": 465,
+            "cost": 0.028044,
+            "prompt_tokens": 1256,
+            "response_time": 1.744,
+            "total_tokens": 1721
+        },
+        "photo_agent_usage": {
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "prompt_tokens": 0,
+            "response_time": 0.0,
+            "total_tokens": 0
+        },
+        "pii_agent_usage": {
+            "completion_tokens": 0,
+            "cost": 0.0,
+            "prompt_tokens": 0,
+            "response_time": 0.0,
+            "total_tokens": 0
+        },
+        "prompt_tokens": 3140,
+        "specs_agent_usage": {
+            "completion_tokens": 229,
+            "cost": 0.017055,
+            "prompt_tokens": 979,
+            "response_time": 2.252,
+            "total_tokens": 1208
+        },
+        "textual_agent_usage": {
+            "completion_tokens": 231,
+            "cost": 0.016461,
+            "prompt_tokens": 905,
+            "response_time": 1.493,
+            "total_tokens": 1136
+        },
+        "total_cost": 0.06156
+    },
+    "unit": "Piece",
+    "worker_name": "Product_Approval_Auditor_1.2"
+}

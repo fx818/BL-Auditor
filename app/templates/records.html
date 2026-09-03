@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.4px;">CSV Dashboard</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);">Previous Records</h2>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" class="btn btn-outline btn-sm" onclick="openCsvModal('records-table', 'audit_records.csv')">Download CSV</button>
+      <button type="button" class="btn btn-outline btn-sm" style="color:#dc2626;border-color:#dc2626;" onclick="clearAllLogs()">Clear Logs</button>
+      <a href="{{ home_url | default('/') }}" class="btn btn-outline btn-sm">Back Home</a>
+    </div>
+  </div>
+
+  <div class="card records-card">
+    <div class="card-header records-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">CSV</div>
+        <div>
+          <div class="card-title">Saved Audit Records</div>
+          <div class="card-subtitle">{{ rows|length }} record(s)</div>
+        </div>
+      </div>
+      <div class="records-toolbar">
+        <input
+          id="records-offer-filter"
+          class="form-control records-filter-input"
+          type="text"
+          placeholder="Search by offer id"
+        />
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          onclick="document.getElementById('records-offer-filter').value=''; document.getElementById('records-offer-filter').dispatchEvent(new Event('input'));"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+
+    {% if rows %}
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1rem;">
+      <div style="font-size:0.78rem;color:var(--text-muted);">
+        Scroll vertically through saved rows and horizontally for long reason columns.
+      </div>
+      <div id="records-count" style="font-size:0.78rem;color:var(--text-secondary);">
+        Showing {{ rows|length }} of {{ rows|length }}
+      </div>
+    </div>
+
+    <div class="records-table-wrap">
+      <table class="check-table records-table" id="records-table">
+        <thead>
+          {% set retail1_keys = ['retail_classification','retail_classi_score','retail_confidence','retail_override_applied','retail_reason','retail_error','price_agent_result','price_agent_score','price_agent_confidence','price_value_by_ai','price_agent_reason','price_error'] %}
+          {% set photo_excluded_keys = ['photo_category_outlier_status','photo_category_outlier_reason','photo_title_verdict','photo_title_verdict_reason'] %}
+          {% set outlier_keys = ['specs_category_outlier_status','title_category_outlier_status','title_spec_verdict'] %}
+          {% set agent2_status_keys = ['specs_vs_cat_a2_status','title_vs_cat_a2_status','title_vs_specs_a2_status'] %}
+          {% set bl_verdict_keys = ['bl_verdict','bl_verdict_2'] %}
+          {% set recheck_before_keys = ['title_vs_cat_recheck_before','title_vs_specs_recheck_before','specs_vs_cat_recheck_before','isq_recheck_before'] %}
+          <tr>
+            <th style="width:64px;" data-csv-skip="1">View</th>
+            {% for key in rows[0].keys() %}
+            {% if key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') and key not in photo_excluded_keys %}
+            {% if show_retail_1 or key not in retail1_keys %}
+            <th data-csv-name="{{ key }}">{{ key.replace('_', ' ').title() }}</th>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr class="records-row" data-offer-id="{{ row.get('offer_id', '') }}">
+            <td style="white-space:nowrap;">
+              {% if row.get('trace_id') %}
+              <a href="{{ trace_detail_base | default('/traces') }}/{{ row.get('trace_id') }}/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>
+              {% else %}
+              <span style="color:var(--text-muted);font-size:0.72rem;">—</span>
+              {% endif %}
+            </td>
+            {% for key, value in row.items() %}
+            {% if key and key is string and key != 'trace_id' and not key.endswith('_raw_json') and not key.endswith('_json') and key not in photo_excluded_keys %}
+            {% if show_retail_1 or key not in retail1_keys %}
+            <td
+              class="{% if key == 'offer_id' %}check-key records-offer-cell{% else %}check-reason{% endif %}"
+              data-column="{{ key }}"
+              {% if key == 'buyer_viewed_vs_csl_status' %}style="background:{% if value == 'matched' %}#dcfce7{% elif value == 'not matched' %}#fecaca{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key == 'isq_status' %}style="background:{% if value == 'not_outlier' %}#dcfce7{% elif value == 'outlier' %}#fecaca{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key == 'desc_status' %}style="background:{% if value == 'not_outlier' %}#dcfce7{% elif value == 'outlier' %}#fecaca{% elif value == 'error' %}#fca5a5{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key in outlier_keys %}style="background:{% if value == 'Correct' %}#dcfce7{% elif value == 'Wrong' %}#fecaca{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key in agent2_status_keys %}style="background:{% if value == 'Correct' %}#dcfce7{% elif value == 'Incorrect' %}#fecaca{% elif value == 'Not Available' %}#fed7aa{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key in bl_verdict_keys %}style="background:{% if value == 'Approved' %}#dcfce7{% elif value == 'Do Not Approve' %}#fecaca{% elif value == 'Needs Review' %}#fef9c3{% else %}transparent{% endif %};font-weight:600;"
+              {% elif key == 'recheck_ran' %}style="color:{% if value == 'true' %}var(--accent-green){% else %}var(--text-muted){% endif %};font-weight:600;"
+              {% elif key in recheck_before_keys %}style="color:{% if value|lower in ('wrong','outlier') %}#dc2626{% elif value %}var(--text-secondary){% else %}var(--text-muted){% endif %};font-weight:{% if value %}600{% else %}400{% endif %};"{% endif %}
+            >
+              {{ value or '-' }}
+            </td>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div style="color:var(--text-muted);font-size:0.9rem;">No records saved yet.</div>
+    {% endif %}
+  </div>
+</div>
+<script>
+  (() => {
+    let efInstance = null;
+
+    function updateCount() {
+      const rows = document.querySelectorAll('#records-table .records-row');
+      const count = document.getElementById('records-count');
+      if (!count) return;
+      let visible = 0;
+      rows.forEach((r) => { if (!r.hidden) visible += 1; });
+      count.textContent = `Showing ${visible} of ${rows.length}`;
+    }
+
+    function applyOfferFilter() {
+      const input = document.getElementById('records-offer-filter');
+      const rows = document.querySelectorAll('#records-table .records-row');
+      if (!input || !rows.length) return;
+      const query = input.value.trim().toLowerCase();
+      rows.forEach((row) => {
+        const offerId = (row.getAttribute('data-offer-id') || '').trim().toLowerCase();
+        const matches = !query || offerId.includes(query);
+        if (efInstance) {
+          efInstance.setRowExternalHidden(row, !matches);
+        } else {
+          row.hidden = !matches;
+        }
+      });
+      updateCount();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.ExcelFilter) {
+        efInstance = window.ExcelFilter.attach({
+          tableId: 'records-table',
+          skipColumns: [0],
+        });
+        if (efInstance) efInstance.onChange = updateCount;
+      }
+      const input = document.getElementById('records-offer-filter');
+      if (input) input.addEventListener('input', applyOfferFilter);
+      applyOfferFilter();
+    });
+  })();
+
+  async function clearAllLogs() {
+    if (!confirm('Clear all logs and traces? This cannot be undone.')) return;
+    const res = await fetch('/clear-logs', { method: 'POST' });
+    if (res.ok) { location.reload(); }
+    else { alert('Failed to clear logs.'); }
+  }
+</script>
+{% endblock %}

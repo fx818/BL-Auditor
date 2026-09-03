@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.25rem;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Retail Agent 1 · Batch</div>
+      <h2 style="font-size:1.4rem;font-weight:800;">Batch Retail Audit</h2>
+    </div>
+    <a href="{{ home_url | default('/retail') }}" class="btn btn-outline btn-sm">← Back</a>
+  </div>
+
+  <div class="form-card" style="margin-bottom:1.25rem;">
+    <div class="form-group" style="margin-bottom:0.75rem;">
+      <label class="form-label" for="batch-input">Offer IDs (comma-separated or one per line)</label>
+      <textarea
+        id="batch-input"
+        class="form-control"
+        rows="3"
+        placeholder="143796010195, 143816401285, 142764424452"
+        style="resize:vertical;font-family:monospace;font-size:0.85rem;"
+      ></textarea>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button id="batch-btn" class="btn btn-primary" onclick="startBatch()">Run Batch</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('batch-file').click()">Upload .txt</button>
+      <input id="batch-file" type="file" accept=".txt,text/plain" style="display:none;">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('batch-input').value='';document.getElementById('batch-count').textContent=''">Clear</button>
+      <span id="batch-count" style="font-size:0.78rem;color:var(--text-muted);"></span>
+    </div>
+  </div>
+
+  <div id="progress-section" style="display:none;margin-bottom:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span id="progress-label" style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);"></span>
+      <span id="progress-pct" style="font-size:0.78rem;color:var(--text-muted);"></span>
+    </div>
+    <div style="background:var(--card-border);border-radius:4px;height:6px;overflow:hidden;">
+      <div id="progress-bar" style="height:100%;background:var(--accent-blue);width:0%;transition:width 0.3s ease;"></div>
+    </div>
+    <div id="current-id" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
+  </div>
+
+  <div id="results-section" style="display:none;">
+    <div class="card records-card">
+      <div class="card-header records-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">RT</div>
+          <div>
+            <div class="card-title">Batch Results</div>
+            <div class="card-subtitle" id="results-summary"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="openCsvModal('batch-table', 'retail_batch.csv')">Download CSV</button>
+          <div id="done-badge" style="display:none;font-size:0.75rem;padding:3px 10px;border-radius:12px;background:rgba(16,185,129,0.15);color:var(--accent-green);font-weight:600;">All done</div>
+        </div>
+      </div>
+
+      <div class="records-table-wrap">
+        <table class="check-table records-table" id="batch-table" style="font-size:0.76rem;">
+          <thead>
+            <tr>
+              <th style="width:28px;" data-csv-skip="1">#</th>
+              <th style="width:60px;" data-csv-skip="1">View</th>
+              <th data-csv-name="offer_id">Offer ID</th>
+              <th data-csv-name="item_name">Item Name</th>
+              <th data-csv-name="mcat_name">MCAT</th>
+              <th data-csv-name="retail_classification">Classification</th>
+              <th data-csv-name="retail_classi_score">Score</th>
+              <th data-csv-name="retail_confidence">Confidence</th>
+              <th data-csv-name="retail_override_applied">Override</th>
+              <th data-csv-name="retail_reason">Reason</th>
+              <th data-csv-name="retail_error">Error</th>
+              <th data-csv-skip="1">Saved</th>
+            </tr>
+          </thead>
+          <tbody id="batch-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const traceDetailBase = '/traces';
+  let es = null;
+  let efInstance = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.ExcelFilter) {
+      efInstance = window.ExcelFilter.attach({ tableId: 'batch-table', skipColumns: [0, 1] });
+    }
+  });
+
+  window.startBatch = function () {
+    const raw = document.getElementById('batch-input').value;
+    const ids = raw.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+    if (!ids.length) return;
+
+    document.getElementById('batch-tbody').innerHTML = '';
+    document.getElementById('progress-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'block';
+    document.getElementById('done-badge').style.display = 'none';
+    document.getElementById('batch-btn').disabled = true;
+    document.getElementById('batch-btn').textContent = 'Processing…';
+    document.getElementById('results-summary').textContent = '0 record(s)';
+    setProgress(0, ids.length, '');
+
+    if (es) es.close();
+    es = new EventSource('/retail/batch/stream?offer_ids=' + encodeURIComponent(ids.join(',')));
+
+    es.onmessage = function (e) {
+      const d = JSON.parse(e.data);
+      if (d.done) {
+        es.close();
+        document.getElementById('done-badge').style.display = 'inline-block';
+        document.getElementById('batch-btn').disabled = false;
+        document.getElementById('batch-btn').textContent = 'Run Batch';
+        document.getElementById('current-id').textContent = '';
+        setProgress(d.total, d.total, '');
+        document.getElementById('results-summary').textContent =
+          d.total + ' record(s) — ' + d.errors + ' error(s)';
+        return;
+      }
+      setProgress(d.index, d.total, d.offer_id);
+      document.getElementById('results-summary').textContent = d.index + ' record(s)';
+      appendRow(d);
+      if (efInstance) efInstance.refresh();
+    };
+
+    es.onerror = function () {
+      es.close();
+      document.getElementById('batch-btn').disabled = false;
+      document.getElementById('batch-btn').textContent = 'Run Batch';
+    };
+  };
+
+  function setProgress(done, total, currentId) {
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progress-label').textContent = done + ' of ' + total + ' processed';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('current-id').textContent = currentId ? 'Processing: ' + currentId : '';
+  }
+
+  function v(val) {
+    return (val === null || val === undefined || val === '') ? '-' : String(val);
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function badge(val) {
+    const s = v(val);
+    if (s === '-') return '<span style="color:var(--text-muted)">-</span>';
+    const low = s.toLowerCase();
+    let color = 'var(--text-secondary)', bg = 'transparent';
+    if (low === 'retail') { color = 'var(--accent-green)'; bg = '#dcfce7'; }
+    else if (low === 'non-retail') { color = 'var(--accent-red)'; bg = '#fecaca'; }
+    else if (low.includes('unclassified')) { color = 'var(--accent-orange)'; bg = '#fed7aa'; }
+    return '<span style="color:' + color + ';background:' + bg + ';font-weight:600;padding:2px 8px;border-radius:10px;display:inline-block;">' + escapeHtml(s) + '</span>';
+  }
+
+  function cell(val) { return '<td class="check-reason">' + escapeHtml(v(val)) + '</td>'; }
+  function badgeCell(val) { return '<td>' + badge(val) + '</td>'; }
+
+  function appendRow(d) {
+    const tbody = document.getElementById('batch-tbody');
+    const tr = document.createElement('tr');
+    if (d.error) {
+      const stepCount = (d.steps && d.steps.length) || 0;
+      const detailId = 'err-detail-' + d.index;
+      const btnId = 'err-btn-' + d.index;
+      const errViewBtn = d.trace_id
+        ? '<a href="' + traceDetailBase + '/' + escapeHtml(d.trace_id) + '/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>'
+        : '<span style="color:var(--text-muted);font-size:0.72rem;">—</span>';
+      const showLabel = 'Show steps (' + stepCount + ')';
+      tr.innerHTML =
+        '<td>' + d.index + '</td>' +
+        '<td>' + errViewBtn + '</td>' +
+        '<td class="check-key">' + escapeHtml(d.offer_id) + '</td>' +
+        '<td colspan="9" style="font-size:0.75rem;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">' +
+            '<div style="color:var(--accent-red);font-weight:600;">✗ ' + escapeHtml(d.failed_step || 'Error') + ': ' + escapeHtml(d.error) + '</div>' +
+            '<button type="button" id="' + btnId + '" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">' + escapeHtml(showLabel) + '</button>' +
+          '</div>' +
+          '<div id="' + detailId + '" style="display:none;margin-top:8px;">' +
+            (stepCount ? d.steps.map(renderStepBlock).join('') : '<div style="color:var(--text-muted);font-size:0.72rem;">No steps recorded.</div>') +
+          '</div>' +
+        '</td>';
+      tbody.appendChild(tr);
+      const btn = document.getElementById(btnId);
+      const detailEl = document.getElementById(detailId);
+      if (btn && detailEl) {
+        btn.addEventListener('click', function () {
+          const open = detailEl.style.display !== 'none';
+          detailEl.style.display = open ? 'none' : 'block';
+          btn.textContent = open ? showLabel : 'Hide steps';
+        });
+      }
+      return;
+    }
+    const okViewBtn = d.trace_id
+      ? '<a href="' + traceDetailBase + '/' + escapeHtml(d.trace_id) + '/detail" class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:2px 8px;">View</a>'
+      : '<span style="color:var(--text-muted);font-size:0.72rem;">—</span>';
+    tr.innerHTML =
+      '<td>' + d.index + '</td>' +
+      '<td>' + okViewBtn + '</td>' +
+      '<td class="check-key">' + escapeHtml(v(d.offer_id)) + '</td>' +
+      cell(d.item_name) +
+      cell(d.mcat_name) +
+      badgeCell(d.retail_classification) +
+      cell(d.retail_classi_score) +
+      cell(d.retail_confidence) +
+      cell(d.retail_override_applied) +
+      cell(d.retail_reason) +
+      cell(d.retail_error) +
+      '<td><span style="color:var(--accent-green);font-size:0.72rem;font-weight:600;">✓</span></td>';
+    tbody.appendChild(tr);
+  }
+
+  function renderStepBlock(step) {
+    const isErr = step.status === 'error';
+    const color = isErr ? 'var(--accent-red)' : 'var(--accent-green)';
+    const bg = isErr ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)';
+    let html = '<div style="border-left:3px solid ' + color + ';background:' + bg + ';padding:6px 10px;margin-bottom:6px;border-radius:4px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px;">' +
+      '<b style="font-size:0.78rem;color:var(--text-primary);">' + escapeHtml(step.step) + '. ' + escapeHtml(step.name) + '</b>' +
+      '<span style="font-size:0.7rem;font-weight:600;color:' + color + ';">' + escapeHtml((step.status||'').toUpperCase()) + ' · ' + escapeHtml(step.duration_ms || 0) + 'ms</span>' +
+      '</div>';
+    if (step.error) html += '<div style="font-size:0.72rem;font-family:monospace;color:var(--accent-red);white-space:pre-wrap;margin-bottom:4px;">' + escapeHtml(step.error) + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  document.getElementById('batch-input').addEventListener('input', function () {
+    const ids = this.value.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+    document.getElementById('batch-count').textContent = ids.length ? ids.length + ' offer ID(s)' : '';
+  });
+
+  document.getElementById('batch-file').addEventListener('change', function (evt) {
+    const file = evt.target.files && evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const text = String(e.target.result || '');
+      const ids = text.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+      const textarea = document.getElementById('batch-input');
+      textarea.value = ids.join(', ');
+      textarea.dispatchEvent(new Event('input'));
+    };
+    reader.readAsText(file);
+    evt.target.value = '';
+  });
+})();
+</script>
+{% endblock %}

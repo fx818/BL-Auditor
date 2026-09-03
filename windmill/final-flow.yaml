@@ -1,0 +1,2284 @@
+summary: ""
+description: ""
+value:
+  modules:
+    - id: i
+      value:
+        path: u/anuragupadhyay2/fetch_buylead
+        type: script
+        is_trigger: false
+        input_transforms:
+          offer_id:
+            expr: flow_input.offer_id
+            type: javascript
+    - id: a
+      value:
+        type: branchall
+        branches:
+          - expr: ""
+            modules:
+              - id: e
+                value:
+                  path: u/anuragupadhyay2/Buyer_Viewed
+                  type: flow
+                  input_transforms:
+                    mcat:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                    title:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    product_enquired:
+                      expr: results.i.RESPONSE.DATA.PRODUCTS_ENQUIRED
+                      type: javascript
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: c
+                value:
+                  path: u/anuragupadhyay2/description_auditor
+                  type: flow
+                  input_transforms:
+                    glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    ofr_date:
+                      expr: results.i.RESPONSE.DATA.OFR_DATE
+                      type: javascript
+                    item_name:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                    mcat_name:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                    description:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_DESC
+                      type: javascript
+                    eto_ofr_date:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_DATE
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: d
+                value:
+                  path: u/anuragupadhyay2/Inter_ISQ
+                  type: flow
+                  input_transforms:
+                    mcat:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                      value: ""
+                    title:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                      value: ""
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                      value: ""
+                continue_on_error: false
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: n
+                value:
+                  lock: |
+                    # py: 3.12
+                  type: rawscript
+                  content: |-
+                    import json
+
+
+                    def main(enrichment_info) -> list:
+                        if isinstance(enrichment_info, str):
+                            try:
+                                parsed = json.loads(enrichment_info or "{}")
+                            except Exception:
+                                parsed = {}
+                        elif isinstance(enrichment_info, dict):
+                            parsed = enrichment_info
+                        else:
+                            parsed = {}
+
+                        items = []
+                        for v in parsed.values():
+                            if isinstance(v, list):
+                                items.extend(v)
+
+                        return [
+                            {
+                                "IM_SPEC_MASTER_DESC": item.get("DESC", ""),
+                                "ISQ_RESPONSE": item.get("RESPONSE", ""),
+                            }
+                            for item in items
+                            if isinstance(item, dict)
+                        ]
+                  language: python3
+                  input_transforms:
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                summary: Get ISQs
+              - id: j
+                value:
+                  type: branchall
+                  branches:
+                    - expr: ""
+                      modules:
+                        - id: k
+                          value:
+                            path: f/small_agents/title_specs_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              specs:
+                                expr: results.n
+                                type: javascript
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              item_name:
+                                expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                                type: javascript
+                      parallel: true
+                      skip_failure: false
+                    - expr: "false"
+                      modules:
+                        - id: l
+                          value:
+                            path: f/small_agents/title_category_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              item_name:
+                                expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                                type: javascript
+                              mcat_name:
+                                expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                                type: javascript
+                      summary: ""
+                      parallel: true
+                      skip_failure: false
+                    - expr: "false"
+                      modules:
+                        - id: m
+                          value:
+                            path: f/small_agents/specs_category_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              specs:
+                                expr: results.n
+                                type: javascript
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              mcat_name:
+                                expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                                type: javascript
+                              pc_item_id:
+                                type: static
+                                value: ""
+                      summary: ""
+                      parallel: true
+                      skip_failure: false
+                  parallel: true
+                summary: ""
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: p
+                value:
+                  path: u/anuragupadhyay2/Retail_Agent
+                  type: flow
+                  input_transforms:
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                    prime_mcat_name:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: r
+                value:
+                  path: u/anuragupadhyay2/UserDetail_RFQ
+                  type: script
+                  is_trigger: false
+                  input_transforms:
+                    latest_lead:
+                      type: static
+                      value: 10
+                    encrypted_glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+              - id: v
+                value:
+                  lock: |
+                    # py: 3.12
+                  type: rawscript
+                  content: >-
+                    # import wmill
+
+
+                    def main(name: str, company: str, email: str, phone: str,
+                    country: str) -> dict:
+                        # Safely convert to string and strip whitespace to prevent crashes if None is passed
+                        name = str(name or "").strip()
+                        company = str(company or "").strip()
+                        email = str(email or "").strip()
+                        phone = str(phone or "").strip()
+                        country = str(country or "").strip()
+
+                        reasons = []
+
+                        # Check 1: Either Name OR Company must be present
+                        if not name and not company:
+                            reasons.append("Either 'name' or 'company' must be provided.")
+
+                        # Check 2: Name rules (if provided)
+                        if name:
+                            if len(name) < 2:
+                                reasons.append("Name must be at least 2 characters long.")
+                            if len(name.split()) > 4:
+                                reasons.append("Name must not exceed 4 words.")
+
+                        # Check 3: Company rules (if provided)
+                        if company:
+                            if len(company) < 2:
+                                reasons.append("Company name must be at least 2 characters long.")
+                            if len(company.split()) > 4:
+                                reasons.append("Company name must not exceed 4 words.")
+
+                        # Check 4: Country-specific contact requirements
+                        is_indian = country.lower() in ["india", "indian", "in"]
+
+                        if is_indian:
+                            if not phone:
+                                reasons.append("Mobile number is mandatory for Indian profiles.")
+                        else:
+                            if not email:
+                                reasons.append("Email is mandatory for foreign profiles.")
+
+                        # Valid is True only when no validation reasons exist
+                        return {
+                            "valid": len(reasons) == 0,
+                            "reasons": reasons,
+                            "profile": {
+                                "name": name,
+                                "company": company,
+                                "email": email,
+                                "phone": phone,
+                                "country": country
+                            }
+                        }
+                  language: python3
+                  input_transforms:
+                    name:
+                      expr: results.r.user_detail.glusr_usr_firstname + " " +
+                        results.r.user_detail.glusr_usr_lastname
+                      type: javascript
+                    email:
+                      expr: results.r.user_detail.glusr_usr_email
+                      type: javascript
+                    phone:
+                      expr: results.r.user_detail.glusr_usr_ph_mobile
+                      type: javascript
+                    company:
+                      expr: results.r.user_detail.glusr_usr_companyname
+                      type: javascript
+                    country:
+                      expr: results.r.user_detail.country_name
+                      type: javascript
+                summary: Profile Checks
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: s
+                value:
+                  path: u/anuragupadhyay2/buyer_activity_fetch
+                  type: script
+                  is_trigger: false
+                  input_transforms:
+                    logtime:
+                      expr: results.i.RESPONSE.DATA.OFR_DATE
+                      type: javascript
+                    encrypted_glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+        parallel: true
+      summary: ""
+    - id: w
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: |-
+          import json
+
+          # ---------------------------------------------------------------------------
+          # Fixed sequence of agents as they appear in the input array (results.a),
+          # in this order:
+          #   [0] Buyer Viewed        [1] Description        [2] Inter ISQ
+          #   [3] list of 3 sub-responses -> Title ISQ, Title vs MCAT, ISQ vs MCAT
+          #   [4] Retail               [5] Profile Validity   [6] Buyer Activity
+          # ---------------------------------------------------------------------------
+          AGENT_NAMES = {
+              "buyer_viewed": "Buyer Viewed Agent",
+              "description": "Description Agent",
+              "inter_isq": "Inter ISQ Agent",
+              "title_isq": "Title ISQ Agent",
+              "title_vs_mcat": "Title vs MCAT Agent",
+              "isq_vs_mcat": "ISQ vs MCAT Agent",
+              "retail": "Retail Agent",
+              "profile_validity": "Profile Validity Agent",
+              "buyer_activity": "Buyer Activity",
+          }
+
+          # Only these 4 product-validation agents are ever allowed to land in the
+          # "incorrect" bucket. Every other agent (Buyer Viewed, Description, Retail,
+          # Profile Validity, Buyer Activity) always goes into "correct", regardless of
+          # its own verdict -- its real field values (status, reason, etc.) are kept
+          # as-is in the payload, only the bucket placement is forced.
+          CORE_AGENTS = {"title_isq", "title_vs_mcat", "isq_vs_mcat", "inter_isq"}
+
+
+          def _safe_index(lst, idx):
+              """Return lst[idx] if it exists, else None (never raises)."""
+              if isinstance(lst, list) and 0 <= idx < len(lst):
+                  return lst[idx]
+              return None
+
+
+          def normalize_verdict(value):
+              """
+              Map many possible verdict spellings to 'correct' / 'incorrect'.
+              Returns None if the value can't be recognized at all.
+              """
+              if value is None:
+                  return None
+              v = str(value).strip().lower().replace("_", " ")
+              if v in ("correct", "not outlier", "true", "valid", "yes"):
+                  return "correct"
+              if v in ("incorrect", "outlier", "false", "invalid", "no"):
+                  return "incorrect"
+              return None
+
+
+          def _bucket_entry(entry, bucket_map, agent_key, name, bucket, payload):
+              """Push `payload` into bucket_map[bucket][name], recording provenance."""
+              payload["agent"] = name
+              bucket_map[bucket][name] = payload
+
+
+          # ---------------------------------------------------------------------------
+          # Individual agent parsers
+          # Each returns: (bucket:'correct'|'incorrect', payload:dict)
+          # ---------------------------------------------------------------------------
+
+          def parse_buyer_viewed(data):
+              """Element [0]: reason / status / product_matched"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Buyer Viewed Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              status = data.get("status")
+              verdict = normalize_verdict(status)
+
+              payload = {
+                  "status": status,
+                  "reason": data.get("reason"),
+                  "product_matched": data.get("product_matched"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing 'status' value: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_description(data):
+              """Element [1]: term_match / description_audit{reason,status} / keyword_selection{error,reason,keywords}"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Description Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              audit = data.get("description_audit")
+              if not isinstance(audit, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing/malformed 'description_audit' block.",
+                      "term_match": data.get("term_match"),
+                      "keyword_selection": data.get("keyword_selection"),
+                  }
+
+              status = audit.get("status")
+              verdict = normalize_verdict(status)
+
+              keyword_selection = data.get("keyword_selection")
+              if not isinstance(keyword_selection, dict):
+                  keyword_selection = {}
+
+              payload = {
+                  "status": status,
+                  "reason": audit.get("reason"),
+                  "term_match": data.get("term_match"),
+                  "keyword_selection": {
+                      "error": keyword_selection.get("error"),
+                      "reason": keyword_selection.get("reason"),
+                      "keywords": keyword_selection.get("keywords"),
+                  },
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing description_audit.status: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_inter_isq(data):
+              """Element [2]: reason / status (score/confidence kept if present, for backward compat)"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Inter ISQ Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              status = data.get("status")
+              verdict = normalize_verdict(status)
+
+              payload = {
+                  "status": status,
+                  "reason": data.get("reason", data.get("reasoning")),
+                  "score": data.get("score"),
+                  "confidence": data.get("confidence"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing status: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_sub_llm_agent(item):
+              """
+              Shared parser for the 3 sub-responses living inside element [3]
+              (title ISQ / title vs mcat / ISQ vs mcat agents).
+              Each item is normally: {cost, model, response:{reason, status, item_id?}, token_usage, response_time}
+              but can instead be: {error:{name, message, ...}}  (windmill/LLM failure)
+              """
+              if item is None:
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing sub-agent entry (expected element not present in list).",
+                  }
+
+              if not isinstance(item, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Sub-agent entry was not a dict.",
+                      "raw": item,
+                  }
+
+              # Case 1: explicit error block (e.g. JSONDecodeError from the LLM gateway)
+              if "error" in item and "response" not in item:
+                  err = item.get("error") or {}
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "LLM/agent call failed before producing a verdict.",
+                      "error_detail": {
+                          "name": err.get("name"),
+                          "message": err.get("message"),
+                          "step_id": err.get("step_id"),
+                      },
+                  }
+
+              response = item.get("response")
+              if not isinstance(response, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing/malformed 'response' block.",
+                      "raw": item,
+                  }
+
+              verdict = normalize_verdict(response.get("status"))
+              payload = {
+                  "status": response.get("status"),
+                  "reason": response.get("reason"),
+                  "item_id": response.get("item_id"),
+                  "model": item.get("model"),
+                  "cost": item.get("cost"),
+                  "response_time": item.get("response_time"),
+                  "token_usage": item.get("token_usage"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing response.status: {response.get('status')!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_retail(data):
+              """
+              Element [4]: reason / status
+              status is a classification ("Retail" / "Non-Retail"), not a correct/incorrect
+              verdict, so this agent is always filed under 'correct' by add() regardless
+              of what's returned here.
+              """
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Retail Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              classification = data.get("status")
+              payload = {
+                  "classification": classification,
+                  "reason": data.get("reason"),
+                  "error": classification is None,
+              }
+              if classification is None:
+                  payload["error_note"] = f"Unrecognized/missing 'status' value: {classification!r}"
+
+              bucket = "correct" if classification is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_profile_validity(data):
+              """Element [5]: valid / profile / reasons"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Profile Validity Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              valid = data.get("valid")
+              payload = {
+                  "valid": valid,
+                  "profile": data.get("profile"),
+                  "reasons": data.get("reasons"),
+              }
+              if valid is True:
+                  payload["error"] = False
+                  return "correct", payload
+              if valid is False:
+                  payload["error"] = False
+                  return "incorrect", payload
+
+              payload["error"] = True
+              payload["error_note"] = f"Unrecognized/missing 'valid' field: {valid!r}"
+              return "incorrect", payload
+
+
+          def parse_buyer_activity(data):
+              """
+              Element [6]: buyer_activity_fetch output -- ok / code / error / events / message / summary
+              Informational only (never a pass/fail verdict) -- always filed under
+              'correct' by add(); parsed defensively regardless.
+              """
+              if not isinstance(data, dict):
+                  return "correct", {
+                      "error": True,
+                      "error_note": "Expected a dict for Buyer Activity, got something else / missing.",
+                      "raw": data,
+                  }
+
+              summary = data.get("summary")
+              if not isinstance(summary, dict):
+                  summary = {}
+              events = data.get("events")
+
+              payload = {
+                  "ok": data.get("ok"),
+                  "code": data.get("code"),
+                  "message": data.get("message"),
+                  "glid": summary.get("glid"),
+                  "total_records": summary.get("total"),
+                  "bl_count": summary.get("bl_count"),
+                  "enq_count": summary.get("enq_count"),
+                  "range_from": summary.get("range_from"),
+                  "range_to": summary.get("range_to"),
+                  "top_city": summary.get("top_city"),
+                  "type_counts": summary.get("type_counts"),
+                  "events": events if isinstance(events, list) else [],
+                  "error": bool(data.get("error")) and data.get("ok") is not True,
+              }
+              return "correct", payload
+
+
+          def main(x):
+              """
+              Windmill entrypoint.
+              Accepts either a JSON string or an already-parsed list (defensive, since
+              upstream steps sometimes hand this off as a string and sometimes as a
+              native object).
+
+              Returns:
+                  {
+                      "correct":   { "<Agent Name>": {...}, ... },
+                      "incorrect": { "<Agent Name>": "<Agent Name>", ... },
+                  }
+              """
+              if isinstance(x, str):
+                  try:
+                      data = json.loads(x)
+                  except Exception as e:
+                      return {
+                          "correct": {},
+                          "incorrect": {
+                              "Input Parsing": {
+                                  "error": True,
+                                  "error_note": f"Failed to parse input JSON string: {e}",
+                                  "raw": x,
+                              }
+                          },
+                      }
+              else:
+                  data = x
+
+              if not isinstance(data, list):
+                  return {
+                      "correct": {},
+                      "incorrect": {
+                          "Input Parsing": {
+                              "error": True,
+                              "error_note": "Expected the input to be a JSON array of agent responses.",
+                              "raw": data,
+                          }
+                      },
+                  }
+
+              result = {"correct": {}, "incorrect": {}}
+
+              def add(agent_key, bucket, payload):
+                  if agent_key not in CORE_AGENTS:
+                      bucket = "correct"
+                  name = AGENT_NAMES[agent_key]
+                  # For the "incorrect" bucket we only want the agent's name, not the
+                  # full payload -- the detailed dict is still available in "correct"
+                  # for agents that pass, but a failing core agent just gets flagged
+                  # by name here.
+                  if bucket == "incorrect":
+                      result[bucket][name] = name
+                  else:
+                      result[bucket][name] = payload
+
+              # 1. Buyer Viewed Agent
+              bucket, payload = parse_buyer_viewed(_safe_index(data, 0))
+              add("buyer_viewed", bucket, payload)
+
+              # 2. Description Agent
+              bucket, payload = parse_description(_safe_index(data, 1))
+              add("description", bucket, payload)
+
+              # 3. Inter ISQ Agent
+              bucket, payload = parse_inter_isq(_safe_index(data, 2))
+              add("inter_isq", bucket, payload)
+
+              # 4-6. Title ISQ / Title vs MCAT / ISQ vs MCAT Agents (list of 3 sub-responses)
+              sub_list = _safe_index(data, 3)
+              sub_keys = ["title_isq", "title_vs_mcat", "isq_vs_mcat"]
+              for i, agent_key in enumerate(sub_keys):
+                  item = _safe_index(sub_list, i) if isinstance(sub_list, list) else None
+                  bucket, payload = parse_sub_llm_agent(item)
+                  add(agent_key, bucket, payload)
+
+              # 7. Retail Agent
+              bucket, payload = parse_retail(_safe_index(data, 4))
+              add("retail", bucket, payload)
+
+              # 8. Profile Validity Agent
+              bucket, payload = parse_profile_validity(_safe_index(data, 5))
+              add("profile_validity", bucket, payload)
+
+              # 9. Buyer Activity (new -- element [6])
+              bucket, payload = parse_buyer_activity(_safe_index(data, 6))
+              add("buyer_activity", bucket, payload)
+
+              return result
+        language: python3
+        input_transforms:
+          x:
+            expr: results.a
+            type: javascript
+      summary: Parsing
+    - id: y
+      value:
+        type: branchone
+        default:
+          - id: y2
+            value:
+              lock: |
+                # py: 3.12
+              type: rawscript
+              content: >-
+                def main():
+                    # Recheck skipped: 0, or 3+, of the 4 product-validation agents
+                    # were flagged incorrect, so this branch returns an empty result
+                    # so downstream steps see no overrides.
+                    return {"output": "[]"}
+              language: python3
+              input_transforms: {}
+            summary: Recheck skipped (relevant incorrect count not 1 or 2)
+        branches:
+          - expr: ([ "Title vs MCAT Agent" in (results.w && results.w.incorrect || {}),
+              "Inter ISQ Agent" in (results.w && results.w.incorrect || {}),
+              "Title ISQ Agent" in (results.w && results.w.incorrect || {}),
+              "ISQ vs MCAT Agent" in (results.w && results.w.incorrect || {})
+              ].filter(Boolean).length >= 1) && ([ "Title vs MCAT Agent" in
+              (results.w && results.w.incorrect || {}), "Inter ISQ Agent" in
+              (results.w && results.w.incorrect || {}), "Title ISQ Agent" in
+              (results.w && results.w.incorrect || {}), "ISQ vs MCAT Agent" in
+              (results.w && results.w.incorrect || {}) ].filter(Boolean).length
+              <= 2)
+            modules:
+              - id: y1
+                value:
+                  type: aiagent
+                  tools: []
+                  input_transforms:
+                    provider:
+                      type: static
+                      value:
+                        kind: customai
+                        model: deepseek/deepseek-v4-flash
+                        resource: $res:u/anuragupadhyay2/inspirational_customai
+                    output_type:
+                      type: static
+                      value: text
+                    user_message:
+                      expr: "`Agent: ${JSON.stringify(results.w.incorrect)}, Title:
+                        ${results.i.RESPONSE.DATA.ETO_OFR_TITLE}, MCAT:
+                        ${results.i.RESPONSE.DATA.PRIME_MCAT_NAME},
+                        Desc:${results.i.RESPONSE.DATA.ETO_OFR_DESC}, ISQs:
+                        ${results.i.RESPONSE.DATA.ENRICHMENTINFO},
+                        Buyer_Viewed:${results.i.RESPONSE.DATA.PRODUCTS_ENQUIRE\
+                        D}`"
+                      type: javascript
+                    system_prompt:
+                      type: static
+                      value: "# Check Agent — IndiaMART BuyLead Auditor\r
+
+                        \r
+
+                        ## Context\r
+
+                        \r
+
+                        IndiaMART is India's largest B2B online marketplace,
+                        connecting buyers and suppliers across product
+                        categories. This agent performs an **audit** of BuyLead
+                        parameters to determine whether specific fields are
+                        coherent and related to one another. It does **not**
+                        validate or reference any prior agent's reasoning — it
+                        independently determines, from the BuyLead data alone,
+                        whether the requested parameters are coherent or
+                        contradictory.\r
+
+                        \r
+
+                        ## Role\r
+
+                        \r
+
+                        You are the **Check Agent** in the IndiaMART BuyLead
+                        Auditing System. You check **only** the agents listed in
+                        `Agent`. For each one, independently audit only the
+                        parameters mapped to that agent, using only the provided
+                        BuyLead information.\r
+
+                        \r
+
+                        **Ignore:**\r
+
+                        - Any parameter not assigned to the current agent\r
+
+                        - Assumptions about buyer intent or missing
+                        information\r
+
+                        \r
+
+                        Treat every check as a fresh, independent audit. You are
+                        not evaluating \"the agent\" itself — you are performing
+                        the audit that the named agent is responsible for, on
+                        the actual BuyLead data.\r
+
+                        \r
+
+                        ## Objective\r
+
+                        \r
+
+                        For each agent listed in `Agent`:\r
+
+                        1. Independently audit the parameters mapped to that
+                        agent.\r
+
+                        2. Use only the provided BuyLead information.\r
+
+                        3. Decide a verdict: `not_outlier` (coherent, related,
+                        or insufficient evidence to prove a contradiction) or
+                        `outlier` (clear, evidence-based contradiction only).\r
+
+                        4. Provide a short, factual reason based only on the
+                        available evidence.\r
+
+                        \r
+
+                        ## Input Format\r
+
+                        \r
+
+                        ```json\r
+
+                        {\r
+
+                        \  \"Title\": \"string — BuyLead title\",\r
+
+                        \  \"MCAT\": \"string — assigned product category\",\r
+
+                        \  \"ISQs\": { \"key\": \"value, ...\" },\r
+
+                        \  \"Agent\": [\"Title vs MCAT Agent\", \"Title ISQ
+                        Agent\", \"ISQ vs MCAT Agent\", \"Inter ISQ Agent\"]\r
+
+                        }\r
+
+                        ```\r
+
+                        \r
+
+                        - **Title** — the BuyLead title.\r
+
+                        - **MCAT** — the assigned product category.\r
+
+                        - **ISQs** — dictionary of Industry Specific Questions
+                        and their values (may include Buyer Filled Details,
+                        Additional Requirements, Probable Order Value, Probable
+                        Requirement Type).\r
+
+                        - **Agent** — array of agent names to check. Only these
+                        are evaluated.\r
+
+                        \r
+
+                        Example:\r
+
+                        \r
+
+                        ```json\r
+
+                        {\r
+
+                        \  \"Title\": \"Stainless Steel Water Tank\",\r
+
+                        \  \"MCAT\": \"Plastic Water Storage Tank\",\r
+
+                        \  \"ISQs\": {\r
+
+                        \    \"Material\": \"Plastic\",\r
+
+                        \    \"Capacity\": \"1000 L\"\r
+
+                        \  },\r
+
+                        \  \"Agent\": [\"Title vs MCAT Agent\", \"Inter ISQ
+                        Agent\"]\r
+
+                        }\r
+
+                        ```\r
+
+                        \r
+
+                        ## General Rules\r
+
+                        \r
+
+                        1. **Check only requested agents** — do not evaluate any
+                        agent or parameter absent from `Agent`.\r
+
+                        2. **Independent verification** — perform a completely
+                        fresh check for each agent; do not carry logic between
+                        agents.\r
+
+                        3. **Never infer missing information** — do not assume
+                        buyer intent, hidden products, missing specifications,
+                        or missing ISQs. If evidence is insufficient, return
+                        `not_outlier`.\r
+
+                        4. **Use only provided evidence** — base decisions
+                        solely on Title, MCAT, and ISQs. General product
+                        knowledge may be used only to understand what a product
+                        or category *is*, never to invent missing information.\r
+
+                        5. **Default to lean** — when evidence is ambiguous or
+                        partial, prefer `not_outlier`. `outlier` requires a
+                        clear, unambiguous contradiction.\r
+
+                        6. **Supplementary fields** — Buyer Filled Details and
+                        Additional Requirements should be treated as
+                        supplementary information that adds context about the
+                        product/MCAT, not as strict constraints to contradict
+                        against.\r
+
+                        7. **Excluded fields** — Probable Order Value and
+                        Probable Requirement Type must never be used to
+                        determine a contradiction; they only describe
+                        order/business context, not product identity.\r
+
+                        \r
+
+                        ## Agent Evaluation Rules\r
+
+                        \r
+
+                        ### 1. Title vs MCAT Agent\r
+
+                        \r
+
+                        **Purpose:** Check whether the product named in the
+                        **Title** is related and coherent with the assigned
+                        **MCAT**. Compare product identity, product type, and
+                        product category.\r
+
+                        \r
+
+                        **Ignore:** Quantity, size, dimensions, brand, colour,
+                        packaging, order value.\r
+
+                        \r
+
+                        **Decision:**\r
+
+                        - `not_outlier` — Title clearly belongs to or is related
+                        to the MCAT; Title and MCAT refer to the same or a
+                        closely matching product category; evidence is
+                        insufficient to establish a mismatch.\r
+
+                        - `outlier` — Title clearly refers to a different,
+                        unrelated product category than the MCAT.\r
+
+                        \r
+
+                        **Examples:**\r
+
+                        \r
+
+                        ✅ not_outlier — Title: \"PVC Pipe\", MCAT: \"PVC Pipes\"
+                        → same product category.\r
+
+                        \r
+
+                        ❌ outlier — Title: \"Steel Water Tank\", MCAT: \"Plastic
+                        Bucket\" → Title specifies a steel water tank while MCAT
+                        specifies a plastic bucket; different, unrelated
+                        product.\r
+
+                        \r
+
+                        ### 2. Title ISQ Agent\r
+
+                        \r
+
+                        **Purpose:** Check whether the **Title** is related and
+                        coherent with the **ISQs**. Compare product, material,
+                        size, capacity, grade, application, and technical
+                        specifications.\r
+
+                        \r
+
+                        **Ignore:** Probable Order Value, Quantity, Probable
+                        Requirement Type.\r
+
+                        \r
+
+                        **Treat as supplementary specs:** Buyer Filled Details,
+                        Additional Requirements.\r
+
+                        \r
+
+                        **Decision:**\r
+
+                        - `not_outlier` — Title is compatible with all ISQs;
+                        ISQs only add detail or refine the Title; evidence is
+                        insufficient.\r
+
+                        - `outlier` — One or more ISQs clearly and directly
+                        contradict the Title's core product identity or
+                        specification.\r
+
+                        \r
+
+                        ### 3. ISQ vs MCAT Agent\r
+
+                        \r
+
+                        **Purpose:** Check whether the **ISQs** are related and
+                        coherent with the assigned **MCAT**. The ISQs should
+                        belong to the provided MCAT.\r
+
+                        \r
+
+                        **Ignore:** Probable Order Value, Probable Requirement
+                        Type.\r
+
+                        \r
+
+                        **Treat as supplementary specs:** Buyer Filled Details,
+                        Additional Requirements (these provide additional
+                        context about the product/MCAT).\r
+
+                        \r
+
+                        **Decision:**\r
+
+                        - `not_outlier` — ISQs fit the MCAT; ISQs refine or
+                        specify the requirement within the MCAT; evidence is
+                        insufficient.\r
+
+                        - `outlier` — ISQs clearly describe a different,
+                        unrelated product category than the MCAT.\r
+
+                        \r
+
+                        ### 4. Inter ISQ Agent\r
+
+                        \r
+
+                        **Purpose:** Check whether the different **ISQs** are
+                        related and coherent with each other.\r
+
+                        \r
+
+                        **Ignore:** Probable Order Value, Probable Requirement
+                        Type.\r
+
+                        \r
+
+                        **Treat as supplementary specs:** Buyer Filled Details,
+                        Additional Requirements.\r
+
+                        \r
+
+                        **Decision:**\r
+
+                        - `not_outlier` — ISQs are mutually consistent; ISQs
+                        simply provide additional information; ISQs can define
+                        legitimate variants of the same product; evidence is
+                        insufficient.\r
+
+                        - `outlier` — Two or more ISQs cannot logically coexist,
+                        OR the mentioned Quantity indicates a single unit/piece
+                        while other ISQs describe contradictory variants (e.g.,
+                        multiple mutually exclusive variant values) for that
+                        single unit.\r
+
+                        \r
+
+                        ## Decision Principles\r
+
+                        \r
+
+                        The Check Agent performs a direct, independent audit —
+                        it does not evaluate or second-guess any other agent's
+                        output.\r
+
+                        \r
+
+                        - Coherent parameter → `not_outlier`.\r
+
+                        - Clear contradiction → `outlier`.\r
+
+                        - Inconclusive evidence → `not_outlier`.\r
+
+                        - Never mark `outlier` based on assumption.\r
+
+                        \r
+
+                        ## Reasoning Guidelines\r
+
+                        \r
+
+                        Reasons must be factual, concise, refer only to provided
+                        evidence, avoid assumptions, and explain *why* the
+                        parameter is coherent or contradictory.\r
+
+                        \r
+
+                        **Good:**\r
+
+                        - \"Title specifies PVC Pipe and the MCAT is PVC Pipes,
+                        which represent the same product category.\"\r
+
+                        - \"The ISQs are mutually consistent and do not
+                        contradict one another.\"\r
+
+                        - \"ISQs describe specifications that are compatible
+                        with the assigned MCAT.\"\r
+
+                        \r
+
+                        **Bad:**\r
+
+                        - \"Buyer probably intended...\"\r
+
+                        - \"The previous agent seems incorrect...\"\r
+
+                        - \"It appears that...\"\r
+
+                        \r
+
+                        ## Output Format\r
+
+                        \r
+
+                        Return **only** a JSON array — no markdown, no
+                        explanations, no text outside the array. Each object
+                        must contain exactly three keys, in this order: `Agent`,
+                        `status`, `reason`.\r
+
+                        \r
+
+                        ```json\r
+
+                        [\r
+
+                        \  {\r
+
+                        \    \"Agent\": \"Title vs MCAT Agent\",\r
+
+                        \    \"status\": \"not_outlier\",\r
+
+                        \    \"reason\": \"Title specifies PVC Pipe and the MCAT
+                        is PVC Pipes, which represent the same product
+                        category.\"\r
+
+                        \  },\r
+
+                        \  {\r
+
+                        \    \"Agent\": \"Inter ISQ Agent\",\r
+
+                        \    \"status\": \"outlier\",\r
+
+                        \    \"reason\": \"The ISQs specify Stainless Steel
+                        material and PVC material for the same single-unit
+                        product, which are contradictory.\"\r
+
+                        \  }\r
+
+                        ]\r
+
+                        ```\r
+
+                        \r
+
+                        **Rules:**\r
+
+                        - `status` must be exactly `\"outlier\"` or
+                        `\"not_outlier\"` — no other values.\r
+
+                        - Return exactly one object per agent listed in `Agent`,
+                        preserving the same order.\r
+
+                        - Do not add, omit, or reorder agents.\r
+
+                        \r
+
+                        ## Final Checklist\r
+
+                        \r
+
+                        Before returning the response, verify:\r
+
+                        \r
+
+                        - [ ] Only agents listed in `Agent` were checked.\r
+
+                        - [ ] Every agent was checked independently, with no
+                        carry-over between agents.\r
+
+                        - [ ] No assumptions or inferred information were
+                        used.\r
+
+                        - [ ] Probable Order Value and Probable Requirement Type
+                        were ignored wherever required.\r
+
+                        - [ ] Buyer Filled Details and Additional Requirements
+                        were considered as supplementary specs where
+                        applicable.\r
+
+                        - [ ] Inter ISQ Agent checked for variant contradictions
+                        when Quantity indicates a single unit/piece.\r
+
+                        - [ ] `status` is exactly `\"outlier\"` or
+                        `\"not_outlier\"`.\r
+
+                        - [ ] Reasons are concise, factual, and
+                        evidence-based.\r
+
+                        - [ ] Every object contains exactly `Agent`, `status`,
+                        `reason`.\r
+
+                        - [ ] Output is valid JSON only — no markdown or extra
+                        text.\r\n"
+                    streaming:
+                      type: static
+                      value: true
+                    memory:
+                      type: static
+                      value:
+                        kind: off
+                    output_schema:
+                      type: static
+                      value:
+                        type: object
+                        order:
+                          - results
+                        required:
+                          - results
+                        properties:
+                          results:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - Agent
+                                - Final Verdict
+                                - Reason
+                              properties:
+                                agent:
+                                  type: string
+                                  default: ""
+                                  description: ""
+                                reason:
+                                  type: string
+                                  default: ""
+                                  description: ""
+                                status:
+                                  enum:
+                                    - not_outlier
+                                    - outlier
+                                  type: string
+                                  default: ""
+                                  description: ""
+                              additionalProperties: false
+                            default: []
+                            description: ""
+                        additionalProperties: false
+                    user_attachments:
+                      type: static
+                      value: []
+                    max_completion_tokens:
+                      type: static
+                      value: null
+                    temperature:
+                      type: static
+                      value: null
+                    max_iterations:
+                      type: static
+                      value: 10
+                summary: Recheck-agent
+            summary: Run recheck only if exactly 1 or 2 of the 4 product-validation agents
+              (Title vs MCAT, Title ISQ, ISQ vs MCAT, Inter ISQ) are incorrect
+            parallel: true
+            skip_failure: true
+      summary: Recheck-agent
+    - id: t
+      value:
+        type: aiagent
+        tools: []
+        input_transforms:
+          provider:
+            type: static
+            value:
+              kind: customai
+              model: deepseek/deepseek-v4-flash
+              resource: $res:u/anuragupadhyay2/inspirational_customai
+          output_type:
+            type: static
+            value: text
+          user_message:
+            expr: "`\\`${JSON.stringify(results.y.output)}\\`,
+              \\`${JSON.stringify(results.w.correct)}\\`,
+              \\`${JSON.stringify(results.r.prev_buyleads.RESPONSE.DATA.Listing\
+              )}\\`,
+              \\`${JSON.stringify(results.r.prev_enquiries.RESPONSE.DATA)}\\``"
+            type: javascript
+          system_prompt:
+            type: static
+            value: "# Decision Agent — IndiaMART BuyLead Auditor\r
+
+              \r
+
+              \r
+
+              ## 1. Role\r
+
+              \r
+
+              \r
+
+              You are the **Decision Agent** for the IndiaMART BuyLead
+              Auditor.\r
+
+              \r
+
+              \r
+
+              Your responsibility is to aggregate the outputs from all
+              specialized Product Validation, Coherence, Buyer Profile, and
+              Buyer History agents/scripts, and produce the **final structured
+              verdict** for the BuyLead.\r
+
+              \r
+
+              \r
+
+              You must **never re-audit the BuyLead yourself**. Use only the
+              outputs from the provided agents and scripts.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ## 2. Core Principle\r
+
+              \r
+
+              \r
+
+              The output is composed of **four independent verdict blocks**:\r
+
+              \r
+
+              \r
+
+              1. **Final Verdict** — driven strictly by the 4 Product Validation
+              agents.\r
+
+              2. **Buyer Profile Verdict** — driven by the Profile Validity
+              Agent.\r
+
+              3. **Prev Requirements Verdict** — driven by relatedness of prior
+              BuyLeads/enquiries to the current BuyLead.\r
+
+              4. **Buyer Activity Verdict** — driven by coherence of buyer
+              activity events with the current BuyLead.\r
+
+              \r
+
+              \r
+
+              Each block is evaluated independently. **None of Buyer Profile,
+              Prev Requirements, or Buyer Activity influence the Final
+              Verdict.** They are reported alongside it for downstream use.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ## 3. Inputs\r
+
+              \r
+
+              \r
+
+              ### 3.1 Product Validation Agents (drive Final Verdict)\r
+
+              \r
+
+              \r
+
+              - **Title vs MCAT Agent** (`response.status`, `response.reason`)\r
+
+              - **Title ISQ Agent** (`response.status`, `response.reason`)\r
+
+              - **ISQ vs MCAT Agent** (`response.status`, `response.reason`)\r
+
+              - **Inter ISQ Agent** (`status`, `reasoning`)\r
+
+              \r
+
+              \r
+
+              These four agents are the sole determinants of the Final
+              Verdict.\r
+
+              \r
+
+              \r
+
+              ### 3.2 Coherence Agents (Description & Buyer Viewed)\r
+
+              \r
+
+              \r
+
+              - **Description Agent**\r
+
+              \  - `description_audit.status`\r
+
+              \  - `description_audit.reasoning`\r
+
+              - **Buyer Viewed Agent**\r
+
+              \  - `Genuineness`\r
+
+              \  - `Product_match`\r
+
+              \  - `Profile_Reason`\r
+
+              \r
+
+              \r
+
+              Used to assess Coherence and Relatedness of the BuyLead (reported
+              as supporting context; does not independently drive the Final
+              Verdict — see Step 2).\r
+
+              \r
+
+              \r
+
+              ### 3.3 Profile Validity Agent (drives Buyer Profile Verdict)\r
+
+              \r
+
+              \r
+
+              Evaluates buyer identity fields:\r
+
+              \r
+
+              \r
+
+              - Name\r
+
+              - Email\r
+
+              - Phone\r
+
+              - Company\r
+
+              - Country\r
+
+              \r
+
+              \r
+
+              ### 3.4 Buyer History Scripts\r
+
+              \r
+
+              \r
+
+              **`prev_buyleads` / `prev_enquiries`** — drives Prev Requirements
+              Verdict\r
+
+              - `prev_buyleads.total_records`\r
+
+              - `prev_buyleads.leads`\r
+
+              - `prev_enquiries.total_records`\r
+
+              - `prev_enquiries.enquiries`\r
+
+              \r
+
+              \r
+
+              **`Buyer_Activity.events`** — drives Buyer Activity Verdict\r
+
+              - Buyer's activity event stream, checked for relatedness/coherence
+              with the current BuyLead.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ## 4. Decision Hierarchy\r
+
+              \r
+
+              \r
+
+              ### Step 1 – Product Validation (Final Verdict)\r
+
+              \r
+
+              \r
+
+              Evaluate:\r
+
+              \r
+
+              \r
+
+              - Title vs MCAT\r
+
+              - Title ISQ\r
+
+              - ISQ vs MCAT\r
+
+              - Inter ISQ\r
+
+              \r
+
+              \r
+
+              If **any** of the four agents returns:\r
+
+              \r
+
+              \r
+
+              - outlier\r
+
+              \r
+
+              \r
+
+              Then:\r
+
+              \r
+
+              \r
+
+              > **final_verdict = Review**\r
+
+              \r
+
+              \r
+
+              Otherwise:\r
+
+              \r
+
+              \r
+
+              > **final_verdict = Correct**\r
+
+              \r
+
+              \r
+
+              Continue evaluating all remaining steps regardless of the outcome
+              here — every block must always be populated.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ### Step 2 – Coherence & Relatedness (Description + Buyer
+              Viewed)\r
+
+              \r
+
+              \r
+
+              Evaluate both:\r
+
+              \r
+
+              \r
+
+              - **Description Agent** status\r
+
+              - **Buyer Viewed Agent** status (via `Genuineness` /
+              `Product_match`)\r
+
+              \r
+
+              \r
+
+              If **both** report `not_outlier` (i.e., description is coherent
+              with title/MCAT, and viewed products are genuine/related to the
+              BuyLead):\r
+
+              \r
+
+              \r
+
+              > Description and Buyer Viewed are considered **related to the
+              BuyLead**.\r
+
+              \r
+
+              \r
+
+              If either agent reports an outlier/mismatch/not-genuine signal,
+              note this in `final_reason` as supporting context. This step
+              **informs** `final_reason` but does **not** by itself flip
+              `final_verdict` — only Step 1 (Product Validation) can set
+              `final_verdict = Review`.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ### Step 3 – Buyer Profile Verdict\r
+
+              \r
+
+              \r
+
+              Use the **Profile Validity Agent** output across: name, email,
+              phone, company, country.\r
+
+              \r
+
+              \r
+
+              ```text\r
+
+              If all fields are correct / valid per Profile Validity Agent:\r
+
+              \    buyer_profile_verdict = not_outlier\r
+
+              \r
+
+              \r
+
+              Else (any field invalid, missing, or inconsistent):\r
+
+              \    buyer_profile_verdict = outlier\r
+
+              ```\r
+
+              \r
+
+              \r
+
+              State the specific field(s) responsible for the verdict in
+              `buyer_profile_reason`.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ### Step 4 – Prev Requirements Verdict\r
+
+              \r
+
+              \r
+
+              Use `prev_buyleads` and `prev_enquiries`.\r
+
+              \r
+
+              \r
+
+              ```text\r
+
+              If prev_buyleads has no records AND prev_enquiries has no
+              records:\r
+
+              \    prev_req_verdict = not_outlier\r
+
+              \    prev_req_reason = \"No previous BuyLeads or enquiries found
+              for the buyer.\"\r
+
+              \r
+
+              \r
+
+              If prior records exist and are related to the current BuyLead\r
+
+              (same or broadly related category/product family):\r
+
+              \    prev_req_verdict = not_outlier\r
+
+              \r
+
+              \r
+
+              If prior records exist and are factually unrelated to the current
+              BuyLead,\r
+
+              even under a broad category interpretation:\r
+
+              \    prev_req_verdict = outlier\r
+
+              ```\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ### Step 5 – Buyer Activity Verdict\r
+
+              \r
+
+              \r
+
+              Use `Buyer_Activity.events`.\r
+
+              \r
+
+              \r
+
+              ```text\r
+
+              Assess whether the buyer's activity events are related/coherent
+              with the current BuyLead\r
+
+              (e.g., browsing, searches, or interactions consistent with the
+              product/category requested).\r
+
+              \r
+
+              \r
+
+              If coherent or no meaningful contradicting activity exists:\r
+
+              \    buyer_activity_verdict = not_outlier\r
+
+              \r
+
+              \r
+
+              If activity events clearly contradict or are unrelated to the
+              current BuyLead:\r
+
+              \    buyer_activity_verdict = outlier\r
+
+              ```\r
+
+              \r
+
+              \r
+
+              State the specific coherent or contradicting activity in
+              `buyer_activity_reason`.\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ## 5. Output Contract\r
+
+              \r
+
+              \r
+
+              Return **only** valid JSON matching this structure:\r
+
+              \r
+
+              \r
+
+              ```json\r
+
+              {\r
+
+              \  \"final_verdict\": \"Correct | Review\",\r
+
+              \  \"final_reason\": \"1-3 sentence explanation based on the 4
+              Product Validation agents (and supporting Description/Buyer Viewed
+              context)\",\r
+
+              \r
+
+              \r
+
+              \  \"buyer_profile_verdict\": \"outlier | not_outlier\",\r
+
+              \  \"buyer_profile_reason\": \"Reason stating the cause,
+              referencing name/email/phone/company/country as applicable\",\r
+
+              \r
+
+              \r
+
+              \  \"prev_req_verdict\": \"outlier | not_outlier\",\r
+
+              \  \"prev_req_reason\": \"Reason based on prev_buyleads and
+              prev_enquiries\",\r
+
+              \r
+
+              \r
+
+              \  \"buyer_activity_verdict\": \"outlier | not_outlier\",\r
+
+              \  \"buyer_activity_reason\": \"Reason stating whether buyer
+              activity is related/coherent to the BuyLead\"\r
+
+              }\r
+
+              ```\r
+
+              \r
+
+              \r
+
+              ---\r
+
+              \r
+
+              \r
+
+              ## 6. Hard Rules\r
+
+              \r
+
+              \r
+
+              1. Never re-audit any field — use only agent/script outputs
+              provided.\r
+
+              2. `final_verdict` is driven **exclusively** by the 4 Product
+              Validation agents (Title vs MCAT, Title ISQ, ISQ vs MCAT, Inter
+              ISQ).\r
+
+              3. If any Product Validation agent returns Outlier, Incorrect,
+              Wrong, Mismatch, or Review → `final_verdict = Review`.\r
+
+              4. If all 4 Product Validation agents return Correct/not_outlier →
+              `final_verdict = Correct`.\r
+
+              5. Description Agent and Buyer Viewed Agent inform `final_reason`
+              as coherence/relatedness context but **never** independently
+              override `final_verdict`.\r
+
+              6. `buyer_profile_verdict` is driven solely by the Profile
+              Validity Agent (name, email, phone, company, country). All fields
+              valid → `not_outlier`; any field invalid → `outlier`.\r
+
+              7. `prev_req_verdict` is driven solely by relatedness of
+              `prev_buyleads`/`prev_enquiries` to the current BuyLead. No
+              records → `not_outlier`. Related (including broad category match)
+              → `not_outlier`. Factually unrelated → `outlier`.\r
+
+              8. `buyer_activity_verdict` is driven solely by
+              `Buyer_Activity.events` coherence with the current BuyLead.\r
+
+              9. `buyer_profile_verdict`, `prev_req_verdict`, and
+              `buyer_activity_verdict` must **never** influence `final_verdict`,
+              and vice versa — all four blocks are independent.\r
+
+              10. All four verdict blocks must always be populated in every
+              response, regardless of individual outcomes.\r
+
+              11. Return only valid JSON matching the Output Contract — no
+              additional commentary outside the JSON object.\r
+
+              \r\n"
+          streaming:
+            type: static
+            value: false
+          memory:
+            type: static
+            value:
+              kind: off
+          output_schema:
+            type: static
+            value:
+              type: object
+              order:
+                - verdict
+                - reasoning
+              $schema: https://json-schema.org/draft/2020-12/schema
+              required:
+                - verdict
+                - reasoning
+                - buyer_activity
+                - buyer_activity_reason
+                - summary
+              properties:
+                verdict:
+                  enum:
+                    - Correct
+                    - Review
+                  type: string
+                  default: ""
+                  description: ""
+                reasoning:
+                  type: string
+          user_attachments:
+            type: static
+            value: []
+          max_completion_tokens:
+            type: static
+            value: null
+          temperature:
+            type: static
+            value: null
+          max_iterations:
+            type: static
+            value: 10
+      summary: Final_Decision_Agent
+    - id: u
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: >-
+          import json
+
+          from typing import Any
+
+
+          # The recheck agent (y1) is inconsistent about which naming convention
+          it
+
+          # echoes back in its "Agent" field -- sometimes the internal
+          doc-example
+
+          # names ("Title_category_mismatch", "Specs_category_mismatch", ...)
+          and
+
+          # sometimes the same friendly names it was given via Incorrect_agent
+
+          # ("Title vs MCAT Agent", "ISQ vs MCAT Agent", ...). Normalize both
+
+          # conventions down to the canonical friendly name (the one used as
+          keys
+
+          # in the Parsing (w) node) so matching works either way.
+
+          def _normalize_key(s: str) -> str:
+              return "".join(ch for ch in str(s).lower() if ch.isalnum())
+
+
+          AGENT_ALIASES = {
+              _normalize_key("Title_category_mismatch"): "Title vs MCAT Agent",
+              _normalize_key("Title vs MCAT Agent"): "Title vs MCAT Agent",
+              _normalize_key("Title_specs_mismatch"): "Title ISQ Agent",
+              _normalize_key("Title ISQ Agent"): "Title ISQ Agent",
+              _normalize_key("Specs_category_mismatch"): "ISQ vs MCAT Agent",
+              _normalize_key("ISQ vs MCAT Agent"): "ISQ vs MCAT Agent",
+              _normalize_key("Inter_ISQ"): "Inter ISQ Agent",
+              _normalize_key("Inter ISQ Agent"): "Inter ISQ Agent",
+          }
+
+
+
+          def _canonical_agent_name(raw_name: Any) -> str:
+              return AGENT_ALIASES.get(_normalize_key(raw_name), str(raw_name))
+
+
+          def _get_ci(d: dict, *keys: str):
+              """
+              Case-insensitive dict lookup. The recheck agent (y1) is inconsistent
+              not just about the *value* it echoes back for "Agent" (handled by
+              AGENT_ALIASES above) but also about the *casing of the key itself*
+              -- sometimes "Agent", sometimes "agent". Try each candidate key as-is
+              first, then fall back to a case-insensitive scan.
+              """
+              for k in keys:
+                  if k in d:
+                      return d[k]
+              lower_map = {str(k).lower(): v for k, v in d.items()}
+              for k in keys:
+                  v = lower_map.get(k.lower())
+                  if v is not None:
+                      return v
+              return None
+
+
+          def _parse(value: Any) -> Any:
+              if isinstance(value, str):
+                  text = value.strip()
+                  if text:
+                      try:
+                          return json.loads(text)
+                      except Exception:
+                          return value
+                  return value
+              return value
+
+
+          def _extract_verdict_reasoning(payload: Any):
+              """
+              Best-effort extraction of (verdict, reasoning) from a w-node agent
+              payload -- the shape differs slightly per agent type (status-based,
+              classification-based, valid/reasons-based, or informational-only).
+              """
+              if not isinstance(payload, dict):
+                  return None, None
+
+              if "status" in payload:
+                  return payload.get("status"), payload.get("reason")
+
+              if "classification" in payload:
+                  return payload.get("classification"), payload.get("reason")
+
+              if "valid" in payload:
+                  valid = payload.get("valid")
+                  if valid is True:
+                      verdict = "Correct"
+                  elif valid is False:
+                      verdict = "Incorrect"
+                  else:
+                      verdict = None
+                  reasons = payload.get("reasons")
+                  if isinstance(reasons, list):
+                      reasoning = "; ".join(str(r) for r in reasons) if reasons else None
+                  else:
+                      reasoning = reasons
+                  return verdict, reasoning
+
+              if "ok" in payload or "message" in payload:
+                  return ("Correct" if payload.get("ok") else None), payload.get("message")
+
+              return None, payload.get("error_note")
+
+
+          def _build_recheck_lookup(y_output: Any) -> dict:
+              """
+              results.y.output is either:
+                - the literal string "[]" when the recheck agent was skipped, or
+                - {"results": [{"Agent"/"agent": ..., "Reason"/"reason": ...,
+                                "status": ...}, ...]}
+                  when it ran.
+              """
+              parsed = _parse(y_output)
+
+              if isinstance(parsed, dict):
+                  items = parsed.get("results") or []
+              elif isinstance(parsed, list):
+                  items = parsed
+              else:
+                  items = []
+
+              lookup = {}
+              for item in items:
+                  if not isinstance(item, dict):
+                      continue
+                  raw_name = _get_ci(item, "Agent", "agent")
+                  if not raw_name:
+                      continue
+                  canonical_name = _canonical_agent_name(raw_name)
+                  lookup[canonical_name] = item
+              return lookup
+
+
+          def main(x: Any, w: Any = None, y_output: Any = None, offer_id: Any =
+          None):
+              parsed = _parse(x)
+
+              if isinstance(parsed, dict):
+                  summary = parsed.get("summary") or {}
+                  buyer_viewed = summary.get("buyer_viewed") or {}
+                  final_output = {
+                      "offer_id": offer_id,
+                      "verdict": parsed.get("verdict"),
+                      "reasoning": parsed.get("reasoning"),
+                  }
+              else:
+                  final_output = {"offer_id": offer_id, "output": parsed}
+
+              # ------------------------------------------------------------------
+              # Per-agent verdict + reasoning, built from the Parsing (w) node and,
+              # for the four product-validation agents that were flagged incorrect,
+              # overridden by the recheck agent (y1) output when it ran.
+              # ------------------------------------------------------------------
+              w_parsed = _parse(w)
+              w_correct = w_parsed.get("correct") or {} if isinstance(w_parsed, dict) else {}
+              w_incorrect = w_parsed.get("incorrect") or {} if isinstance(w_parsed, dict) else {}
+
+              recheck_lookup = _build_recheck_lookup(y_output)
+
+              agent_results = {}
+
+              # Agents already in the "correct" bucket: use their own verdict/reasoning.
+              for agent_name, payload in w_correct.items():
+                  verdict, reasoning = _extract_verdict_reasoning(payload)
+                  agent_results[agent_name] = {
+                      "verdict": verdict,
+                      "reasoning": reasoning,
+                      "source": "parsing",
+                  }
+
+              # Agents in the "incorrect" bucket: prefer the recheck agent's verdict
+              # if it ran for that agent, else fall back to the original w-node verdict.
+              for agent_name, payload in w_incorrect.items():
+                  recheck_entry = recheck_lookup.get(agent_name)
+
+                  if recheck_entry:
+                      agent_results[agent_name] = {
+                          "verdict": _get_ci(recheck_entry, "status", "Status"),
+                          "reasoning": _get_ci(recheck_entry, "reason", "Reason"),
+                          "source": "recheck",
+                      }
+                  else:
+                      verdict, reasoning = _extract_verdict_reasoning(payload)
+                      agent_results[agent_name] = {
+                          "verdict": verdict,
+                          "reasoning": reasoning,
+                          "source": "parsing",
+                      }
+
+              final_output["agent_results"] = agent_results
+
+              return final_output
+        language: python3
+        input_transforms:
+          w:
+            expr: results.w
+            type: javascript
+          x:
+            expr: results.t.output
+            type: javascript
+          offer_id:
+            expr: flow_input.offer_id
+            type: javascript
+          y_output:
+            expr: results.y.output
+            type: javascript
+      summary: Final_structured
+  failure_module:
+    id: failure
+    value:
+      lock: |
+        # py: 3.12
+      type: rawscript
+      content: >-
+        from typing import Any
+
+
+
+        def main(error: dict = None, offer_id: Any = None):
+            """
+            Flow-level error handler. Runs automatically whenever ANY step in the
+            flow fails (fetch, an agent, the decision agent, node u, etc.), so the
+            caller always gets back which offer_id blew up and why -- instead of
+            just a bare error with no way to trace it to a lead.
+            """
+            err = error or {}
+            return {
+                "offer_id": offer_id,
+                "verdict": "Error",
+                "error": {
+                    "message": err.get("message"),
+                    "name": err.get("name"),
+                    "step_id": err.get("step_id"),
+                },
+            }
+      language: python3
+      input_transforms:
+        error:
+          expr: error
+          type: javascript
+        offer_id:
+          expr: flow_input.offer_id
+          type: javascript
+  groups: []
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  properties:
+    offer_id:
+      default: null
+      description: ""
+      originalType: string
+      type: string
+  required:
+    - offer_id
+  type: object
+  order:
+    - offer_id

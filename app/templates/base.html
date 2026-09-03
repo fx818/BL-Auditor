@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BL Auditor - Dashboard</title>
+  <meta name="description" content="BuyLead Product Auditor - AI-powered categorization and quality analysis dashboard." />
+  <link rel="stylesheet" href="/static/css/style.css?v=light-3" />
+  <link rel="stylesheet" href="/static/css/excel-filter.css?v=1" />
+  <script src="/static/js/settings.js?v=4"></script>
+</head>
+<body>
+  {% set _admin_nav = request is defined and request.url.path.startswith('/admin_view') %}
+  <nav class="navbar">
+    <a href="{{ '/admin_view' if _admin_nav else '/' }}" class="navbar-brand">
+      <div class="navbar-logo">BL</div>
+      <div>
+        <div class="navbar-title">BL Auditor</div>
+        <div class="navbar-subtitle">Multiagent BuyLead Auditor</div>
+      </div>
+    </a>
+    <div class="navbar-actions">
+{% if request is defined and request.url.path.startswith('/admin_view') %}
+      <a href="/admin_view/prompts" class="btn btn-outline btn-sm">Prompts</a>
+      {% else %}
+      <a href="/prompts" class="btn btn-outline btn-sm">Prompts</a>
+      {% endif %}
+      <a href="/settings" class="btn btn-outline btn-sm">Settings</a>
+      {% if request is defined and request.url.path.startswith('/admin_view') %}
+      <a href="/download/audit-dashboard-log" class="btn btn-outline btn-sm" download>↓ Dashboard Log</a>
+      <a href="/download/audit-traces" class="btn btn-outline btn-sm" download>↓ Audit Traces</a>
+      {% endif %}
+      {% if request is defined and request.session.get('user') %}
+      <span class="btn btn-sm" style="pointer-events:none;">{{ request.session['user']['email'] }}</span>
+      <a href="/auth/logout" class="btn btn-outline btn-sm">Logout</a>
+      {% endif %}
+      <span class="badge-live">Live</span>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Running AI Auditor Pipeline...</div>
+    <div style="color:var(--text-muted);font-size:0.78rem;margin-top:6px;">This may take 15-30 seconds</div>
+  </div>
+
+  <script src="/static/js/excel-filter.js?v=1"></script>
+  <script src="/static/js/app.js?v=light-6"></script>
+</body>
+</html>

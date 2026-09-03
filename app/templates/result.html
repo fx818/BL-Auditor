@@ -1,0 +1,928 @@
+{% extends "base.html" %}
+{% block content %}
+{% macro weight_badge(key, sc=none, sc2=none) %}
+{% set ns = namespace(ag1=none, ag2=none) %}
+{% if sc %}{% for _ag in sc.get('agent_breakdown', []) %}{% if _ag.get('key') == key %}{% set ns.ag1 = _ag %}{% endif %}{% endfor %}{% endif %}
+{% if sc2 %}{% for _ag in sc2.get('agent_breakdown', []) %}{% if _ag.get('key') == key %}{% set ns.ag2 = _ag %}{% endif %}{% endfor %}{% endif %}
+{% if ns.ag1 is not none or ns.ag2 is not none %}
+<div style="margin-top:auto;padding-top:6px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+  {% if ns.ag1 is not none %}
+  <div style="display:flex;align-items:center;gap:3px;">
+    <span style="font-size:0.58rem;color:var(--text-muted);letter-spacing:0.2px;font-weight:500;">S1</span>
+    {% if ns.ag1.get('is_na') %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.1);color:var(--text-muted);">N/A</span>
+    {% else %}
+    {% set _s1 = ns.ag1.get('agent_score') %}
+    {% set _s1pct = ((_s1 or 0) * 100)|round|int %}
+    {% set _s1col = '#639922' if (_s1 or 0) >= 0.7 else ('#BA7517' if (_s1 or 0) >= 0.3 else '#E24B4A') %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.12);color:#888;font-weight:500;">{{ ns.ag1.get('base_weight', 0)|int }}%</span>
+    {% if (sc.get('na_agents') or [])|length > 0 %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(99,153,34,0.15);color:#3B6D11;font-weight:600;">→{{ ns.ag1.get('adjusted_weight', 0)|round|int }}%</span>
+    {% endif %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.06);color:{{ _s1col }};font-weight:600;">{{ _s1pct }}%</span>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% if ns.ag2 is not none %}
+  <div style="display:flex;align-items:center;gap:3px;">
+    <span style="font-size:0.58rem;color:var(--text-muted);letter-spacing:0.2px;font-weight:500;">S2</span>
+    {% if ns.ag2.get('is_na') %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.1);color:var(--text-muted);">N/A</span>
+    {% else %}
+    {% set _s2 = ns.ag2.get('agent_score') %}
+    {% set _s2pct = ((_s2 or 0) * 100)|round|int %}
+    {% set _s2col = '#639922' if (_s2 or 0) >= 0.7 else ('#BA7517' if (_s2 or 0) >= 0.3 else '#E24B4A') %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.12);color:#888;font-weight:500;">{{ ns.ag2.get('base_weight', 0)|int }}%</span>
+    {% if (sc2.get('na_agents') or [])|length > 0 %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(99,153,34,0.15);color:#3B6D11;font-weight:600;">→{{ ns.ag2.get('adjusted_weight', 0)|round|int }}%</span>
+    {% endif %}
+    <span style="font-size:0.58rem;padding:1px 5px;border-radius:7px;background:rgba(120,120,120,0.06);color:{{ _s2col }};font-weight:600;">{{ _s2pct }}%</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endmacro %}
+{% set checks = [
+  ('Specs vs Category', data.get('specs_category_outlier', {})),
+  ('Title vs Category', data.get('title_category_outlier', {})),
+] %}
+{% set bl = (buylead_response or {}).get('RESPONSE', {}).get('DATA', {}) %}
+{% set bl_isq = (payload or {}).get('ISQ', []) %}
+{% set bl_products = bl.get('PRODUCTS_ENQUIRED') or [] %}
+{% set bl_city = bl.get('GLUSR_CITY') or bl.get('GL_CITY_DISTRICT_HQ_NAME') or '' %}
+{% set bl_state = bl.get('GLUSR_STATE') or '' %}
+{% set bl_loc = (bl_city ~ (', ' if bl_city and bl_state else '') ~ bl_state) or '-' %}
+{% set bl_mcat = bl.get('PRIME_MCAT_NAME') or bl.get('ETO_OFR_GLCAT_MCAT_NAME') or payload.get('mcat_name', '-') %}
+{% set bl_title = bl.get('ETO_OFR_TITLE') or payload.get('item_name', '-') %}
+{% set bl_desc = bl.get('ETO_OFR_DESC') or payload.get('item_desc', '') %}
+{% set bl_flag = bl.get('GL_COUNTRY_FLAG_SMALL') %}
+{% set bl_mob = bl.get('ETO_OFR_BUYER_IS_MOB_VERF') == '1' %}
+{% set bl_email = bl.get('ETO_OFR_EMAIL_VERIFIED') == '1' %}
+{% set bl_wa = bl.get('IS_WHATSAPP_ACTIVE') == '1' %}
+{% set bl_member = bl.get('GLUSR_USR_MEMBERSINCE') %}
+{% set bl_date = bl.get('ETO_OFR_DATE') %}
+
+<div class="page-content">
+
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;">
+    <div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.4px;">Audit Result</div>
+      <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);line-height:1.3;">{{ data.get('item_name', payload.get('item_name', '-')) }}</h2>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span>ID: <b style="color:var(--text-secondary);">{{ offer_id }}</b></span>
+        <span>MCAT: <b style="color:var(--text-secondary);">{{ payload.get('mcat_name', '-') }}</b></span>
+        <span>Price: <b style="color:var(--text-secondary);">{{ payload.get('price', '-') }}</b></span>
+        {% set _glid = (buyer_profile_result or {}).get('Glid') %}
+        {% if _glid %}<span>GLID: <b style="color:var(--text-secondary);">{{ _glid }}</b></span>{% endif %}
+      </div>
+      {% if agents_ran is not none %}
+      <div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0;">Agents ran:</span>
+        {% set _all_agent_keys = ['auditmate','buyer_viewed','retail_agent_2','isq','description','specs_vs_category','title_vs_category','title_vs_specs','buyer_profile','buyer_viewed_vs_csl'] %}
+        {% for _k in _all_agent_keys %}
+          {% if _k in agents_ran %}
+          <span style="font-size:0.62rem;padding:1px 6px;border-radius:8px;background:rgba(5,150,105,0.1);color:var(--accent-green);border:1px solid rgba(5,150,105,0.2);font-weight:600;">{{ _k }}</span>
+          {% else %}
+          <span style="font-size:0.62rem;padding:1px 6px;border-radius:8px;background:rgba(100,100,100,0.07);color:var(--text-muted);border:1px solid var(--border);text-decoration:line-through;">{{ _k }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% set _admin = request is defined and request.url.path.startswith('/admin_view') %}
+    {% set _prefix = '/admin_view' if _admin else '' %}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;">
+      <button type="button" onclick="goBack()" class="btn btn-outline btn-sm">← Back</button>
+      {% if trace_id %}<a href="{{ _prefix }}/traces/{{ trace_id }}" class="btn btn-outline btn-sm">View Trace</a>{% endif %}
+      <button type="button" id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">Copy JSON</button>
+    </div>
+  </div>
+
+  {% if csv_path %}
+  <div class="alert alert-info" style="margin-bottom:0.875rem;">
+    <span>Saved →</span><span style="font-family:monospace;font-size:0.75rem;">{{ csv_path }}</span>
+  </div>
+  {% endif %}
+
+  <div class="bl-audit-layout" style="display:grid;grid-template-columns:340px 1fr;gap:1rem;align-items:start;">
+    <aside class="bl-side" style="position:sticky;top:1rem;">
+      <div class="card" data-card="buylead" style="padding:0;overflow:hidden;">
+        <div style="padding:0.75rem 0.875rem 0.5rem;border-bottom:1px solid var(--border);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">BuyLead</div>
+          <div style="font-size:0.95rem;font-weight:700;color:var(--text-primary);line-height:1.3;">Buyer looking for {{ bl_mcat }}</div>
+        </div>
+        <div style="padding:0.75rem 0.875rem;">
+          <div style="font-size:0.95rem;font-weight:700;color:var(--accent-blue);line-height:1.3;margin-bottom:0.5rem;">{{ bl_title }}</div>
+          {% if bl_desc %}
+          <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.4;margin-bottom:0.5rem;padding:6px 8px;background:var(--bg-primary);border-left:2px solid var(--accent-blue);border-radius:3px;white-space:pre-wrap;">{{ bl_desc }}</div>
+          {% endif %}
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.78rem;color:var(--text-secondary);margin-bottom:6px;">
+            {% if bl_flag %}<img src="{{ bl_flag }}" alt="flag" style="width:18px;height:auto;border-radius:2px;">{% endif %}
+            <span style="font-weight:600;">{{ bl_loc }}</span>
+            {% if bl_date %}<span style="color:var(--accent-cyan);">⏰ {{ bl_date }}</span>{% endif %}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:0.75rem;margin-bottom:8px;">
+            <span style="color:{{ 'var(--accent-green)' if bl_mob else 'var(--text-muted)' }};">Mobile {{ '✓' if bl_mob else '✗' }}</span>
+            <span style="color:{{ 'var(--accent-green)' if bl_email else 'var(--text-muted)' }};">Email {{ '✓' if bl_email else '✗' }}</span>
+            <span style="color:{{ 'var(--accent-green)' if bl_wa else 'var(--text-muted)' }};">WhatsApp {{ '✓' if bl_wa else '✗' }}</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">Category: <span style="color:var(--accent-red);font-weight:600;">{{ bl_mcat }}</span></div>
+          {% if existing_retail_flag %}
+          {% set _erf_color = 'var(--accent-green)' if existing_retail_flag == 'Retail' else ('var(--accent-red)' if existing_retail_flag == 'Non-Retail' else 'var(--text-muted)') %}
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Existing Retail Flag: <span style="color:{{ _erf_color }};font-weight:600;">{{ existing_retail_flag }}</span></div>
+          {% endif %}
+        </div>
+        {% if bl_isq %}
+        <div style="padding:0.75rem 0.875rem;border-top:1px solid var(--border);background:var(--bg-primary);">
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:0.5rem;">ISQs</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+            <tbody>
+              {% for q in bl_isq %}
+              <tr>
+                <td style="padding:4px 6px 4px 0;color:var(--text-secondary);font-weight:600;vertical-align:top;width:48%;">{{ q.get('IM_SPEC_MASTER_DESC', '-') }}</td>
+                <td style="padding:4px 0;color:var(--text-muted);vertical-align:top;width:4%;">:</td>
+                <td style="padding:4px 0;color:var(--text-primary);vertical-align:top;">{{ q.get('ISQ_RESPONSE', '-') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+        {% if bl_products %}
+        <div style="padding:0.75rem 0.875rem;border-top:1px solid var(--border);background:var(--bg-primary);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:0.5rem;">
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">Products Enquired</div>
+            <span style="font-size:0.65rem;padding:1px 6px;border-radius:8px;background:rgba(124,58,237,0.12);color:var(--accent-purple);font-weight:600;">{{ bl_products|length }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;">
+            {% for p in bl_products %}
+            {% set _name = p.get('FK_PC_ITEM_NAME') or p.get('FK_PC_ITEM_DISPLAY_NAME') or '-' %}
+            {% set _price = (p.get('PRODUCT_PRICE') or '')|string %}
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:4px;background:var(--bg-secondary);">
+              <div style="font-size:0.76rem;color:var(--text-primary);font-weight:600;line-height:1.3;flex:1;min-width:0;word-break:break-word;">{{ _name }}</div>
+              {% if _price %}<div style="font-size:0.72rem;color:var(--accent-green);font-weight:700;white-space:nowrap;flex-shrink:0;">{{ _price }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if bl_member %}
+        <div style="padding:0.5rem 0.875rem;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text-muted);text-align:center;">— Member since {{ bl_member }} —</div>
+        {% endif %}
+      </div>
+
+      {# ── BuyLead Score Card ── #}
+      {% set _tca1_status = (data.get('title_category_outlier') or {}).get('status', '') %}
+      {% set _tca2_status = (title_vs_cat_a2_result or {}).get('Status', '') or (title_vs_cat_a2_result or {}).get('status', '') %}
+      {% set _fatal_1 = _tca1_status == 'Wrong' %}
+      {% set _fatal_2 = _tca2_status == 'Incorrect' %}
+      {% set _zero_isq = not bl_isq %}
+      {% set _specs1_status = (data.get('specs_category_outlier') or {}).get('status', '') %}
+      {% set _desc_status = (desc_result or {}).get('status', '') %}
+      {% set _isq_agent_status = (isq_result or {}).get('status', '') %}
+      {% set _specs_a2_status = (specs_vs_cat_a2_result or {}).get('Status', '') or (specs_vs_cat_a2_result or {}).get('status', '') %}
+      {% set _lq_score1 = _zero_isq or _specs1_status == 'Wrong' or _desc_status == 'outlier' or _isq_agent_status == 'outlier' %}
+      {% set _lq_score2 = _zero_isq or _specs_a2_status == 'Incorrect' or _desc_status == 'outlier' or _isq_agent_status == 'Incorrect' %}
+      {% set _high_value = false %}
+      {% set sc = scoring_result | default({}) %}
+      {% set _score = sc.get('composite_score') %}
+      {% set _vclass = sc.get('verdict_class', 'review') %}
+      {% set _score_color = '#639922' if _vclass == 'approved' else ('#E24B4A' if _vclass == 'reject' else '#BA7517') %}
+      {% set _verdict_bg = 'rgba(99,153,34,0.12)' if _vclass == 'approved' else ('rgba(226,75,74,0.12)' if _vclass == 'reject' else 'rgba(186,117,23,0.12)') %}
+      {% set _verdict_col = '#3B6D11' if _vclass == 'approved' else ('#A32D2D' if _vclass == 'reject' else '#854F0B') %}
+      {% set _verdict_bd = 'rgba(99,153,34,0.3)' if _vclass == 'approved' else ('rgba(226,75,74,0.3)' if _vclass == 'reject' else 'rgba(186,117,23,0.3)') %}
+
+      {% set _dr = decision_result | default({}) %}
+      {% set _dv = _dr.get('Final_Verdict', '') %}
+      {% if _dv %}
+      {% set _dv_outlier = _dv == 'outlier' %}
+      <div class="card" data-card="decision" style="margin-top:0.75rem;padding:0.75rem 0.875rem;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;">Decision Agent</div>
+          <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.4;">{{ _dr.get('Reason', '') }}</div>
+        </div>
+        <span style="flex-shrink:0;padding:5px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;letter-spacing:0.2px;
+          background:{{ 'rgba(226,75,74,0.12)' if _dv_outlier else 'rgba(99,153,34,0.12)' }};
+          color:{{ '#A32D2D' if _dv_outlier else '#3B6D11' }};
+          border:1px solid {{ 'rgba(226,75,74,0.3)' if _dv_outlier else 'rgba(99,153,34,0.3)' }};">
+          {{ _dv }}
+        </span>
+      </div>
+      {% endif %}
+
+      <div class="card" data-card="score_1" style="margin-top:0.75rem;padding:0;overflow:hidden;">
+        <div style="padding:0.75rem 0.875rem 0.625rem;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">BuyLead Score</div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              {% if _fatal_1 %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#dc2626;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">FATAL</span>{% elif _lq_score1 %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#b45309;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">LOW QUALITY BL</span>{% if _zero_isq %}<span style="font-size:0.62rem;font-weight:600;color:#fff;background:#92400e;padding:1px 6px;border-radius:3px;letter-spacing:0.2px;">0 ISQ</span>{% endif %}{% endif %}
+              {% if _high_value %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#1d4ed8;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">HIGH VALUE BL</span>{% endif %}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:2.8rem;font-weight:500;line-height:1;color:{{ _score_color }};">
+              {% if _score is not none %}{{ _score }}%{% else %}—{% endif %}
+            </div>
+            {% if sc.get('verdict') and _vclass != 'na' %}
+            <span style="padding:4px 13px;border-radius:20px;font-size:0.72rem;font-weight:600;background:{{ _verdict_bg }};color:{{ _verdict_col }};border:1px solid {{ _verdict_bd }};">
+              {{ sc.get('verdict') }}
+            </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if sc.get('agent_breakdown') %}
+        <div style="padding:0.75rem 0.875rem 0.625rem;">
+          {% if sc.get('na_agents') %}
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:0.625rem;line-height:1.5;padding:5px 8px;background:var(--bg-primary);border-radius:4px;">
+            Weight redistributed: {{ sc.get('na_agents') | length }} agent(s) N/A — {{ sc.get('redistributed_weight', 0) | round | int }}% spread across remaining agents.
+          </div>
+          {% endif %}
+          {% for ag in sc.get('agent_breakdown', []) %}
+          {% set _bar_pct = ((ag.get('agent_score', 0) or 0) * 100) | round | int %}
+          {% set _s = ag.get('agent_score') %}
+          {% set _bar_col = '#B4B2A9' if ag.get('is_na') else ('#639922' if (_s or 0) >= 0.7 else ('#BA7517' if (_s or 0) >= 0.3 else '#E24B4A')) %}
+          {% set _has_na = sc.get('na_agents') | length > 0 %}
+          <div style="margin-bottom:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:0.72rem;margin-bottom:3px;">
+              <span style="color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;" title="{{ ag.get('display_name') }}">{{ ag.get('display_name') }}</span>
+              <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+                {% if _has_na and not ag.get('is_na') %}
+                <span style="font-size:0.65rem;color:var(--text-muted);">→{{ ag.get('adjusted_weight', 0) | round | int }}%</span>
+                {% else %}
+                <span style="font-size:0.65rem;color:var(--text-muted);">{{ ag.get('base_weight', 0) | int }}%</span>
+                {% endif %}
+                <span style="font-size:0.7rem;font-weight:600;color:{{ '#B4B2A9' if ag.get('is_na') else _bar_col }};">
+                  {% if ag.get('is_na') %}N/A{% elif ag.get('agent_score') is not none %}{{ _bar_pct }}%{% else %}?{% endif %}
+                </span>
+              </div>
+            </div>
+            <div style="height:5px;background:var(--bg-primary);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:{{ 0 if ag.get('is_na') else _bar_pct }}%;background:{{ _bar_col }};border-radius:3px;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if sc.get('error') %}
+        <div style="padding:0.5rem 0.875rem;font-size:0.72rem;color:var(--accent-red);border-top:1px solid var(--border);">Scoring error: {{ sc.get('error') }}</div>
+        {% endif %}
+      </div>
+
+      {# ── BuyLead Score 2 Card (Agent 2 category checks) ── #}
+      {% set sc2 = scoring_result_2 | default({}) %}
+      {% set _score2 = sc2.get('composite_score') %}
+      {% set _vclass2 = sc2.get('verdict_class', 'review') %}
+      {% set _score_color2 = '#639922' if _vclass2 == 'approved' else ('#E24B4A' if _vclass2 == 'reject' else '#BA7517') %}
+      {% set _verdict_bg2 = 'rgba(99,153,34,0.12)' if _vclass2 == 'approved' else ('rgba(226,75,74,0.12)' if _vclass2 == 'reject' else 'rgba(186,117,23,0.12)') %}
+      {% set _verdict_col2 = '#3B6D11' if _vclass2 == 'approved' else ('#A32D2D' if _vclass2 == 'reject' else '#854F0B') %}
+      {% set _verdict_bd2 = 'rgba(99,153,34,0.3)' if _vclass2 == 'approved' else ('rgba(226,75,74,0.3)' if _vclass2 == 'reject' else 'rgba(186,117,23,0.3)') %}
+
+      <div class="card" data-card="score_2" style="margin-top:0.75rem;padding:0;overflow:hidden;">
+        <div style="padding:0.75rem 0.875rem 0.625rem;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">BuyLead Score 2 <span style="font-size:0.65rem;opacity:0.7;">(Agent 2)</span></div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              {% if _fatal_2 %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#dc2626;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">FATAL</span>{% elif _lq_score2 %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#b45309;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">LOW QUALITY BL</span>{% if _zero_isq %}<span style="font-size:0.62rem;font-weight:600;color:#fff;background:#92400e;padding:1px 6px;border-radius:3px;letter-spacing:0.2px;">0 ISQ</span>{% endif %}{% endif %}
+              {% if _high_value %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#1d4ed8;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">HIGH VALUE BL</span>{% endif %}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:2.8rem;font-weight:500;line-height:1;color:{{ _score_color2 }};">
+              {% if _score2 is not none %}{{ _score2 }}%{% else %}—{% endif %}
+            </div>
+            {% if sc2.get('verdict') and _vclass2 != 'na' %}
+            <span style="padding:4px 13px;border-radius:20px;font-size:0.72rem;font-weight:600;background:{{ _verdict_bg2 }};color:{{ _verdict_col2 }};border:1px solid {{ _verdict_bd2 }};">
+              {{ sc2.get('verdict') }}
+            </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if sc2.get('agent_breakdown') %}
+        <div style="padding:0.75rem 0.875rem 0.625rem;">
+          {% if sc2.get('na_agents') %}
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:0.625rem;line-height:1.5;padding:5px 8px;background:var(--bg-primary);border-radius:4px;">
+            Weight redistributed: {{ sc2.get('na_agents') | length }} agent(s) N/A — {{ sc2.get('redistributed_weight', 0) | round | int }}% spread across remaining agents.
+          </div>
+          {% endif %}
+          {% for ag2 in sc2.get('agent_breakdown', []) %}
+          {% set _bar_pct2 = ((ag2.get('agent_score', 0) or 0) * 100) | round | int %}
+          {% set _s2 = ag2.get('agent_score') %}
+          {% set _bar_col2 = '#B4B2A9' if ag2.get('is_na') else ('#639922' if (_s2 or 0) >= 0.7 else ('#BA7517' if (_s2 or 0) >= 0.3 else '#E24B4A')) %}
+          {% set _has_na2 = sc2.get('na_agents') | length > 0 %}
+          <div style="margin-bottom:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:0.72rem;margin-bottom:3px;">
+              <span style="color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;" title="{{ ag2.get('display_name') }}">{{ ag2.get('display_name') }}</span>
+              <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+                {% if _has_na2 and not ag2.get('is_na') %}
+                <span style="font-size:0.65rem;color:var(--text-muted);">→{{ ag2.get('adjusted_weight', 0) | round | int }}%</span>
+                {% else %}
+                <span style="font-size:0.65rem;color:var(--text-muted);">{{ ag2.get('base_weight', 0) | int }}%</span>
+                {% endif %}
+                <span style="font-size:0.7rem;font-weight:600;color:{{ '#B4B2A9' if ag2.get('is_na') else _bar_col2 }};">
+                  {% if ag2.get('is_na') %}N/A{% elif ag2.get('agent_score') is not none %}{{ _bar_pct2 }}%{% else %}?{% endif %}
+                </span>
+              </div>
+            </div>
+            <div style="height:5px;background:var(--bg-primary);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:{{ 0 if ag2.get('is_na') else _bar_pct2 }}%;background:{{ _bar_col2 }};border-radius:3px;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if sc2.get('error') %}
+        <div style="padding:0.5rem 0.875rem;font-size:0.72rem;color:var(--accent-red);border-top:1px solid var(--border);">Scoring error: {{ sc2.get('error') }}</div>
+        {% endif %}
+      </div>
+
+      {# ── BL Completeness Score Card ── #}
+      {% set cmp = completeness_result | default({}) %}
+      {% set _cpct = cmp.get('percentage') %}
+      {% set _ctotal = cmp.get('total_score') %}
+      {% set _cpct_f = (_cpct or 0) | float %}
+      {% set _ccol = '#639922' if _cpct_f >= 70 else ('#BA7517' if _cpct_f >= 30 else '#E24B4A') %}
+      {% set _cbreakdown = cmp.get('breakdown') or {} %}
+      {% set _cfactors = [
+        ('BL Title',        'title'),
+        ('Quantity',        'quantity'),
+        ('Spec Count',      'spec_count'),
+        ('Predicted Specs', 'predicted_specs'),
+        ('Description',     'description'),
+      ] %}
+
+      {% set _lq_completeness = _cpct is not none and _cpct <= 50 %}
+      <div class="card" data-card="completeness" style="margin-top:0.75rem;padding:0;overflow:hidden;">
+        <div style="padding:0.75rem 0.875rem 0.625rem;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;">BL Completeness Score</div>
+            {% if _lq_completeness %}<span style="font-size:0.68rem;font-weight:700;color:#fff;background:#b45309;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;">LOW QUALITY BL</span>{% endif %}
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+            <div style="font-size:2.8rem;font-weight:500;line-height:1;color:{{ _ccol }};">
+              {% if _cpct is not none %}{{ _cpct }}%{% else %}—{% endif %}
+            </div>
+            {% if _ctotal is not none %}
+            <div style="font-size:0.72rem;color:var(--text-muted);">{{ _ctotal }} / 15</div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if _cbreakdown %}
+        <div style="padding:0.75rem 0.875rem 0.625rem;">
+          {% for _fname, _fkey in _cfactors %}
+          {% set _fdata = _cbreakdown.get(_fkey) or {} %}
+          {% set _fscore = _fdata.get('score') %}
+          {% set _fbar = ((_fscore or 0) / 3 * 100) %}
+          {% set _fcol = '#B4B2A9' if _fscore is none else ('#639922' if (_fscore or 0) / 3 >= 0.7 else ('#BA7517' if (_fscore or 0) / 3 >= 0.3 else '#E24B4A')) %}
+          <div style="margin-bottom:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:0.72rem;margin-bottom:3px;">
+              <span style="color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;" title="{{ _fdata.get('reason', '') }}">{{ _fname }}</span>
+              <span style="font-size:0.7rem;font-weight:600;color:{{ _fcol }};flex-shrink:0;">
+                {% if _fscore is not none %}{{ _fscore }} / {{ _fdata.get('max', 3) }}{% else %}?{% endif %}
+              </span>
+            </div>
+            <div style="height:5px;background:var(--bg-primary);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:{{ _fbar }}%;background:{{ _fcol }};border-radius:3px;"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if cmp.get('error') %}
+        <div style="padding:0.5rem 0.875rem;font-size:0.72rem;color:var(--accent-red);border-top:1px solid var(--border);">{{ cmp.get('error') }}</div>
+        {% endif %}
+      </div>
+    </aside>
+
+    <main class="bl-main" style="min-width:0;">
+  <div data-card="category_checks">
+  <div class="section-title">Category Checks</div>
+  {% set _ck = ['specs_vs_category', 'title_vs_category'] %}
+  {% set _ck_wm = ['ISQ vs MCAT Agent', 'Title vs MCAT Agent'] %}
+  <div class="dashboard-grid grid-2" style="margin-bottom:1rem;">
+    {% for label, verdict in checks %}
+    {% set _vs = verdict.get('status', '') %}
+    {% set _vsl = _vs|lower %}
+    {% set _vcol = '#059669' if _vsl in ('correct','not_outlier','not-outlier','not outlier') else ('#dc2626' if _vsl in ('wrong','outlier') else 'var(--text-muted)') %}
+    {% set _vbg = 'rgba(5,150,105,0.12)' if _vsl in ('correct','not_outlier','not-outlier','not outlier') else ('rgba(220,38,38,0.12)' if _vsl in ('wrong','outlier') else 'transparent') %}
+    {% set _vbd = 'rgba(5,150,105,0.25)' if _vsl in ('correct','not_outlier','not-outlier','not outlier') else ('rgba(220,38,38,0.3)' if _vsl in ('wrong','outlier') else 'var(--border)') %}
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(217,119,6,0.1);color:var(--accent-orange);">C</div>
+        <div class="card-title">{{ label }}</div>
+      </div>
+      <div style="margin-bottom:6px;">
+        <span class="verdict" style="background:{{ _vbg }};color:{{ _vcol }};border:1px solid {{ _vbd }};">{{ _vs or '-' }}</span>
+      </div>
+      <div class="check-reason">{{ verdict.get('reason', '-') or '-' }}</div>
+      {{ weight_badge(_ck[loop.index0], sc=scoring_result) }}
+      {% if recheck_lookup and recheck_lookup.get(_ck_wm[loop.index0]) %}
+      {% set _rc_ck = recheck_lookup[_ck_wm[loop.index0]] %}
+      {% set _rc_ck_col = '#059669' if _rc_ck.status == 'not_outlier' else '#dc2626' %}
+      {% set _rc_ck_bg = 'rgba(5,150,105,0.08)' if _rc_ck.status == 'not_outlier' else 'rgba(220,38,38,0.08)' %}
+      {% set _rc_ck_bd = 'rgba(5,150,105,0.25)' if _rc_ck.status == 'not_outlier' else 'rgba(220,38,38,0.3)' %}
+      <div style="margin-top:8px;padding:6px 10px;border-radius:6px;background:{{ _rc_ck_bg }};border:1px solid {{ _rc_ck_bd }};">
+        <div style="font-size:0.67rem;font-weight:700;color:{{ _rc_ck_col }};text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">⟳ Rechecked{% if _rc_ck.before_status %} | Was: {{ _rc_ck.before_status | title }}{% endif %} → {{ 'Not Outlier' if _rc_ck.status == 'not_outlier' else 'Confirmed Outlier' }}</div>
+        <div style="font-size:0.74rem;color:var(--text-secondary);">{{ _rc_ck.reason }}</div>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="dashboard-grid grid-1" style="margin-bottom:1rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">TS</div>
+        <div class="card-title">Title vs Specs</div>
+      </div>
+      {% set ts = data.get('title_spec_verdict', {}) %}
+      {% set _ts = ts.get('status', '') %}
+      {% set _tsl = _ts|lower %}
+      {% set _tscol = '#059669' if _tsl in ('correct','not_outlier','not-outlier','not outlier') else ('#dc2626' if _tsl in ('wrong','outlier') else 'var(--text-muted)') %}
+      {% set _tsbg  = 'rgba(5,150,105,0.12)' if _tsl in ('correct','not_outlier','not-outlier','not outlier') else ('rgba(220,38,38,0.12)' if _tsl in ('wrong','outlier') else 'transparent') %}
+      {% set _tsbd  = 'rgba(5,150,105,0.25)' if _tsl in ('correct','not_outlier','not-outlier','not outlier') else ('rgba(220,38,38,0.3)' if _tsl in ('wrong','outlier') else 'var(--border)') %}
+      <div style="margin-bottom:6px;">
+        <span class="verdict" style="background:{{ _tsbg }};color:{{ _tscol }};border:1px solid {{ _tsbd }};">{{ _ts or '-' }}</span>
+      </div>
+      <div class="check-reason">{{ (ts.get('reason') or '-') }}</div>
+      {{ weight_badge('title_vs_specs', sc=scoring_result) }}
+      {% if recheck_lookup and recheck_lookup.get('Title ISQ Agent') %}
+      {% set _rc_ts = recheck_lookup['Title ISQ Agent'] %}
+      {% set _rc_ts_col = '#059669' if _rc_ts.status == 'not_outlier' else '#dc2626' %}
+      {% set _rc_ts_bg = 'rgba(5,150,105,0.08)' if _rc_ts.status == 'not_outlier' else 'rgba(220,38,38,0.08)' %}
+      {% set _rc_ts_bd = 'rgba(5,150,105,0.25)' if _rc_ts.status == 'not_outlier' else 'rgba(220,38,38,0.3)' %}
+      <div style="margin-top:8px;padding:6px 10px;border-radius:6px;background:{{ _rc_ts_bg }};border:1px solid {{ _rc_ts_bd }};">
+        <div style="font-size:0.67rem;font-weight:700;color:{{ _rc_ts_col }};text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">⟳ Rechecked{% if _rc_ts.before_status %} | Was: {{ _rc_ts.before_status | title }}{% endif %} → {{ 'Not Outlier' if _rc_ts.status == 'not_outlier' else 'Confirmed Outlier' }}</div>
+        <div style="font-size:0.74rem;color:var(--text-secondary);">{{ _rc_ts.reason }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  </div>
+
+  <div data-card="agent2_checks">
+  <div class="section-title">Agent 2 Checks</div>
+  <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,0.1);color:var(--accent-cyan);">SC</div>
+        <div class="card-title">Specs vs Category (Agent 2)</div>
+      </div>
+      {% set sca2 = specs_vs_cat_a2_result or {} %}
+      {% set _sca2s = sca2.get('Status', '') or sca2.get('status', '') %}
+      {% set _sca2_color = 'var(--accent-green)' if _sca2s == 'Correct' else ('#f87171' if _sca2s == 'Incorrect' else 'var(--text-muted)') %}
+      {% set _sca2_score = sca2.get('Score') if sca2.get('Score') is not none else sca2.get('score') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ _sca2_color }};">{{ _sca2s or '-' }}</div><div class="stat-label">Status</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ ('%.2f' | format(_sca2_score|float)) if _sca2_score is not none else '-' }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ sca2.get('Confidence', '') or sca2.get('confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+      </div>
+      <div class="check-reason">{{ sca2.get('Reason', '') or sca2.get('reason', '') or sca2.get('reasoning', '-') or '-' }}</div>
+      {% set _sca2_issues = sca2.get('Issues', sca2.get('issues', [])) %}
+      {% if _sca2_issues %}
+      <ul style="margin:6px 0 0 18px;padding:0;font-size:0.78rem;color:var(--text-secondary);">
+        {% for iss in _sca2_issues %}<li><b>{{ iss.get('type', '') }}</b>{% if iss.get('fields') %} [{{ iss.get('fields') | join(', ') }}]{% endif %}: {{ iss.get('detail', '') }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if sca2.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ sca2.get('error') }}</div>{% endif %}
+      {{ weight_badge('specs_vs_category', sc2=scoring_result_2) }}
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(217,119,6,0.1);color:var(--accent-orange);">TC</div>
+        <div class="card-title">Title vs Category (Agent 2)</div>
+      </div>
+      {% set tca2 = title_vs_cat_a2_result or {} %}
+      {% set _tca2s = tca2.get('Status', '') or tca2.get('status', '') %}
+      {% set _tca2_color = 'var(--accent-green)' if _tca2s == 'Correct' else ('#f87171' if _tca2s == 'Incorrect' else 'var(--text-muted)') %}
+      {% set _tca2_score = tca2.get('Score') if tca2.get('Score') is not none else tca2.get('score') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ _tca2_color }};">{{ _tca2s or '-' }}</div><div class="stat-label">Status</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ ('%.2f' | format(_tca2_score|float)) if _tca2_score is not none else '-' }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ tca2.get('Confidence', '') or tca2.get('confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+      </div>
+      <div class="check-reason">{{ tca2.get('Reason', '') or tca2.get('reason', '') or tca2.get('reasoning', '-') or '-' }}</div>
+      {% set _tca2_issues = tca2.get('Issues', tca2.get('issues', [])) %}
+      {% if _tca2_issues %}
+      <ul style="margin:6px 0 0 18px;padding:0;font-size:0.78rem;color:var(--text-secondary);">
+        {% for iss in _tca2_issues %}<li><b>{{ iss.get('type', '') }}</b>{% if iss.get('fields') %} [{{ iss.get('fields') | join(', ') }}]{% endif %}: {{ iss.get('detail', '') }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if tca2.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ tca2.get('error') }}</div>{% endif %}
+      {{ weight_badge('title_vs_category', sc2=scoring_result_2) }}
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(16,185,129,0.1);color:var(--accent-green);">TS2</div>
+        <div class="card-title">Title vs Specs (Agent 2)</div>
+      </div>
+      {% set tvsa2 = title_vs_specs_a2_result or {} %}
+      {% set _tvsa2s = tvsa2.get('Status', '') or tvsa2.get('status', '') %}
+      {% set _tvsa2_color = 'var(--accent-green)' if _tvsa2s == 'Correct' else ('#f87171' if _tvsa2s == 'Incorrect' else 'var(--text-muted)') %}
+      {% set _tvsa2_score = tvsa2.get('Score') if tvsa2.get('Score') is not none else tvsa2.get('score') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ _tvsa2_color }};">{{ _tvsa2s or '-' }}</div><div class="stat-label">Status</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ ('%.2f' | format(_tvsa2_score|float)) if _tvsa2_score is not none else '-' }}</div><div class="stat-label">Score</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ tvsa2.get('Confidence', '') or tvsa2.get('confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+      </div>
+      <div class="check-reason">{{ tvsa2.get('Reason', '') or tvsa2.get('reason', '') or tvsa2.get('reasoning', '-') or '-' }}</div>
+      {% set _tvsa2_issues = tvsa2.get('Issues', tvsa2.get('issues', [])) %}
+      {% if _tvsa2_issues %}
+      <ul style="margin:6px 0 0 18px;padding:0;font-size:0.78rem;color:var(--text-secondary);">
+        {% for iss in _tvsa2_issues %}<li><b>{{ iss.get('type', '') }}</b>{% if iss.get('fields') %} [{{ iss.get('fields') | join(', ') }}]{% endif %}: {{ iss.get('detail', '') }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if tvsa2.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ tvsa2.get('error') }}</div>{% endif %}
+      {{ weight_badge('title_vs_specs', sc2=scoring_result_2) }}
+    </div>
+  </div>
+  </div>
+
+  <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
+    <div class="card" data-card="buyer_viewed">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">BV</div>
+        <div class="card-title">Buyer Viewed</div>
+      </div>
+      {% set br = buyer_result or {} %}
+      {% set _st = br.get('status', '') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _st == 'not_outlier' else ('#f87171' if _st == 'outlier' else 'var(--text-muted)') }};">{{ _st or '-' }}</div><div class="stat-label">Status</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ br.get('product_matched') or '-' }}</div><div class="stat-label">Product Matched</div></div>
+      </div>
+      <div class="check-reason">{{ br.get('reason', '-') or '-' }}</div>
+      {% if br.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ br.get('error') }}</div>{% endif %}
+    </div>
+
+    <div class="card" data-card="buyer_profile">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">BP</div>
+        <div class="card-title">Buyer Profile</div>
+      </div>
+      {% set bp = buyer_profile_result or {} %}
+      {% set _bpstatus = bp.get('status', '') %}
+      {% set _bps = bp.get('Profile_Status', '') %}
+      {% set _bpt = bp.get('Tenure', '') %}
+      {% set _bpbl = bp.get('prev_buyleads') or [] %}
+      {% set _bpenq = bp.get('prev_enquiries') or [] %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _bpstatus == 'related' else ('#f87171' if _bpstatus == 'not related' else 'var(--text-muted)') }};">{{ _bpstatus or '-' }}</div><div class="stat-label">Coherence</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _bps == 'Complete' else '#f87171' }};">{{ _bps or '-' }}</div><div class="stat-label">Profile</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ _bpt or '-' }}</div><div class="stat-label">Tenure</div></div>
+      </div>
+      <div class="check-reason">{{ bp.get('reasoning', '-') or '-' }}</div>
+      {% if bp.get('Profile_Check_Reason') %}<div class="check-reason" style="margin-top:6px;color:var(--text-muted);">Profile: {{ bp.get('Profile_Check_Reason') }}</div>{% endif %}
+      {% if bp.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ bp.get('error') }}</div>{% endif %}
+      {% if _bpbl or _bpenq %}
+      <button type="button" class="bp-view-btn" onclick="document.getElementById('bp-prior-modal').style.display='flex'">
+        View prior activity ({{ _bpbl|length }} BL · {{ _bpenq|length }} enq)
+      </button>
+      {% endif %}
+
+      <div id="bp-prior-modal" class="csv-modal-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="csv-modal" role="dialog" aria-modal="true">
+          <div class="csv-modal-header">
+            <span>Buyer's Prior Activity — fields used by the agent</span>
+            <button type="button" class="csv-modal-close" onclick="document.getElementById('bp-prior-modal').style.display='none'">&times;</button>
+          </div>
+          <div class="csv-modal-section">
+            <span class="csv-modal-label">Previous BuyLeads ({{ _bpbl|length }})</span>
+            {% for b in _bpbl %}
+            <div class="bp-prior-item">
+              <div class="bp-prior-title">{{ b.get('title') or '-' }}</div>
+              {% if b.get('desc') %}<div class="bp-prior-sub">{{ b.get('desc') }}</div>{% endif %}
+            </div>
+            {% else %}
+            <div class="bp-prior-empty">None</div>
+            {% endfor %}
+          </div>
+          <div class="csv-modal-section">
+            <span class="csv-modal-label">Previous Enquiries ({{ _bpenq|length }})</span>
+            {% for e in _bpenq %}
+            <div class="bp-prior-item">
+              <div class="bp-prior-title">{{ e.get('subject') or '-' }}</div>
+              {% if e.get('message') %}<div class="bp-prior-sub">{{ e.get('message') }}</div>{% endif %}
+            </div>
+            {% else %}
+            <div class="bp-prior-empty">None</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-card="buyer_viewed_vs_csl">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">VC</div>
+        <div class="card-title">Buyer Viewed vs CSL</div>
+      </div>
+      {% set vc = buyer_viewed_vs_csl_result or {} %}
+      {% set _vcst = vc.get('status', '') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _vcst == 'matched' else ('#f87171' if _vcst == 'not matched' else 'var(--text-muted)') }};">{{ _vcst or '-' }}</div><div class="stat-label">CSL Match</div></div>
+      </div>
+      <div class="check-reason">{{ vc.get('reason', '-') or '-' }}</div>
+      {% if vc.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ vc.get('error') }}</div>{% endif %}
+    </div>
+  </div>
+
+  <div class="dashboard-grid grid-3" style="margin-bottom:1rem;">
+    <div class="card" data-card="retail_agent_2">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(16,185,129,0.1);color:var(--accent-green);">R2</div>
+        <div class="card-title">Retail Classification (Agent 2)</div>
+      </div>
+      {% set r2 = retail_agent_2_result or {} %}
+      {% set _r2c = r2.get('Classification', '') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ 'var(--accent-green)' if _r2c == 'Retail' else ('var(--accent-red)' if _r2c == 'Non-Retail' else 'var(--accent-orange)') }};">{{ _r2c or '-' }}</div><div class="stat-label">Classification</div></div>
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;">{{ r2.get('Confidence', '-') }}</div><div class="stat-label">Confidence</div></div>
+      </div>
+      <div class="check-reason">{{ r2.get('Reason', '-') or '-' }}</div>
+      {% if r2.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ r2.get('error') }}</div>{% endif %}
+      {{ weight_badge('retail_classification', sc=scoring_result, sc2=scoring_result_2) }}
+    </div>
+
+    <div class="card" data-card="isq_validation">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);color:var(--accent-purple);">IQ</div>
+        <div class="card-title">ISQ Validation</div>
+      </div>
+      {% set isq = isq_result or {} %}
+      {% set _isqs = isq.get('status', '') %}
+      {% set _isq_color = 'var(--accent-green)' if _isqs == 'not_outlier' else ('#f87171' if _isqs == 'outlier' else 'var(--text-muted)') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ _isq_color }};">{{ _isqs or '-' }}</div><div class="stat-label">Status</div></div>
+      </div>
+      <div class="check-reason">{{ isq.get('reason', '-') or '-' }}</div>
+      {% if isq.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ isq.get('error') }}</div>{% endif %}
+      {{ weight_badge('isq_validation', sc=scoring_result, sc2=scoring_result_2) }}
+      {% if recheck_lookup and recheck_lookup.get('Inter ISQ Agent') %}
+      {% set _rc_isq = recheck_lookup['Inter ISQ Agent'] %}
+      {% set _rc_isq_col = '#059669' if _rc_isq.status == 'not_outlier' else '#dc2626' %}
+      {% set _rc_isq_bg = 'rgba(5,150,105,0.08)' if _rc_isq.status == 'not_outlier' else 'rgba(220,38,38,0.08)' %}
+      {% set _rc_isq_bd = 'rgba(5,150,105,0.25)' if _rc_isq.status == 'not_outlier' else 'rgba(220,38,38,0.3)' %}
+      <div style="margin-top:8px;padding:6px 10px;border-radius:6px;background:{{ _rc_isq_bg }};border:1px solid {{ _rc_isq_bd }};">
+        <div style="font-size:0.67rem;font-weight:700;color:{{ _rc_isq_col }};text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">⟳ Rechecked{% if _rc_isq.before_status %} | Was: {{ _rc_isq.before_status | title }}{% endif %} → {{ 'Not Outlier' if _rc_isq.status == 'not_outlier' else 'Confirmed Outlier' }}</div>
+        <div style="font-size:0.74rem;color:var(--text-secondary);">{{ _rc_isq.reason }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="card" data-card="description">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(37,99,235,0.1);color:var(--accent-blue);">DC</div>
+        <div class="card-title">Description Coherence</div>
+      </div>
+      {% set desc = desc_result or {} %}
+      {% set _descs = desc.get('status', '') %}
+      {% set _desc_color = 'var(--accent-green)' if _descs == 'not_outlier' else ('#f87171' if _descs == 'outlier' else 'var(--text-muted)') %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <div class="stat-card"><div class="stat-value" style="font-size:1rem;color:{{ _desc_color }};">{{ _descs or '-' }}</div><div class="stat-label">Status</div></div>
+      </div>
+      <div class="check-reason">{{ desc.get('reason', '-') or '-' }}</div>
+      {% if desc.get('error') %}<div class="check-reason" style="margin-top:6px;color:var(--accent-red);">{{ desc.get('error') }}</div>{% endif %}
+      {% set _kw = activity_keywords or [] %}
+      {% set _stm = searched_terms_match if (searched_terms_match and searched_terms_match.get('terms')) else None %}
+      {% if _kw or _stm %}
+      <button type="button" class="bp-view-btn" onclick="document.getElementById('desc-kw-modal').style.display='flex'">
+        View keyword analysis{% if _kw %} · {{ _kw|length }} suggested{% endif %}{% if _stm %} · {{ _stm.get('found_count', 0) }}/{{ _stm.get('total', 0) }} matched{% endif %}
+      </button>
+
+      <div id="desc-kw-modal" class="csv-modal-backdrop" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+        <div class="csv-modal" role="dialog" aria-modal="true">
+          <div class="csv-modal-header">
+            <span>Keyword Analysis — buyer activity vs description</span>
+            <button type="button" class="csv-modal-close" onclick="document.getElementById('desc-kw-modal').style.display='none'">&times;</button>
+          </div>
+          {% if _kw %}
+          <div class="csv-modal-section">
+            <span class="csv-modal-label">Suggested keywords (from buyer activity)</span>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+              {% for kw in _kw %}<span style="background:rgba(124,58,237,0.12);color:var(--accent-purple);padding:2px 9px;border-radius:6px;font-size:0.74rem;font-weight:600;">{{ kw }}</span>{% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% if _stm %}
+          <div class="csv-modal-section">
+            <span class="csv-modal-label">Searched terms vs activity log ({{ _stm.get('found_count', 0) }}/{{ _stm.get('total', 0) }} found)</span>
+            <ul style="margin:4px 0 0;padding:0 0 0 4px;list-style:none;font-size:0.78rem;">
+              {% for t in _stm.get('terms', []) %}
+              <li style="margin:2px 0;">
+                {% if t.get('found') %}<span style="color:var(--accent-green);font-weight:700;">✓</span>{% else %}<span style="color:#f87171;font-weight:700;">✗</span>{% endif %}
+                <b>{{ t.get('term') }}</b>
+                {% if t.get('found') %}<span style="color:var(--text-muted);"> — matched “{{ t.get('matched_keyword') }}”</span>{% else %}<span style="color:var(--text-muted);"> — not in activity log</span>{% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      {{ weight_badge('description_coherence', sc=scoring_result, sc2=scoring_result_2) }}
+    </div>
+  </div>
+
+  {# ── Quantity Audit Card (deterministic, no LLM) ── #}
+  {% set qa = quantity_audit_result or {} %}
+  {% set _qas = qa.get('status', '') %}
+  {% set _qa_absurd = _qas == 'Absurd' %}
+  {% set _qacol = '#dc2626' if _qa_absurd else ('var(--text-muted)' if _qas == 'Unverifiable' else '#059669') %}
+  {% set _qabg = 'rgba(220,38,38,0.12)' if _qa_absurd else ('transparent' if _qas == 'Unverifiable' else 'rgba(5,150,105,0.12)') %}
+  {% set _qabd = 'rgba(220,38,38,0.3)' if _qa_absurd else ('var(--border)' if _qas == 'Unverifiable' else 'rgba(5,150,105,0.25)') %}
+  <div class="dashboard-grid grid-1" data-card="quantity_audit" style="margin-bottom:1rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(220,38,38,0.1);color:#dc2626;">QA</div>
+        <div class="card-title">Quantity Audit</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0.75rem;align-items:center;">
+        <span class="verdict" style="background:{{ _qabg }};color:{{ _qacol }};border:1px solid {{ _qabd }};">{{ _qas or '-' }}</span>
+        {% if qa.get('qty_raw') %}<span style="font-size:0.78rem;color:var(--text-secondary);"><strong>Qty:</strong> {{ qa.get('qty_raw') }}</span>{% endif %}
+      </div>
+      <div class="check-reason">{{ qa.get('reason', '-') or '-' }}</div>
+      {% if qa.get('rules_fired') %}
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+        {% for r in qa.get('rules_fired', []) %}<span style="background:rgba(220,38,38,0.1);color:#dc2626;padding:2px 9px;border-radius:6px;font-size:0.72rem;font-weight:600;">{{ r }}</span>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div style="display:grid;gap:0.5rem;margin-bottom:1.5rem;">
+    <div class="accordion">
+      <div class="accordion-header"><span>Audit payload sent</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer payload-json-viewer">{{ payload | tojson(indent=2) }}</div></div>
+    </div>
+    {% if is_detail_view %}
+    {% if buylead_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>BuyLead detail API response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer buylead-json-viewer">{{ buylead_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Audit API response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer audit-json-viewer">{{ raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if buyer_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Buyer viewed agent response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer buyer-json-viewer">{{ buyer_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if retail_agent_2_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Retail Agent 2 response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer retail-agent-2-json-viewer">{{ retail_agent_2_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if isq_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>ISQ Validation response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer isq-json-viewer">{{ isq_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if desc_raw_json %}
+    <div class="accordion">
+      <div class="accordion-header"><span>Description Agent response</span><span class="accordion-arrow">▾</span></div>
+      <div class="accordion-body"><div class="json-viewer desc-json-viewer">{{ desc_raw_json }}</div></div>
+    </div>
+    {% endif %}
+    {% if trace_id %}
+    <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:0.3rem;">
+      Step-by-step execution log → <a href="{{ _prefix }}/traces/{{ trace_id }}" style="color:var(--accent-blue);font-weight:600;">View Trace Steps</a>
+    </div>
+    {% endif %}
+    {% else %}
+    {% if trace_id %}
+    <div style="font-size:0.75rem;color:var(--text-muted);text-align:center;padding:0.4rem;">
+      Raw API responses are available in the trace step view →
+      <a href="{{ _prefix }}/traces/{{ trace_id }}" style="color:var(--accent-blue);font-weight:600;">View Trace Steps</a>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+
+    </main>
+  </div>
+
+  {% if buyer_activity %}
+  <div data-card="buyer_activity">
+  <div class="section-title" style="margin-top:0.5rem;">
+    Buyer Activity
+    {% if buyer_glid %}<span style="font-weight:400;color:var(--text-muted);font-size:0.8rem;">· buyer GLID {{ buyer_glid }}</span>{% endif %}
+  </div>
+  {% if buyer_activity.ok %}
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:0.78rem;">
+      <span style="background:rgba(99,153,34,0.15);color:#3B6D11;padding:2px 10px;border-radius:999px;font-weight:600;">{{ buyer_activity.status }}</span>
+      <span><strong>Events:</strong> {{ buyer_activity.summary.total }}</span>
+      <span><strong>BuyLeads:</strong> {{ buyer_activity.summary.bl_count }}</span>
+      <span><strong>Enquiries:</strong> {{ buyer_activity.summary.enq_count }}</span>
+      {% if buyer_activity.summary.top_city %}<span><strong>City:</strong> {{ buyer_activity.summary.top_city }}</span>{% endif %}
+      <span><strong>Window:</strong> {{ buyer_activity.summary.range_from }} → {{ buyer_activity.summary.range_to }}</span>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:0.75rem;">
+    <input id="act-filter" class="form-control" type="text" placeholder="Filter by keyword…" style="max-width:220px;" autocomplete="off" />
+    <select id="act-type" class="form-control" style="max-width:170px;">
+      <option value="">All types ({{ buyer_activity.summary.total }})</option>
+      {% for t, n in buyer_activity.type_counts.items() %}
+      <option value="{{ t }}">{{ t }} ({{ n }})</option>
+      {% endfor %}
+    </select>
+    <select id="act-sort" class="form-control" style="max-width:160px;margin-left:auto;">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+    </select>
+  </div>
+
+  <div id="act-list" style="border-left:2px solid var(--border);padding-left:18px;margin-bottom:1.5rem;">
+    {% for ev in buyer_activity.events %}
+    {% set c = {'BL': ['rgba(99,153,34,0.15)','#3B6D11'], 'ENQ': ['rgba(37,99,235,0.12)','#1e40af'], 'Browse': ['rgba(120,120,120,0.1)','var(--text-secondary)']}.get(ev.activity_type, ['rgba(120,120,120,0.1)','var(--text-muted)']) %}
+    <div class="act-row" data-keyword="{{ ev.keyword|lower }}" data-type="{{ ev.activity_type }}" data-time="{{ ev.datetime }}" style="position:relative;margin-bottom:10px;">
+      <div style="position:absolute;left:-25px;top:10px;width:10px;height:10px;border-radius:50%;background:{{ c[1] }};"></div>
+      <div class="card" style="padding:0.7rem 0.9rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:5px;">
+          <span style="background:{{ c[0] }};color:{{ c[1] }};padding:1px 9px;border-radius:6px;font-size:0.74rem;font-weight:700;">{{ ev.activity_type }}{% if ev.activity_id %} · {{ ev.activity_id }}{% endif %}</span>
+          {% if ev.keyword %}<span style="font-size:0.82rem;font-weight:600;color:var(--text-primary);">{{ ev.keyword }}</span>{% endif %}
+          <span style="font-size:0.72rem;color:var(--text-muted);margin-left:auto;">{{ ev.time_label }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px 16px;font-size:0.72rem;color:var(--text-muted);">
+          {% if ev.mcat_name %}<span><strong>mcat:</strong> {{ ev.mcat_name }}{% if ev.mcat_id %} ({{ ev.mcat_id }}){% endif %}</span>{% elif ev.mcat_id %}<span><strong>mcat_id:</strong> {{ ev.mcat_id }}</span>{% endif %}
+          {% if ev.product_disp_id %}<span><strong>product:</strong> {{ ev.product_disp_id }}</span>{% endif %}
+          {% if ev.seller_glusr_id %}<span><strong>seller:</strong> {{ ev.seller_glusr_id }}</span>{% endif %}
+          {% if ev.city %}<span><strong>pref city:</strong> {{ ev.city }}</span>{% endif %}
+        </div>
+        {% if ev.request_url %}<div style="font-family:monospace;font-size:0.7rem;color:var(--text-primary);word-break:break-all;margin-top:5px;">{{ ev.request_url }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div id="act-empty" style="display:none;font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">No activity matches the filter.</div>
+  {% else %}
+  <div class="card" style="margin-bottom:1.5rem;padding:0.875rem;font-size:0.8rem;color:var(--text-muted);">
+    No buyer activity available{% if buyer_activity.error %} — {{ buyer_activity.error }}{% endif %}.
+  </div>
+  {% endif %}
+  </div>
+  {% endif %}
+
+</div>
+<style>
+  .card { display: flex; flex-direction: column; }
+  @media (max-width: 1100px) {
+    .bl-audit-layout { grid-template-columns: 1fr !important; }
+    .bl-side { position: static !important; }
+  }
+</style>
+<script>
+(function () {
+  var list = document.getElementById('act-list');
+  if (!list) return;
+  var filter = document.getElementById('act-filter');
+  var typeSel = document.getElementById('act-type');
+  var sortSel = document.getElementById('act-sort');
+  var emptyEl = document.getElementById('act-empty');
+  var rows = Array.prototype.slice.call(list.querySelectorAll('.act-row'));
+
+  function apply() {
+    var q = (filter.value || '').trim().toLowerCase();
+    var t = typeSel.value;
+    var ordered = rows.slice().sort(function (a, b) {
+      var ta = a.dataset.time, tb = b.dataset.time;  // YYYYMMDDhhmmss → lexicographic = chronological
+      return sortSel.value === 'oldest' ? ta.localeCompare(tb) : tb.localeCompare(ta);
+    });
+    var shown = 0;
+    ordered.forEach(function (row) {
+      var match = (!q || row.dataset.keyword.indexOf(q) !== -1) && (!t || row.dataset.type === t);
+      row.style.display = match ? '' : 'none';
+      if (match) shown++;
+      list.appendChild(row);
+    });
+    if (emptyEl) emptyEl.style.display = shown ? 'none' : '';
+  }
+  filter.addEventListener('input', apply);
+  typeSel.addEventListener('change', apply);
+  sortSel.addEventListener('change', apply);
+  apply();
+})();
+</script>
+<script>
+if (window.BLSettings) window.BLSettings.applyCardVisibility();
+</script>
+{% endblock %}

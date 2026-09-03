@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div class="hero">
+    <h1>Buyer Activity</h1>
+    <p>Fetch a buyer's recent activity (browse, search, enquiry, BuyLead) and view it as a timeline.</p>
+  </div>
+
+  <form id="activity-form" class="form-card" method="post" action="/activity" autocomplete="off">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+      <div class="form-group">
+        <label class="form-label" for="glusr-id">GLID (glusrId)</label>
+        <input id="glusr-id" class="form-control" name="glusr_id" type="text"
+               value="{{ form.glusr_id }}" placeholder="e.g. 270765971" inputmode="numeric" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="logtime">Log time — newer (YYYYMMDDhhmmss)</label>
+        <input id="logtime" class="form-control" name="logtime" type="text"
+               value="{{ form.logtime }}" placeholder="20260623165023" inputmode="numeric" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="endlogtime">End log time — older (YYYYMMDDhhmmss)</label>
+        <input id="endlogtime" class="form-control" name="endlogtime" type="text"
+               value="{{ form.endlogtime }}" placeholder="20260621165020" inputmode="numeric" />
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;">
+      <button type="submit" class="btn btn-primary" id="submit-btn">Fetch Activity</button>
+      <a href="/" class="btn btn-outline btn-sm">Home</a>
+    </div>
+  </form>
+
+  {% if result %}
+    {% if result.ok %}
+      <div class="card" style="max-width:980px;margin:1.25rem auto 0;padding:1rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;font-size:0.8rem;">
+          <span style="background:#dcfce7;color:#166534;padding:2px 10px;border-radius:999px;font-weight:600;">{{ result.status }}</span>
+          <span><strong>GLID:</strong> {{ result.summary.glid or '—' }}</span>
+          <span><strong>Events:</strong> {{ result.summary.total }}</span>
+          <span><strong>BuyLeads:</strong> {{ result.summary.bl_count }}</span>
+          <span><strong>Enquiries:</strong> {{ result.summary.enq_count }}</span>
+          {% if result.summary.top_city %}<span><strong>City:</strong> {{ result.summary.top_city }}</span>{% endif %}
+          <span><strong>Window:</strong> {{ result.summary.range_from }} → {{ result.summary.range_to }}</span>
+        </div>
+      </div>
+
+      <div style="max-width:980px;margin:1rem auto 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+        <input id="act-filter" class="form-control" type="text" placeholder="Filter by keyword…"
+               style="max-width:220px;" autocomplete="off" />
+        <select id="act-type" class="form-control" style="max-width:170px;">
+          <option value="">All types ({{ result.summary.total }})</option>
+          {% for t, n in result.type_counts.items() %}
+          <option value="{{ t }}">{{ t }} ({{ n }})</option>
+          {% endfor %}
+        </select>
+        <select id="act-sort" class="form-control" style="max-width:160px;margin-left:auto;">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+        </select>
+      </div>
+
+      <div id="act-list" style="max-width:980px;margin:0.75rem auto 0;border-left:2px solid var(--border, #e5e7eb);padding-left:18px;">
+        {% for ev in result.events %}
+        {% set c = {'BL': ['#dcfce7','#166534'], 'ENQ': ['#dbeafe','#1e40af'], 'Browse': ['#f3f4f6','#374151']}.get(ev.activity_type, ['#f3f4f6','#6b7280']) %}
+        <div class="act-row" data-keyword="{{ ev.keyword|lower }}" data-type="{{ ev.activity_type }}" data-time="{{ ev.datetime }}"
+             style="position:relative;margin-bottom:10px;">
+          <div style="position:absolute;left:-25px;top:10px;width:10px;height:10px;border-radius:50%;background:{{ c[1] }};"></div>
+          <div class="card" style="padding:0.7rem 0.9rem;">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:5px;">
+              <span style="background:{{ c[0] }};color:{{ c[1] }};padding:1px 9px;border-radius:6px;font-size:0.74rem;font-weight:700;">
+                {{ ev.activity_type }}{% if ev.activity_id %} · {{ ev.activity_id }}{% endif %}
+              </span>
+              {% if ev.keyword %}<span style="font-size:0.82rem;font-weight:600;color:var(--text-primary);">{{ ev.keyword }}</span>{% endif %}
+              <span style="font-size:0.72rem;color:var(--text-muted);margin-left:auto;">{{ ev.time_label }}</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px 16px;font-size:0.72rem;color:var(--text-muted);">
+              {% if ev.mcat_name %}<span><strong>mcat:</strong> {{ ev.mcat_name }}{% if ev.mcat_id %} ({{ ev.mcat_id }}){% endif %}</span>
+              {% elif ev.mcat_id %}<span><strong>mcat_id:</strong> {{ ev.mcat_id }}</span>{% endif %}
+              {% if ev.product_disp_id %}<span><strong>product:</strong> {{ ev.product_disp_id }}</span>{% endif %}
+              {% if ev.seller_glusr_id %}<span><strong>seller:</strong> {{ ev.seller_glusr_id }}</span>{% endif %}
+              {% if ev.city %}<span><strong>pref city:</strong> {{ ev.city }}</span>{% endif %}
+            </div>
+            {% if ev.request_url %}<div style="font-family:monospace;font-size:0.7rem;color:var(--text-primary);word-break:break-all;margin-top:5px;">{{ ev.request_url }}</div>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div id="act-empty" style="display:none;max-width:980px;margin:0.5rem auto 0;font-size:0.8rem;color:var(--text-muted);">No activity matches the filter.</div>
+    {% else %}
+      <div class="card" style="max-width:980px;margin:1.25rem auto 0;padding:1rem;border-left:3px solid #dc2626;">
+        <div style="font-weight:600;color:#dc2626;margin-bottom:6px;">
+          Activity fetch failed — status: {{ result.status }}{% if result.code is not none %} (code {{ result.code }}){% endif %}
+        </div>
+        <div style="font-size:0.8rem;color:var(--text-primary);word-break:break-word;">{{ result.error }}</div>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+
+<script>
+(function () {
+  var list = document.getElementById('act-list');
+  if (!list) return;
+  var filter = document.getElementById('act-filter');
+  var typeSel = document.getElementById('act-type');
+  var sortSel = document.getElementById('act-sort');
+  var emptyEl = document.getElementById('act-empty');
+  var rows = Array.prototype.slice.call(list.querySelectorAll('.act-row'));
+
+  function apply() {
+    var q = (filter.value || '').trim().toLowerCase();
+    var t = typeSel.value;
+    var ordered = rows.slice().sort(function (a, b) {
+      var ta = a.dataset.time, tb = b.dataset.time;  // YYYYMMDDhhmmss → lexicographic = chronological
+      return sortSel.value === 'oldest' ? ta.localeCompare(tb) : tb.localeCompare(ta);
+    });
+    var shown = 0;
+    ordered.forEach(function (row) {
+      var match = (!q || row.dataset.keyword.indexOf(q) !== -1) && (!t || row.dataset.type === t);
+      row.style.display = match ? '' : 'none';
+      if (match) shown++;
+      list.appendChild(row);  // reorder in place
+    });
+    if (emptyEl) emptyEl.style.display = shown ? 'none' : '';
+  }
+  filter.addEventListener('input', apply);
+  typeSel.addEventListener('change', apply);
+  sortSel.addEventListener('change', apply);
+  apply();
+})();
+</script>
+{% endblock %}

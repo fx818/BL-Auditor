@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.25rem;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Windmill Flow</div>
+      <h2 style="font-size:1.4rem;font-weight:800;">BL Auditor — Single Run</h2>
+    </div>
+    <a href="/" class="btn btn-outline btn-sm">← Back Home</a>
+  </div>
+
+  <!-- Input Form -->
+  <form id="wm-form" class="form-card" autocomplete="off" onsubmit="wmRun(event)" style="margin-bottom:1.25rem;">
+    <div class="form-group" style="margin-bottom:0.75rem;">
+      <label class="form-label" for="wm-input">Offer ID</label>
+      <input id="wm-input" class="form-control" type="text" placeholder="e.g. 142764424452" inputmode="numeric" autofocus />
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button type="submit" class="btn btn-primary" id="wm-run-btn">Run Audit</button>
+      <button type="button" class="btn btn-outline btn-sm" onclick="wmClear()">Clear</button>
+    </div>
+  </form>
+
+  <!-- Status bar -->
+  <div id="wm-status-bar" style="display:none;margin-bottom:1rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span id="wm-status-label" style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);"></span>
+      <span id="wm-job-id-label" style="font-size:0.72rem;color:var(--text-muted);font-family:monospace;"></span>
+    </div>
+    <div style="background:var(--card-border);border-radius:4px;height:6px;overflow:hidden;">
+      <div id="wm-progress-bar" style="height:100%;background:var(--accent-blue);width:0%;transition:width 0.4s ease;"></div>
+    </div>
+    <div id="wm-status-detail" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
+  </div>
+
+  <!-- Error banner -->
+  <div id="wm-error" style="display:none;padding:0.85rem 1rem;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;color:#f87171;font-size:0.85rem;margin-bottom:1rem;"></div>
+
+  <!-- Results -->
+  <div id="wm-results" style="display:none;"></div>
+</div>
+
+<style>
+  .wm-two-col {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 900px) {
+    .wm-two-col { grid-template-columns: 1fr; }
+  }
+
+  .wm-left-panel { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .wm-verdict-card {
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+  }
+  .wm-verdict-card.outlier    { border-color: rgba(220,38,38,0.4);  background: rgba(220,38,38,0.07); }
+  .wm-verdict-card.notoutlier { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.07); }
+  .wm-verdict-card.unknown    { border-color: rgba(99,102,241,0.3);  background: rgba(99,102,241,0.06); }
+  .wm-verdict-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+  .wm-verdict-label {
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .wm-verdict-label.outlier    { color: #f87171; }
+  .wm-verdict-label.notoutlier { color: var(--accent-green); }
+  .wm-verdict-label.unknown    { color: #a5b4fc; }
+  .wm-verdict-reason { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; }
+
+  .wm-bl-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .wm-bl-banner {
+    height: 6px;
+    background: var(--gradient-1, linear-gradient(90deg,#3b82f6,#8b5cf6));
+  }
+  .wm-bl-body { padding: 1rem; }
+  .wm-bl-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; line-height: 1.4; }
+  .wm-bl-mcat  { font-size: 0.78rem; color: var(--accent-blue); margin-bottom: 10px; }
+  .wm-meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .wm-meta-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+  .wm-section-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 10px 0 5px;
+  }
+  .wm-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    padding: 8px 10px;
+    border: 1px solid var(--card-border);
+  }
+  .wm-isq-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.78rem;
+  }
+  .wm-isq-key { color: var(--text-muted); flex-shrink: 0; margin-right: 8px; }
+  .wm-isq-val { color: var(--text-primary); font-weight: 500; text-align: right; }
+  .wm-prod-chip {
+    display: inline-block;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    color: var(--accent-blue);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    margin: 3px 3px 0 0;
+  }
+
+  .wm-agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+  .wm-agent-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+  .wm-agent-name { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; }
+  .wm-agent-status {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .wm-status-bad  { background: rgba(220,38,38,0.15);  color: #f87171; }
+  .wm-status-good { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .wm-status-neu  { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+  .wm-status-warn { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .wm-agent-reason { font-size: 0.62rem; color: var(--text-secondary); line-height: 1.55; }
+  .wm-agent-source { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; }
+  .wm-agent-before {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--card-border);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .wm-raw-toggle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+  .wm-raw-toggle:hover { color: var(--text-secondary); }
+  .wm-json {
+    background: var(--code-bg, rgba(0,0,0,0.25));
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.72rem;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-y: auto;
+    max-height: 400px;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    display: none;
+  }
+</style>
+
+<script>
+(function () {
+  let _pollTimer = null;
+  let _jobId = null;
+  let _pollStart = null;
+  let _offerId = null;
+
+  function showError(msg) {
+    const el = document.getElementById('wm-error');
+    el.textContent = msg; el.style.display = 'block';
+  }
+  function hideError() { document.getElementById('wm-error').style.display = 'none'; }
+
+  function setStatus(label, detail, pct, color) {
+    document.getElementById('wm-status-bar').style.display = 'block';
+    document.getElementById('wm-status-label').textContent = label;
+    document.getElementById('wm-status-detail').textContent = detail || '';
+    const bar = document.getElementById('wm-progress-bar');
+    bar.style.width = (pct || 0) + '%';
+    bar.style.background = color || 'var(--accent-blue)';
+  }
+
+  window.wmClear = function () {
+    if (_pollTimer) clearInterval(_pollTimer);
+    _pollTimer = null; _jobId = null; _offerId = null;
+    document.getElementById('wm-input').value = '';
+    document.getElementById('wm-status-bar').style.display = 'none';
+    document.getElementById('wm-results').style.display = 'none';
+    document.getElementById('wm-results').innerHTML = '';
+    hideError();
+    document.getElementById('wm-run-btn').disabled = false;
+    document.getElementById('wm-run-btn').textContent = 'Run Audit';
+  };
+
+  window.wmRun = async function (e) {
+    if (e) e.preventDefault();
+    const offerId = document.getElementById('wm-input').value.trim();
+    if (!offerId) { showError('Enter an offer ID.'); return; }
+    hideError();
+    if (_pollTimer) clearInterval(_pollTimer);
+    document.getElementById('wm-results').style.display = 'none';
+    document.getElementById('wm-results').innerHTML = '';
+    _offerId = offerId;
+
+    document.getElementById('wm-run-btn').disabled = true;
+    document.getElementById('wm-run-btn').textContent = 'Triggering…';
+    setStatus('Triggering Windmill flow…', '', 5);
+
+    let jobId;
+    try {
+      const res = await fetch('/windmill-batch/trigger-one', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({offer_id: offerId}),
+      });
+      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || `HTTP ${res.status}`); }
+      const data = await res.json();
+      jobId = data.job_id; _jobId = jobId;
+    } catch (e) {
+      showError('Failed to trigger flow: ' + e.message);
+      document.getElementById('wm-run-btn').disabled = false;
+      document.getElementById('wm-run-btn').textContent = 'Run Audit';
+      return;
+    }
+
+    document.getElementById('wm-job-id-label').textContent = 'job: ' + jobId;
+    document.getElementById('wm-run-btn').textContent = 'Running…';
+    _pollStart = Date.now();
+    setStatus('Running…', 'Polling every 3s…', 15);
+    _pollTimer = setInterval(() => wmPoll(jobId), 3000);
+  };
+
+  async function wmPoll(jobId) {
+    let data;
+    try {
+      const res = await fetch(`/windmill-batch/result/${jobId}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
+    } catch (e) { return; }
+
+    const elapsed = Math.round((Date.now() - _pollStart) / 1000);
+    if (!data.completed) {
+      setStatus('Running…', `Elapsed: ${elapsed}s`, Math.min(15 + elapsed * 2, 85));
+      return;
+    }
+
+    clearInterval(_pollTimer); _pollTimer = null;
+    document.getElementById('wm-run-btn').disabled = false;
+    document.getElementById('wm-run-btn').textContent = 'Run Audit';
+
+    if (!data.success) {
+      setStatus('Flow failed', `Completed in ${elapsed}s`, 100, '#f87171');
+    } else {
+      setStatus('Done ✓', `Finished in ${elapsed}s`, 100, 'var(--accent-green)');
+    }
+    renderResult(data.result);
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function statusClass(val) {
+    if (val === null || val === undefined || val === '') return 'wm-status-neu';
+    const v = String(val).toLowerCase().trim();
+    const GOOD = ['not_outlier','not outlier','related','matched','true','correct','retail','non-retail','non retail'];
+    const BAD  = ['outlier','not related','not matched','false','incorrect','error'];
+    if (GOOD.includes(v)) return 'wm-status-good';
+    if (BAD.includes(v))  return 'wm-status-bad';
+    return 'wm-status-neu';
+  }
+
+  function parseISQs(enrichmentInfo) {
+    let parsed = enrichmentInfo;
+    if (typeof parsed === 'string') { try { parsed = JSON.parse(parsed); } catch(e) { return []; } }
+    if (!parsed || typeof parsed !== 'object') return [];
+    const items = [];
+    for (const v of Object.values(parsed)) {
+      if (Array.isArray(v)) items.push(...v);
+    }
+    return items.filter(i => i && typeof i === 'object' && i.DESC !== 'Buyer Filled Details')
+                .map(i => ({ key: i.DESC || '', val: i.RESPONSE || '' }));
+  }
+
+  // ── BL Card ──────────────────────────────────────────────────────────────────
+
+  function buildBLCard(bl) {
+    const d = (bl && bl.RESPONSE && bl.RESPONSE.DATA) ? bl.RESPONSE.DATA : {};
+    const title   = d.ETO_OFR_TITLE   || '—';
+    const mcat    = d.PRIME_MCAT_NAME || '—';
+    const desc    = d.ETO_OFR_DESC    || '';
+    const date    = d.OFR_DATE        || '';
+    const price   = d.ETO_OFR_APPROX_ORDER_VALUE || '';
+    const mcat_id = d.FK_GLCAT_MCAT_ID || '';
+    const products = Array.isArray(d.PRODUCTS_ENQUIRED) ? d.PRODUCTS_ENQUIRED : [];
+    const isqs    = parseISQs(d.ENRICHMENTINFO);
+
+    const isqRows = isqs.length
+      ? isqs.map(i => `<div class="wm-isq-row"><span class="wm-isq-key">${esc(i.key)}</span><span class="wm-isq-val">${esc(i.val)}</span></div>`).join('')
+      : '<div style="font-size:0.75rem;color:var(--text-muted);">No ISQs</div>';
+
+    const prodChips = products.length
+      ? products.map(p => `<span class="wm-prod-chip">${esc(p.FK_PC_ITEM_NAME || p)}</span>`).join('')
+      : '<span style="font-size:0.75rem;color:var(--text-muted);">—</span>';
+
+    const metaTags = [
+      price    ? `💰 ₹${esc(price)}` : null,
+      mcat_id  ? `MCAT ID: ${esc(mcat_id)}` : null,
+      date     ? `📅 ${esc(String(date).substring(0,8))}` : null,
+    ].filter(Boolean).map(t => `<span class="wm-meta-tag">${t}</span>`).join('');
+
+    return `
+      <div class="wm-bl-card">
+        <div class="wm-bl-banner"></div>
+        <div class="wm-bl-body">
+          <div class="wm-bl-title">${esc(title)}</div>
+          <div class="wm-bl-mcat">${esc(mcat)}</div>
+          ${metaTags ? `<div class="wm-meta-row">${metaTags}</div>` : ''}
+          ${desc ? `<div class="wm-section-title">Description</div><div class="wm-desc">${esc(desc)}</div>` : ''}
+          <div class="wm-section-title">ISQs (${isqs.length})</div>
+          <div>${isqRows}</div>
+          <div class="wm-section-title">Products Enquired</div>
+          <div>${prodChips}</div>
+        </div>
+      </div>`;
+  }
+
+  // ── Agent Cards ───────────────────────────────────────────────────────────────
+
+  const AGENTS = [
+    { key: 'Decision',        label: 'Decision Verdict',    status: 'Decision Verdict',           reason: 'Decision Reason' },
+    { key: 'TitleVsMCAT',     label: 'Title vs MCAT',       status: 'Title_vs_MCAT_Agent_status',  reason: 'Title_vs_MCAT_Agent_reason',  source: 'Title_vs_MCAT_Agent_source', before_s: 'Title_vs_MCAT_Agent_before_recheck_status', before_r: 'Title_vs_MCAT_Agent_before_recheck_reason' },
+    { key: 'TitleISQ',        label: 'Title vs Spec',       status: 'Title_ISQ_Agent_status',      reason: 'Title_ISQ_Agent_reason',      source: 'Title_ISQ_Agent_source',     before_s: 'Title_ISQ_Agent_before_recheck_status',     before_r: 'Title_ISQ_Agent_before_recheck_reason' },
+    { key: 'ISQvsMCAT',       label: 'Spec vs MCAT',        status: 'ISQ_vs_MCAT_Agent_status',    reason: 'ISQ_vs_MCAT_Agent_reason',    source: 'ISQ_vs_MCAT_Agent_source',   before_s: 'ISQ_vs_MCAT_Agent_before_recheck_status',   before_r: 'ISQ_vs_MCAT_Agent_before_recheck_reason' },
+    { key: 'InterISQ',        label: 'Inter ISQ',           status: 'Inter_ISQ_Agent_status',      reason: 'Inter_ISQ_Agent_reason',      source: 'Inter_ISQ_Agent_source',     before_s: 'Inter_ISQ_Agent_before_recheck_status',     before_r: 'Inter_ISQ_Agent_before_recheck_reason' },
+    { key: 'Description',     label: 'Description',         status: 'Description_Agent_status',    reason: 'Description_Agent_reason' },
+    { key: 'Retail',          label: 'Retail',              status: 'Retail_Agent_classification', reason: 'Retail_Agent_reason' },
+    { key: 'BLProfile',       label: 'BL Profile',          status: 'BL_Profile_Agent_status',     reason: 'BL_Profile_Agent_reason' },
+    { key: 'BuyerViewed',     label: 'Buyer Viewed',        status: 'Buyer_Viewed_Agent_status',   reason: 'Buyer_Viewed_Agent_reason' },
+    { key: 'BuyerViewedCSL',  label: 'Buyer Viewed vs CSL', status: 'Buyer_Viewed_Agent_vs_CSL_status', reason: 'Buyer_Viewed_Agent_vs_CSL_reason' },
+    { key: 'ProfileValidity', label: 'Profile Validity',    status: 'Profile_Validity_Agent_valid', reason: null, reasons_key: 'Profile_Validity_Agent_reasons' },
+  ];
+
+  function buildAgentCard(agent, row) {
+    const statusVal = row[agent.status];
+    const reasonVal = agent.reason ? row[agent.reason] : null;
+    const reasonsVal = agent.reasons_key ? row[agent.reasons_key] : null;
+    const sourceVal  = agent.source ? row[agent.source] : null;
+    const beforeS    = agent.before_s ? row[agent.before_s] : null;
+    const beforeR    = agent.before_r ? row[agent.before_r] : null;
+
+    const displayStatus = statusVal != null ? String(statusVal).toLowerCase() : '—';
+    const cls = statusClass(displayStatus);
+
+    let reasonHtml = '';
+    if (reasonVal) {
+      reasonHtml = `<div class="wm-agent-reason">${esc(reasonVal)}</div>`;
+    } else if (reasonsVal && Array.isArray(reasonsVal) && reasonsVal.length) {
+      reasonHtml = `<div class="wm-agent-reason">${reasonsVal.map(r => esc(r)).join('<br>')}</div>`;
+    } else if (reasonsVal && Array.isArray(reasonsVal) && !reasonsVal.length) {
+      reasonHtml = `<div class="wm-agent-reason" style="color:var(--text-muted);">No issues found</div>`;
+    }
+
+    let sourceHtml = sourceVal ? `<div class="wm-agent-source">source: ${esc(sourceVal)}</div>` : '';
+
+    let beforeHtml = '';
+    if (beforeS && beforeS !== statusVal) {
+      beforeHtml = `<div class="wm-agent-before">Before recheck: <span class="${statusClass(beforeS)}" style="font-size:0.7rem;padding:2px 7px;border-radius:12px;display:inline-block;">${esc(beforeS)}</span>${beforeR ? `<br><span style="font-size:0.72rem;color:var(--text-muted);">${esc(beforeR)}</span>` : ''}</div>`;
+    }
+
+    const isDecision = agent.key === 'Decision';
+    const cardBorder = isDecision && statusVal != null
+      ? (String(statusVal).toLowerCase().includes('not_outlier') ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(220,38,38,0.3)')
+      : '1px solid var(--card-border)';
+
+    return `
+      <div class="wm-agent-card" style="border:${cardBorder};">
+        <div class="wm-agent-name">${esc(agent.label)}</div>
+        <div><span class="wm-agent-status ${cls}">${esc(displayStatus)}</span></div>
+        ${reasonHtml}
+        ${sourceHtml}
+        ${beforeHtml}
+      </div>`;
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────────
+
+  function renderResult(result) {
+    const container = document.getElementById('wm-results');
+    container.innerHTML = '';
+    container.style.display = 'block';
+
+    const row = Array.isArray(result) ? result[0] : result;
+
+    if (!row) {
+      container.innerHTML = '<div style="color:#f59e0b;padding:1rem;background:rgba(245,158,11,0.1);border-radius:8px;">No result returned. The offer may have been skipped or timed out.</div>';
+      return;
+    }
+
+    if (typeof row === 'object' && 'error' in row) {
+      const errMsg = typeof row.error === 'string' ? row.error : (row.error?.message || JSON.stringify(row.error));
+      container.innerHTML = `<div style="color:#f87171;padding:1rem;background:rgba(220,38,38,0.1);border-radius:8px;"><strong>Error:</strong> ${esc(errMsg)}</div>`;
+      return;
+    }
+
+    const rawVerdict = row['Decision Verdict'];
+    const isUnknown = rawVerdict == null || rawVerdict === '';
+    const isOutlier = !isUnknown && String(rawVerdict).toLowerCase() === 'outlier';
+    const verdictMod = isUnknown ? 'unknown' : (isOutlier ? 'outlier' : 'notoutlier');
+    const verdictDisplay = isUnknown ? '? No Verdict' : (isOutlier ? '⚠ Outlier' : '✓ Not Outlier');
+
+    // Verdict card — goes below the BL card in the left panel
+    const verdictCardHtml = `
+      <div class="wm-verdict-card ${verdictMod}">
+        <div class="wm-verdict-eyebrow">Final Decision</div>
+        <div class="wm-verdict-label ${verdictMod}">${esc(verdictDisplay)}</div>
+        <div class="wm-verdict-reason">${esc(row['Decision Reason'] || '—')}</div>
+      </div>`;
+
+    // Two-column: left = BL card + verdict, right = agents
+    const blHtml = buildBLCard(row.bl_data);
+    const agentsWithoutDecision = AGENTS.filter(a => a.key !== 'Decision');
+    const agentCardsHtml = agentsWithoutDecision.map(a => buildAgentCard(a, row)).join('');
+
+    const twoColHtml = `
+      <div class="wm-two-col">
+        <div class="wm-left-panel">
+          ${blHtml}
+          ${verdictCardHtml}
+        </div>
+        <div class="wm-agents-grid">${agentCardsHtml}</div>
+      </div>`;
+
+    // Raw JSON toggle
+    const rawHtml = `
+      <div>
+        <span class="wm-raw-toggle" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block';this.querySelector('.wm-toggle-arrow').textContent=this.nextElementSibling.style.display==='block'?'▴':'▾'">
+          Raw Response <span class="wm-toggle-arrow">▾</span>
+        </span>
+        <div class="wm-json">${esc(JSON.stringify(row, null, 2))}</div>
+      </div>`;
+
+    container.innerHTML = twoColHtml + rawHtml;
+  }
+})();
+</script>
+{% endblock %}

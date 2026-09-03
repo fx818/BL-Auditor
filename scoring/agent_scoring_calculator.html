@@ -1,0 +1,233 @@
+
+<style>
+  .wrap { padding: 1rem 0; font-family: var(--font-sans); color: var(--color-text-primary); }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin: 1.5rem 0 0.5rem; }
+  .agent-row { display: grid; grid-template-columns: 160px 48px 1fr 64px; align-items: center; gap: 8px; padding: 10px 12px; border-radius: var(--border-radius-md); margin-bottom: 4px; border: 1.5px solid transparent; transition: border-color 0.15s, background 0.15s; }
+  .agent-row.row-correct   { background: #EAF3DE; border-color: #97C459; }
+  .agent-row.row-incorrect { background: #FCEBEB; border-color: #F09595; }
+  .agent-row.row-na        { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  .agent-name { font-weight: 500; font-size: 13px; }
+  .weight-badge { font-size: 11px; color: var(--color-text-secondary); text-align: center; }
+  .controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .pill { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); font-size: 12px; cursor: pointer; color: var(--color-text-secondary); transition: all 0.15s; }
+  .pill:hover { background: var(--color-background-secondary); }
+  .pill.sel-correct   { background: #3B6D11; color: #fff; border-color: #3B6D11; font-weight: 500; }
+  .pill.sel-incorrect { background: #A32D2D; color: #fff; border-color: #A32D2D; font-weight: 500; }
+  .pill.sel-na        { background: #5F5E5A; color: #fff; border-color: #5F5E5A; font-weight: 500; }
+  .pill.sel-high      { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 500; }
+  .pill.sel-medium    { background: #BA7517; color: #fff; border-color: #BA7517; font-weight: 500; }
+  .pill.sel-low       { background: #A32D2D; color: #fff; border-color: #A32D2D; font-weight: 500; }
+  .conf-divider { width: 1px; height: 20px; background: rgba(0,0,0,0.15); margin: 0 2px; }
+  .score-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin: 1.5rem 0 0; text-align: center; }
+  .score-num { font-size: 52px; font-weight: 500; line-height: 1; margin-bottom: 4px; }
+  .score-label { font-size: 14px; color: var(--color-text-secondary); }
+  .verdict { display: inline-block; padding: 5px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-top: 10px; }
+  .verdict.good   { background: #EAF3DE; color: #3B6D11; }
+  .verdict.review { background: #FAEEDA; color: #854F0B; }
+  .verdict.reject { background: #FCEBEB; color: #A32D2D; }
+  .breakdown { margin-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 1rem; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+  .bar-label { width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--color-text-secondary); }
+  .bar-track { flex: 1; height: 6px; background: var(--color-border-tertiary); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+  .info-box { border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; color: var(--color-text-info); background: var(--color-background-info); margin-top: 1rem; line-height: 1.6; }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Agent scoring calculator</h2>
+
+  <div class="section-title">Binary agents</div>
+  <div id="binary-agents"></div>
+
+  <div class="section-title" style="margin-top:1.5rem;">Confidence agents</div>
+  <div id="conf-agents"></div>
+
+  <div class="score-card">
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-label">composite score</div>
+    <div id="verdict-badge"></div>
+    <div class="breakdown" id="breakdown"></div>
+  </div>
+  <div class="info-box" id="info-box">Set each agent status above to compute the composite score.</div>
+</div>
+
+<script>
+const binaryAgents = [
+  { id: 'svc', name: 'Specs vs Category', w: 20 },
+  { id: 'tvc', name: 'Title vs Category', w: 20 },
+  { id: 'tvs', name: 'Title vs Specs',    w: 15 },
+];
+const confAgents = [
+  { id: 'isq', name: 'ISQ Validation',       w: 15, hasRetail: false },
+  { id: 'bp',  name: 'Buyer Profile',         w: 10, hasRetail: false },
+  { id: 'rc',  name: 'Retail Classification', w: 10, hasRetail: true  },
+  { id: 'dc',  name: 'Description Coherence', w: 10, hasRetail: false },
+];
+
+// Scoring: correct+conf gets full credit scaled by confidence
+// incorrect+conf gets partial penalty — high=0, medium=0.2, low=0.4 (low confidence incorrect is less penalised)
+const correctMult  = { high: 1.0, medium: 0.6, low: 0.3 };
+const incorrectMult = { high: 0.0, medium: 0.2, low: 0.4 };
+
+const state = {};
+binaryAgents.forEach(a => state[a.id] = { status: null });
+confAgents.forEach(a => state[a.id] = { status: null, conf: null });
+
+function rowClass(id) {
+  const s = state[id].status;
+  if (!s) return 'agent-row';
+  if (s === 'correct' || s === 'retail') return 'agent-row row-correct';
+  if (s === 'incorrect' || s === 'not_correct') return 'agent-row row-incorrect';
+  if (s === 'na') return 'agent-row row-na';
+  return 'agent-row';
+}
+function pc(cond, cls) { return cond ? 'pill ' + cls : 'pill'; }
+
+function renderBinary() {
+  document.getElementById('binary-agents').innerHTML = binaryAgents.map(a => {
+    const s = state[a.id];
+    return `<div class="${rowClass(a.id)}">
+      <div><div class="agent-name">${a.name}</div></div>
+      <div class="weight-badge">${a.w}%</div>
+      <div class="controls">
+        <button class="${pc(s.status==='correct','sel-correct')}" onclick="setBinary('${a.id}','correct')">Correct</button>
+        <button class="${pc(s.status==='not_correct','sel-incorrect')}" onclick="setBinary('${a.id}','not_correct')">Not correct</button>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);text-align:right;" id="wadj-${a.id}"></div>
+    </div>`;
+  }).join('');
+}
+
+function confPills(id) {
+  const s = state[id];
+  const show = s.status === 'correct' || s.status === 'retail' || s.status === 'incorrect';
+  if (!show) return '';
+  return `<span style="display:flex;gap:4px;align-items:center;">
+    <div class="conf-divider"></div>
+    <button class="${pc(s.conf==='high','sel-high')}" onclick="setConfLevel('${id}','high')">High</button>
+    <button class="${pc(s.conf==='medium','sel-medium')}" onclick="setConfLevel('${id}','medium')">Medium</button>
+    <button class="${pc(s.conf==='low','sel-low')}" onclick="setConfLevel('${id}','low')">Low</button>
+  </span>`;
+}
+
+function renderConf() {
+  document.getElementById('conf-agents').innerHTML = confAgents.map(a => {
+    const s = state[a.id];
+    const isCorrect = s.status === 'correct' || s.status === 'retail';
+    const correctLabel = a.hasRetail ? 'Retail / Non-retail' : 'Correct';
+    const correctVal   = a.hasRetail ? 'retail' : 'correct';
+    return `<div class="${rowClass(a.id)}">
+      <div><div class="agent-name">${a.name}</div></div>
+      <div class="weight-badge">${a.w}%</div>
+      <div class="controls">
+        <button class="${pc(isCorrect,'sel-correct')}" onclick="setConf('${a.id}','${correctVal}')">${correctLabel}</button>
+        ${!a.hasRetail ? `<button class="${pc(s.status==='incorrect','sel-incorrect')}" onclick="setConf('${a.id}','incorrect')">Incorrect</button>` : ''}
+        <button class="${pc(s.status==='na','sel-na')}" onclick="setConf('${a.id}','na')">Not available</button>
+        ${confPills(a.id)}
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);text-align:right;" id="wadj-${a.id}"></div>
+    </div>`;
+  }).join('');
+}
+
+function setBinary(id, val) {
+  state[id].status = state[id].status === val ? null : val;
+  renderBinary(); compute();
+}
+function setConf(id, val) {
+  if (state[id].status === val) { state[id].status = null; state[id].conf = null; }
+  else {
+    state[id].status = val;
+    if (val === 'na') { state[id].conf = null; }
+    else { if (!state[id].conf) state[id].conf = 'high'; }
+  }
+  renderConf(); compute();
+}
+function setConfLevel(id, lvl) { state[id].conf = lvl; renderConf(); compute(); }
+
+function agentScore(a) {
+  const s = state[a.id];
+  if (a.type === 'binary') {
+    if (s.status === 'correct') return 1.0;
+    if (s.status === 'not_correct') return 0.0;
+    return null;
+  }
+  if (s.status === 'na') return null;
+  if ((s.status === 'correct' || s.status === 'retail') && s.conf) return correctMult[s.conf];
+  if (s.status === 'incorrect' && s.conf) return incorrectMult[s.conf];
+  if (s.status !== null) return null; // status set but conf not yet chosen
+  return null;
+}
+
+function compute() {
+  const allAgents = [
+    ...binaryAgents.map(a => ({ ...a, type: 'binary' })),
+    ...confAgents.map(a => ({ ...a, type: 'conf' }))
+  ];
+  const naIds = confAgents.filter(a => state[a.id].status === 'na').map(a => a.id);
+  const naWeight = naIds.reduce((s, id) => s + confAgents.find(a=>a.id===id).w, 0);
+  const available = allAgents.filter(a => !naIds.includes(a.id));
+  const availW = available.reduce((s,a) => s+a.w, 0);
+  const adjW = {};
+  allAgents.forEach(a => { adjW[a.id] = naIds.includes(a.id) ? 0 : a.w + (naWeight>0&&availW>0 ? (a.w/availW)*naWeight : 0); });
+
+  let totalScore=0, totalW=0;
+  const contribs = [];
+  available.forEach(a => {
+    const sc = agentScore(a);
+    const w = adjW[a.id];
+    if (sc !== null) { totalScore += sc*w; totalW += w; }
+    else if (state[a.id].status !== null) { totalW += w; }
+    if (state[a.id].status !== null) contribs.push({ name: a.name, score: sc, adjW: w, status: state[a.id].status });
+  });
+
+  const el=document.getElementById('score-num');
+  const badge=document.getElementById('verdict-badge');
+  const bd=document.getElementById('breakdown');
+  const info=document.getElementById('info-box');
+
+  if (!contribs.length) {
+    el.textContent='—'; el.style.color='var(--color-text-secondary)';
+    badge.innerHTML=''; bd.innerHTML='';
+    info.textContent='Set each agent status above to compute the composite score.';
+    updateAdjW(naIds,adjW); return;
+  }
+
+  const final = totalW>0 ? Math.round((totalScore/totalW)*100) : 0;
+  el.textContent = final+'%';
+  let vClass='review', vText='Needs review', scoreColor='#BA7517';
+  if (final>=75) { vClass='good'; vText='Approved'; scoreColor='#639922'; }
+  else if (final<30) { vClass='reject'; vText='Do not approve'; scoreColor='#E24B4A'; }
+  el.style.color = scoreColor;
+  badge.innerHTML = `<div class="verdict ${vClass}">${vText}</div>`;
+
+  bd.innerHTML = contribs.map(c => {
+    const bw = c.score!==null ? Math.round(c.score*100) : 0;
+    const fc = c.score===null ? '#B4B2A9' : c.score>=0.7 ? '#639922' : c.score>=0.3 ? '#BA7517' : '#E24B4A';
+    const adjNote = naIds.length>0 ? ` (${Math.round(c.adjW)}%)` : '';
+    return `<div class="bar-row">
+      <div class="bar-label" title="${c.name}">${c.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${bw}%;background:${fc};"></div></div>
+      <div class="bar-val">${c.score!==null ? bw+'%' : '?'}</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);width:52px;text-align:right;">${adjNote}</div>
+    </div>`;
+  }).join('');
+
+  const naNames = naIds.map(id=>confAgents.find(a=>a.id===id).name).join(', ');
+  info.innerHTML = naIds.length>0
+    ? `<b>Weight redistribution:</b> ${naNames} unavailable (${naWeight}% weight) — redistributed proportionally across ${available.length} available agents.`
+    : 'Score computed across all available agents.';
+
+  updateAdjW(naIds, adjW);
+}
+
+function updateAdjW(naIds, adjW) {
+  [...binaryAgents,...confAgents].forEach(a => {
+    const el = document.getElementById('wadj-'+a.id);
+    if (!el) return;
+    el.textContent = naIds.includes(a.id) ? 'N/A' : naIds.length>0 ? `→${Math.round(adjW[a.id])}%` : '';
+  });
+}
+
+renderBinary(); renderConf(); compute();
+</script>

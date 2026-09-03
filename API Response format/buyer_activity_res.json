@@ -1,0 +1,198 @@
+bizfeed.imutils.com/ImBuyerActivity/GetData?glusrId=270765971&logtime=20260623165023&endlogtime=20260621165020&AK=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjIzMDAiLCJleHAiOjE3ODIzMDA0OTAsImlhdCI6MTc4MjIxNDA5MCwiaXNzIjoiRU1QTE9ZRUUifQ.FR3d1ld3dJb3NOn6pKWLGfe24MLNCjwv9J8DS2sCfzM
+
+{
+    "CODE": 200,
+    "COUNT": 8,
+    "DATETIME": "20260622041556",
+    "DETAILS": [
+        {
+            "activity_type": "Browse",
+            "datetime": "20260622103407",
+            "fk_activity_id": 559,
+            "glcat_mcat_id": 444900,
+            "glcat_mcat_name": "Tadalafil Tablets",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622103409",
+            "keyword": "cialis tadalafil 60 mg",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                444900
+            ],
+            "mcat_names": [
+                "Tadalafil Tablets"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2856438878888",
+            "request_url": "GET /proddetail/cialis-tadalafil-60-mg-2856438878888.html?utm_source=promote_product_android&utm_medium=whatsapp&utm_campaign=direct_share_lms_order_now&utm_term=UzI1MTY3OTk4fEIyNzA3NjU5NzF8NDgwfFN0cmlw HTTP/1.1",
+            "seller_glusr_id": "25167998"
+        },
+        {
+            "activity_type": "Others",
+            "datetime": "20260622050632",
+            "fk_activity_id": 4481,
+            "glcat_mcat_id": 19246,
+            "glcat_mcat_name": "Smoke Detector Camera",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622060920",
+            "keyword": "Smoke Decorater IP Hidden Camera",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                19246
+            ],
+            "mcat_names": [
+                "Smoke Detector Camera"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2853234497673",
+            "request_url": "GET /products/?id=2853234497673&pos=3&kwd=wireless%20hidden%20cctv%20camera%20smoke%20detector&tags=BA||||8752.144|Price|product||-|-res:RC3|ktp:N0|stype:attr=1|mtp:S|wc:6|qr_nm:splt-rlx-gd|cs:16792|com-cf:nl|ptrs:na|mc:19246|cat:256|qry_typ:P|lang:en|rtn:1-0-0-0-4-4-1|qrd:260622|mrd:260622|prdt:260622&src_ref=c3JjX3JlZj0yOTMyNzY3OA== HTTP/1.1",
+            "seller_glusr_id": "29327678"
+        },
+        {
+            "activity_type": "Others",
+            "datetime": "20260622050609",
+            "fk_activity_id": 4481,
+            "glcat_mcat_id": 19246,
+            "glcat_mcat_name": "Smoke Detector Camera",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622060854",
+            "keyword": "Smoke Decorater IP Hidden Camera",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                19246
+            ],
+            "mcat_names": [
+                "Smoke Detector Camera"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2853234497673",
+            "request_url": "GET /products/?id=2853234497673&pos=3&kwd=wireless%20hidden%20cctv%20camera%20smoke%20detector&tags=BA||||8752.144|Price|product||-|-res:RC3|ktp:N0|stype:attr=1|mtp:S|wc:6|qr_nm:splt-rlx-gd|cs:16792|com-cf:nl|ptrs:na|mc:19246|cat:256|qry_typ:P|lang:en|rtn:1-0-0-0-4-4-1|qrd:260622|mrd:260622|prdt:260622&src_ref=c3JjX3JlZj0yOTMyNzY3OA== HTTP/1.1",
+            "seller_glusr_id": "29327678"
+        },
+        {
+            "activity_type": "Others",
+            "datetime": "20260622050541",
+            "fk_activity_id": 4481,
+            "glcat_mcat_id": 19246,
+            "glcat_mcat_name": "Smoke Detector Camera",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622060837",
+            "keyword": "Smoke Decorater IP Hidden Camera",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                19246
+            ],
+            "mcat_names": [
+                "Smoke Detector Camera"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2853234497673",
+            "request_url": "GET /products/?id=2853234497673&pos=3&kwd=wireless%20hidden%20cctv%20camera%20smoke%20detector&tags=BA||||8752.144|Price|product||-|-res:RC3|ktp:N0|stype:attr=1|mtp:S|wc:6|qr_nm:splt-rlx-gd|cs:16792|com-cf:nl|ptrs:na|mc:19246|cat:256|qry_typ:P|lang:en|rtn:1-0-0-0-4-4-1|qrd:260622|mrd:260622|prdt:260622&src_ref=c3JjX3JlZj0yOTMyNzY3OA== HTTP/1.1",
+            "seller_glusr_id": "29327678"
+        },
+        {
+            "activity_type": "Others",
+            "datetime": "20260622042422",
+            "fk_activity_id": 4481,
+            "glcat_mcat_id": 19246,
+            "glcat_mcat_name": "Smoke Detector Camera",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622053453",
+            "keyword": "Smoke Decorater IP Hidden Camera",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                19246
+            ],
+            "mcat_names": [
+                "Smoke Detector Camera"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2853234497673",
+            "request_url": "GET /products/?id=2853234497673&pos=3&kwd=wireless%20hidden%20cctv%20camera%20smoke%20detector&tags=BA||||8752.144|Price|product||-|-res:RC3|ktp:N0|stype:attr=1|mtp:S|wc:6|qr_nm:splt-rlx-gd|cs:16792|com-cf:nl|ptrs:na|mc:19246|cat:256|qry_typ:P|lang:en|rtn:1-0-0-0-4-4-1|qrd:260622|mrd:260622|prdt:260622&src_ref=c3JjX3JlZj0yOTMyNzY3OA== HTTP/1.1",
+            "seller_glusr_id": "29327678"
+        },
+        {
+            "activity_type": "Others",
+            "datetime": "20260622042348",
+            "fk_activity_id": 4481,
+            "glcat_mcat_id": 19246,
+            "glcat_mcat_name": "Smoke Detector Camera",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622053427",
+            "keyword": "QBM SPY CAMERA SMOKE DETECTOR BODY 1080P CCSSMH",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": "-",
+            "mcat_ids": [
+                19246
+            ],
+            "mcat_names": [
+                "Smoke Detector Camera"
+            ],
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2853930424962",
+            "request_url": "GET /products/?id=2853930424962&pos=1&kwd=wireless%20hidden%20cctv%20camera%20smoke%20detector&tags=BB||||8752.144|Price|product||-|-res:RC3|ktp:N0|stype:attr=1|mtp:S|wc:6|qr_nm:splt-rlx-gd|cs:16792|com-cf:nl|ptrs:na|mc:19246|cat:256|qry_typ:P|lang:en|rtn:1-0-0-0-4-4-1|qrd:260622|mrd:260622|prdt:260622&src_ref=c3JjX3JlZj0yODk1MDQ1Ng== HTTP/1.1",
+            "seller_glusr_id": "28950456"
+        },
+        {
+            "activity_type": "ENQ",
+            "datetime": "20260622041556",
+            "fk_activity_id": 20,
+            "glcat_mcat_id": 444900,
+            "glcat_mcat_name": "-",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622041557",
+            "keyword": "60 Mg Tadalafil Tablets",
+            "location_pref_city_ids": [
+                73657
+            ],
+            "location_pref_city_names": [
+                "Durg"
+            ],
+            "mcat_ids": [
+                444900
+            ],
+            "mcat_names": "-",
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": "2855399792373",
+            "request_url": "-",
+            "seller_glusr_id": "88724661"
+        },
+        {
+            "activity_type": "BL",
+            "datetime": "20260622041556",
+            "fk_activity_id": 10,
+            "glcat_mcat_id": 444900,
+            "glcat_mcat_name": "-",
+            "identified_data_flag": 0,
+            "insertion_time": "20260622043120",
+            "keyword": "60 Mg Tadalafil Tablets",
+            "location_pref_city_ids": 0,
+            "location_pref_city_names": [
+                ""
+            ],
+            "mcat_ids": [
+                444900
+            ],
+            "mcat_names": "-",
+            "modid": "",
+            "nob_type": 0,
+            "product_disp_id": 0,
+            "request_url": "-",
+            "seller_glusr_id": 0
+        }
+    ],
+    "MESSAGE": "Details Found",
+    "glusr_id": "270765971",
+    "unique_id": "jNKS51782277319"
+}

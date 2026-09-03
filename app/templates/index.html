@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-content">
+  <div class="hero">
+    <h1>BL Auditor</h1>
+    <p>Enter a BuyLead offer ID to fetch the BL data, run the audit API, retail classification, and price audit agents.</p>
+  </div>
+
+  <form id="audit-form" class="form-card" autocomplete="off" data-audit-url="{{ audit_url | default('/audit') }}">
+    <div class="form-group">
+      <label class="form-label" for="offer-id-input">Offer ID</label>
+      <input
+        id="offer-id-input"
+        class="form-control"
+        name="offer_id"
+        type="text"
+        value="{{ sample_offer_id }}"
+        placeholder="e.g. 142764424452"
+        inputmode="numeric"
+      />
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button type="submit" class="btn btn-primary" id="submit-btn">Run Audit</button>
+      <a href="{{ batch_url | default('/batch') }}" class="btn btn-outline btn-sm">Batch Audit</a>
+      <a href="{{ records_url | default('/records') }}" class="btn btn-outline btn-sm">Previous Records</a>
+      <a href="{{ traces_url | default('/traces') }}" class="btn btn-outline btn-sm">Audit Traces</a>
+      <a href="{{ windmill_batch_url | default('/windmill-batch') }}" class="btn btn-outline btn-sm">Windmill Flow Run</a>
+<button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('offer-id-input').value=''">Clear</button>
+      <button type="button" class="btn btn-outline btn-sm" style="color:#dc2626;border-color:#dc2626;" onclick="clearAllLogs()">Clear Logs</button>
+    </div>
+  </form>
+
+  <script>
+    async function clearAllLogs() {
+      if (!confirm('Clear all logs and traces? This cannot be undone.')) return;
+      const res = await fetch('/clear-logs', { method: 'POST' });
+      if (!res.ok) { alert('Failed to clear logs.'); }
+      else { alert('Logs and traces cleared.'); }
+    }
+  </script>
+
+  <div style="max-width:860px;margin:1.25rem auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.75rem;">
+    <div class="card" style="padding:1rem;">
+      <div style="font-weight:600;font-size:0.82rem;margin-bottom:6px;color:var(--text-primary);">Payload Mapping</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+        <span style="font-family:monospace;">pc_item_id</span> → offer ID<br>
+        <span style="font-family:monospace;">item_name</span> → ETO_OFR_TITLE<br>
+        <span style="font-family:monospace;">item_desc</span> → ETO_OFR_DESC<br>
+        <span style="font-family:monospace;">mcat_name</span> → PRIME_MCAT_NAME<br>
+        <span style="font-family:monospace;">mcat_id</span> → FK_GLCAT_MCAT_ID<br>
+        <span style="font-family:monospace;">price</span> → ETO_OFR_APPROX_ORDER_VALUE<br>
+        <span style="font-family:monospace;">ISQ</span> → ENRICHMENTINFO
+      </div>
+    </div>
+    <div class="card" style="padding:1rem;">
+      <div style="font-weight:600;font-size:0.82rem;margin-bottom:6px;color:var(--text-primary);">Agents <span style="font-weight:400;color:var(--text-muted);">(run concurrently)</span></div>
+      <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.7;">
+        <span style="color:var(--text-primary);font-weight:500;">Audit API</span> — external payload scorer<br>
+        <span style="color:var(--text-primary);font-weight:500;">Retail Agent</span> — retail vs non-retail (LangGraph)<br>
+        <span style="color:var(--text-primary);font-weight:500;">Retail Agent 2</span> — retail cross-check (requests)<br>
+        <span style="color:var(--text-primary);font-weight:500;">Price Agent</span> — price anomaly (LangGraph)<br>
+        <span style="color:var(--text-primary);font-weight:500;">Buyer Viewed</span> — buyer intent (LangGraph)<br>
+        <span style="color:var(--text-primary);font-weight:500;">ISQ Validation</span> — spec coherence (requests)<br>
+        <span style="color:var(--text-primary);font-weight:500;">Description</span> — title/MCAT match (requests)
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" style="max-width:860px;margin:1rem auto 0;">
+    <div class="accordion-header">
+      <span>Default payload template</span>
+      <span class="accordion-arrow">▾</span>
+    </div>
+    <div class="accordion-body">
+      <div class="json-viewer">{{ default_payload }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

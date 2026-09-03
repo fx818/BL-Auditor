@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "pns-mcp-server": {
+      "type": "http",
+      "url": "https://pns-mcp-server-936671953004.asia-south1.run.app/mcp"
+    },
+    "windmill": {
+      "type": "http",
+      "url": "https://windmill.intermesh.net/api/mcp/w/indiamart-workspace/mcp?token=XxkglniYk93uEg6uKdk8EowN4agOLX7j"
+    }
+  }
+}

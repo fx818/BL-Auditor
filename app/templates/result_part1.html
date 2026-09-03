@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+{% set tc = data.get('title_category_outlier', {}) %}
+{% set ts = data.get('title_spec_verdict', {}) %}
+{% set sc = data.get('specs_category_outlier', {}) %}
+
+<div class="page-content">
+
+<!-- TOP BAR -->
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:1.5rem;">
+  <div>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Audit Result</div>
+    <h2 style="font-size:1.4rem;font-weight:800;">{{ data.get('item_name','—') }}</h2>
+    <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">
+      GLID: <b style="color:var(--text-secondary)">{{ data.get('glid','—') }}</b> &nbsp;|&nbsp;
+      PC Item: <b style="color:var(--text-secondary)">{{ data.get('pc_item_id','—') }}</b> &nbsp;|&nbsp;
+      {{ data.get('datetime','—') }}
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button onclick="goBack()" class="btn btn-outline btn-sm">← New Audit</button>
+    <button id="copy-btn" onclick="copyJson()" class="btn btn-outline btn-sm">📋 Copy JSON</button>
+  </div>
+</div>
+
+<!-- SUMMARY STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value" style="background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">{{ data.get('response_time','—') }}s</div>
+    <div class="stat-label">Response Time</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:{{ 'var(--accent-green)' if tc.get('status','')=='Correct' else 'var(--accent-red)' if tc.get('status','')=='Wrong' else 'var(--text-muted)' }}">{{ tc.get('status','—') }}</div>
+    <div class="stat-label">Title vs Category</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:{{ 'var(--accent-green)' if ts.get('status','')=='Correct' else 'var(--accent-red)' if ts.get('status','')=='Wrong' else 'var(--text-muted)' }}">{{ ts.get('status','—') }}</div>
+    <div class="stat-label">Title vs Specs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:{{ 'var(--accent-green)' if sc.get('status','')=='Correct' else 'var(--accent-red)' if sc.get('status','')=='Wrong' else 'var(--text-muted)' }}">{{ sc.get('status','—') }}</div>
+    <div class="stat-label">Specs vs Category</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:{{ 'var(--accent-green)' if data.get('status')==200 else 'var(--accent-red)' }}">{{ data.get('status','—') }}</div>
+    <div class="stat-label">Status</div>
+  </div>
+</div>
+
+<!-- PRODUCT CARD + FINAL DECISION -->
+<div class="dashboard-grid grid-2" style="margin-bottom:1.25rem;">
+
+  <!-- BuyLead Product Card -->
+  <div class="product-card">
+    <div class="product-card-banner"></div>
+    <div class="product-card-body">
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <div class="product-img-wrap">
+          <img src="{{ data.get('img_url','') }}" alt="Product" onerror="this.src='https://via.placeholder.com/120x120/151c2c/3b82f6?text=No+Img'" />
+        </div>
+        <div class="product-info">
+          <div class="product-title">{{ data.get('item_name','—') }}</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;">
+            <span style="color:var(--text-muted);">{{ data.get('mcat_name','—') }}</span>
+          </div>
+          <div class="product-meta">
+            <div class="meta-tag">💰 ₹<span>{{ data.get('price','—') }}</span>/{{ data.get('unit','—') }}</div>
+            <div class="meta-tag">🏷️ <span>{{ data.get('mcat_name','—') }}</span></div>
+            <div class="meta-tag">👤 <span>{{ data.get('modid','—') }}</span></div>
+            <div class="meta-tag">📋 <span>{{ data.get('screen_name','—') }}</span></div>
+            <div class="meta-tag">🔖 <span>{{ data.get('worker_name','—') }}</span></div>
+            <div class="meta-tag">🌐 <span>GLID {{ data.get('glid','—') }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Small Agent Verdicts -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">🔍</div>
+      <div><div class="card-title">Mismatch Check Results</div><div class="card-subtitle">Windmill small agents</div></div>
+    </div>
+    <table class="check-table">
+      <tr>
+        <td class="check-key">Title vs Category</td>
+        <td><span class="verdict verdict-{{ 'pass' if tc.get('status','')=='Correct' else 'fail' if tc.get('status','')=='Wrong' else 'warn' }}">{{ tc.get('status','—') }}</span></td>
+        <td class="check-reason">{{ tc.get('reason','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">Title vs Specs</td>
+        <td><span class="verdict verdict-{{ 'pass' if ts.get('status','')=='Correct' else 'fail' if ts.get('status','')=='Wrong' else 'warn' }}">{{ ts.get('status','—') }}</span></td>
+        <td class="check-reason">{{ ts.get('reason','—') }}</td>
+      </tr>
+      <tr>
+        <td class="check-key">Specs vs Category</td>
+        <td><span class="verdict verdict-{{ 'pass' if sc.get('status','')=='Correct' else 'fail' if sc.get('status','')=='Wrong' else 'warn' }}">{{ sc.get('status','—') }}</span></td>
+        <td class="check-reason">{{ sc.get('reason','—') }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

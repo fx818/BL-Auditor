@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access denied - BL Auditor</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=light-3" />
+</head>
+<body>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div style="text-align:center;padding:40px;border:1px solid var(--border,#333);border-radius:12px;max-width:460px;">
+      <h1 style="margin:0 0 8px;">Access denied</h1>
+      <p style="color:var(--text-muted,#888);margin:0 0 8px;">
+        {% if email %}<code>{{ email }}</code> is not permitted.{% endif %}
+      </p>
+      <p style="color:var(--text-muted,#888);margin:0 0 24px;">
+        Only <b>@indiamart.com</b> accounts can access this platform.
+      </p>
+      <a href="/auth/logout" class="btn btn-outline">Try a different account</a>
+    </div>
+  </div>
+</body>

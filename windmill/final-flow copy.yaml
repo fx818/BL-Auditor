@@ -1,0 +1,1591 @@
+summary: ""
+description: ""
+value:
+  modules:
+    - id: i
+      value:
+        path: u/anuragupadhyay2/fetch_buylead
+        type: script
+        is_trigger: false
+        input_transforms:
+          offer_id:
+            expr: flow_input.offer_id
+            type: javascript
+    - id: a
+      value:
+        type: branchall
+        branches:
+          - expr: ""
+            modules:
+              - id: e
+                value:
+                  path: u/anuragupadhyay2/Buyer_Viewed
+                  type: flow
+                  input_transforms:
+                    mcat:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                    title:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    product_enquired:
+                      expr: results.i.RESPONSE.DATA.PRODUCTS_ENQUIRED
+                      type: javascript
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: c
+                value:
+                  path: u/anuragupadhyay2/description_auditor
+                  type: flow
+                  input_transforms:
+                    glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    ofr_date:
+                      expr: results.i.RESPONSE.DATA.OFR_DATE
+                      type: javascript
+                    item_name:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                    mcat_name:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                    description:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_DESC
+                      type: javascript
+                    eto_ofr_date:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_DATE
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: d
+                value:
+                  path: u/anuragupadhyay2/Inter_ISQ
+                  type: flow
+                  input_transforms:
+                    mcat:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+                      value: ""
+                    title:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                      value: ""
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                      value: ""
+                continue_on_error: false
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: n
+                value:
+                  lock: |
+                    # py: 3.12
+                  type: rawscript
+                  content: |-
+                    import json
+
+
+                    def main(enrichment_info) -> list:
+                        if isinstance(enrichment_info, str):
+                            try:
+                                parsed = json.loads(enrichment_info or "{}")
+                            except Exception:
+                                parsed = {}
+                        elif isinstance(enrichment_info, dict):
+                            parsed = enrichment_info
+                        else:
+                            parsed = {}
+
+                        items = []
+                        for v in parsed.values():
+                            if isinstance(v, list):
+                                items.extend(v)
+
+                        return [
+                            {
+                                "IM_SPEC_MASTER_DESC": item.get("DESC", ""),
+                                "ISQ_RESPONSE": item.get("RESPONSE", ""),
+                            }
+                            for item in items
+                            if isinstance(item, dict)
+                        ]
+                  language: python3
+                  input_transforms:
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                summary: Get ISQs
+              - id: j
+                value:
+                  type: branchall
+                  branches:
+                    - expr: ""
+                      modules:
+                        - id: k
+                          value:
+                            path: f/small_agents/title_specs_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              specs:
+                                expr: results.n
+                                type: javascript
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              item_name:
+                                expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                                type: javascript
+                      parallel: true
+                      skip_failure: false
+                    - expr: "false"
+                      modules:
+                        - id: l
+                          value:
+                            path: f/small_agents/title_category_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              item_name:
+                                expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                                type: javascript
+                              mcat_name:
+                                expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                                type: javascript
+                      summary: ""
+                      parallel: true
+                      skip_failure: false
+                    - expr: "false"
+                      modules:
+                        - id: m
+                          value:
+                            path: f/small_agents/specs_category_mismatch_agent_flow
+                            type: flow
+                            input_transforms:
+                              model:
+                                type: static
+                                value: google/gemini-2.5-flash-lite
+                              specs:
+                                expr: results.n
+                                type: javascript
+                              api_key:
+                                type: static
+                                value: sk-4HWlXkjoJ8of6Vz-U4N9EQ
+                              mcat_name:
+                                expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                                type: javascript
+                              pc_item_id:
+                                type: static
+                                value: ""
+                      summary: ""
+                      parallel: true
+                      skip_failure: false
+                  parallel: true
+                summary: ""
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: p
+                value:
+                  path: u/anuragupadhyay2/Retail_Agent
+                  type: flow
+                  input_transforms:
+                    offer_id:
+                      expr: flow_input.offer_id
+                      type: javascript
+                      value: ""
+                    enrichment_info:
+                      expr: results.i.RESPONSE.DATA.ENRICHMENTINFO
+                      type: javascript
+                    prime_mcat_name:
+                      expr: results.i.RESPONSE.DATA.PRIME_MCAT_NAME
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: r
+                value:
+                  path: u/anuragupadhyay2/UserDetail_RFQ
+                  type: script
+                  is_trigger: false
+                  input_transforms:
+                    latest_lead:
+                      type: static
+                      value: 10
+                    encrypted_glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+              - id: v
+                value:
+                  lock: |
+                    # py: 3.12
+                  type: rawscript
+                  content: >-
+                    # import wmill
+
+
+                    def main(name: str, company: str, email: str, phone: str,
+                    country: str) -> dict:
+                        # Safely convert to string and strip whitespace to prevent crashes if None is passed
+                        name = str(name or "").strip()
+                        company = str(company or "").strip()
+                        email = str(email or "").strip()
+                        phone = str(phone or "").strip()
+                        country = str(country or "").strip()
+
+                        reasons = []
+
+                        # Check 1: Either Name OR Company must be present
+                        if not name and not company:
+                            reasons.append("Either 'name' or 'company' must be provided.")
+
+                        # Check 2: Name rules (if provided)
+                        if name:
+                            if len(name) < 2:
+                                reasons.append("Name must be at least 2 characters long.")
+                            if len(name.split()) >= 4:
+                                reasons.append("Name must not exceed 5 words.")
+
+                        # Check 3: Company rules (if provided)
+                        if company:
+                            if len(company) < 2:
+                                reasons.append("Company name must be at least 2 characters long.")
+                            if len(company.split()) >= 4:
+                                reasons.append("Company name must not exceed 5 words.")
+
+                        # Check 4: Country-specific contact requirements
+                        is_indian = country.lower() in ["india", "indian", "in"]
+
+                        if is_indian:
+                            if not phone:
+                                reasons.append("Mobile number is mandatory for Indian profiles.")
+                        else:
+                            if not email:
+                                reasons.append("Email is mandatory for foreign profiles.")
+
+                        # Valid is True only when no validation reasons exist
+                        return {
+                            "valid": len(reasons) == 0,
+                            "reasons": reasons,
+                            "profile": {
+                                "name": name,
+                                "company": company,
+                                "email": email,
+                                "phone": phone,
+                                "country": country
+                            }
+                        }
+                  language: python3
+                  input_transforms:
+                    name:
+                      expr: results.r.user_detail.glusr_usr_firstname + " " +
+                        results.r.user_detail.glusr_usr_lastname
+                      type: javascript
+                    email:
+                      expr: results.r.user_detail.glusr_usr_email
+                      type: javascript
+                    phone:
+                      expr: results.r.user_detail.glusr_usr_ph_mobile
+                      type: javascript
+                    company:
+                      expr: results.r.user_detail.glusr_usr_companyname
+                      type: javascript
+                    country:
+                      expr: results.r.user_detail.country_name
+                      type: javascript
+                summary: Profile Checks
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: wh
+                value:
+                  path: u/anuragupadhyay2/bl_profile_agent
+                  type: flow
+                  input_transforms:
+                    title:
+                      expr: results.i.RESPONSE.DATA.ETO_OFR_TITLE
+                      type: javascript
+                    logtime:
+                      expr: results.i.RESPONSE.DATA.OFR_DATE
+                      type: javascript
+                    encrypted_glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+            summary: ""
+            parallel: true
+            skip_failure: false
+          - expr: "false"
+            modules:
+              - id: wj
+                value:
+                  path: u/anuragupadhyay2/buyer_activity_fetch
+                  type: script
+                  is_trigger: false
+                  input_transforms:
+                    logtime:
+                      expr: results.i.RESPONSE.DATA.OFR_DATE
+                      type: javascript
+                    encrypted_glid:
+                      expr: results.i.RESPONSE.DATA.FK_GLUSR_USR_ID
+                      type: javascript
+              - id: wi
+                value:
+                  lock: |
+                    # py: 3.12
+                  type: rawscript
+                  content: >-
+                    import re
+
+                    from difflib import SequenceMatcher
+
+                    from urllib.parse import unquote
+
+                    from datetime import datetime
+
+
+
+                    STOPWORDS = {
+                        "a", "an", "the", "of", "for", "and", "or", "with", "to", "in", "on",
+                        "by", "is", "are", "type", "types", "number", "no", "set", "sets",
+                    }
+
+
+                    ACTIVITY_LABELS = {
+                        "ENQ": "an enquiry",
+                        "BL": "a buylead",
+                        "Browse": "a product browse",
+                        "Search": "a search",
+                    }
+
+
+                    MATCH_THRESHOLD = 0.5  # tune this: higher = stricter
+                    matching
+
+
+
+                    def _normalize(text) -> str:
+                        """Lowercase, url-decode, strip punctuation, collapse whitespace."""
+                        if not text or text == "-":
+                            return ""
+                        text = unquote(str(text))
+                        text = text.lower()
+                        text = re.sub(r"[^a-z0-9\s]", " ", text)
+                        text = re.sub(r"\s+", " ", text).strip()
+                        return text
+
+
+                    def _tokens(text: str) -> set:
+                        normalized = _normalize(text)
+                        return {w for w in normalized.split() if len(w) > 2 and w not in STOPWORDS}
+
+
+                    def _format_datetime(raw) -> str:
+                        try:
+                            return datetime.strptime(str(raw), "%Y%m%d%H%M%S").strftime("%d %b %Y, %I:%M %p")
+                        except (ValueError, TypeError):
+                            return str(raw) if raw else "an unknown time"
+
+
+                    def _build_signals(buyer_activity: dict):
+                        """Flatten buyer_activity into comparable text signals, one per event.
+
+                        Supports two shapes seen from the upstream APIs:
+                          - {"DETAILS": [{"keyword": ..., "glcat_mcat_name": ..., "mcat_names": ..., "activity_type": ..., "datetime": ...}]}
+                          - {"events":  [{"keyword": ..., "activity_type": ..., "datetime": ...}]}
+                        """
+                        entries = (buyer_activity or {}).get("DETAILS")
+                        if entries is None:
+                            entries = (buyer_activity or {}).get("events")
+
+                        signals = []
+                        for entry in entries or []:
+                            texts = set()
+
+                            keyword = _normalize(entry.get("keyword"))
+                            if keyword:
+                                texts.add(keyword)
+
+                            glcat_mcat_name = _normalize(entry.get("glcat_mcat_name"))
+                            if glcat_mcat_name:
+                                texts.add(glcat_mcat_name)
+
+                            mcat_names = entry.get("mcat_names")
+                            if isinstance(mcat_names, list):
+                                for name in mcat_names:
+                                    norm_name = _normalize(name)
+                                    if norm_name:
+                                        texts.add(norm_name)
+                            elif mcat_names:
+                                norm_name = _normalize(mcat_names)
+                                if norm_name:
+                                    texts.add(norm_name)
+
+                            if not texts:
+                                continue
+
+                            signals.append({
+                                "texts": texts,
+                                "activity_type": entry.get("activity_type", "activity"),
+                                "datetime": entry.get("datetime"),
+                            })
+                        return signals
+
+
+                    def _best_match(item_name: str, signals: list):
+                        """Return the (score, signal, matched_text, overlap_tokens) that best matches item_name, or None."""
+                        item_tokens = _tokens(item_name)
+                        item_norm = _normalize(item_name)
+                        if not item_tokens:
+                            return None
+
+                        best = None
+                        for signal in signals:
+                            for text in signal["texts"]:
+                                sig_tokens = {w for w in text.split() if len(w) > 2 and w not in STOPWORDS}
+                                if not sig_tokens:
+                                    continue
+
+                                overlap = item_tokens & sig_tokens
+                                overlap_ratio = len(overlap) / len(item_tokens)
+                                substring_hit = bool(item_norm) and (item_norm in text or text in item_norm)
+                                similarity = SequenceMatcher(None, item_norm, text).ratio()
+
+                                score = max(overlap_ratio, similarity)
+                                if substring_hit:
+                                    score = max(score, 0.9)
+
+                                if best is None or score > best[0]:
+                                    best = (score, signal, text, overlap)
+
+                        return best
+
+
+                    def _match_one(item_name: str, signals: list) -> dict:
+                        """Match a single product name against the buyer's activity signals."""
+                        best = _best_match(item_name, signals)
+
+                        if best and best[0] >= MATCH_THRESHOLD:
+                            score, signal, matched_text, overlap = best
+                            activity_label = ACTIVITY_LABELS.get(signal["activity_type"], signal["activity_type"] or "an activity")
+                            when = _format_datetime(signal["datetime"])
+                            shared = ", ".join(sorted(overlap)) if overlap else matched_text
+                            return {
+                                "status": "matched",
+                                "reason": (
+                                    f"'{item_name}' matches buyer intent for '{matched_text}' via {activity_label} "
+                                    f"on {when} (overlap: {shared})"
+                                ),
+                            }
+
+                        return {
+                            "status": "not matched",
+                            "reason": f"'{item_name}' has no overlapping search, browse, enquiry, or buylead activity",
+                        }
+
+
+                    def main(product_enq: list, buyer_activity: dict) -> dict:
+                        signals = _build_signals(buyer_activity)
+
+                        per_product = [
+                            _match_one(product.get("FK_PC_ITEM_NAME", ""), signals)
+                            for product in (product_enq or [])
+                        ]
+
+                        overall_status = "matched" if any(p["status"] == "matched" for p in per_product) else "not matched"
+                        reason = "; ".join(p["reason"] for p in per_product) if per_product else "No products were provided to check."
+
+                        return {
+                            "status": overall_status,
+                            "reason": reason,
+                        }
+                  language: python3
+                  input_transforms:
+                    product_enq:
+                      expr: results.i.RESPONSE.DATA.PRODUCTS_ENQUIRED
+                      type: javascript
+                    buyer_activity:
+                      expr: results.wj
+                      type: javascript
+                summary: Buyer Viewed vs CSL
+            summary: ""
+            parallel: true
+            skip_failure: false
+        parallel: true
+      summary: ""
+    - id: w
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: |-
+          import json
+
+          # ---------------------------------------------------------------------------
+          # Fixed sequence of agents as they appear in the input array (results.a),
+          # in this order:
+          #   [0] Buyer Viewed        [1] Description        [2] Inter ISQ
+          #   [3] list of 3 sub-responses -> Title ISQ, Title vs MCAT, ISQ vs MCAT
+          #   [4] Retail               [5] Profile Validity   [6] Buyer Activity
+          # ---------------------------------------------------------------------------
+          AGENT_NAMES = {
+              "buyer_viewed": "Buyer Viewed Agent",
+              "description": "Description Agent",
+              "inter_isq": "Inter ISQ Agent",
+              "title_isq": "Title ISQ Agent",
+              "title_vs_mcat": "Title vs MCAT Agent",
+              "isq_vs_mcat": "ISQ vs MCAT Agent",
+              "retail": "Retail Agent",
+              "profile_validity": "Profile Validity Agent",
+              "buyer_activity": "Buyer Activity",
+          }
+
+          # Only these 4 product-validation agents are ever allowed to land in the
+          # "incorrect" bucket. Every other agent (Buyer Viewed, Description, Retail,
+          # Profile Validity, Buyer Activity) always goes into "correct", regardless of
+          # its own verdict -- its real field values (status, reason, etc.) are kept
+          # as-is in the payload, only the bucket placement is forced.
+          CORE_AGENTS = {"title_isq", "title_vs_mcat", "isq_vs_mcat", "inter_isq"}
+
+
+          def _safe_index(lst, idx):
+              """Return lst[idx] if it exists, else None (never raises)."""
+              if isinstance(lst, list) and 0 <= idx < len(lst):
+                  return lst[idx]
+              return None
+
+
+          def normalize_verdict(value):
+              """
+              Map many possible verdict spellings to 'correct' / 'incorrect'.
+              Returns None if the value can't be recognized at all.
+              """
+              if value is None:
+                  return None
+              v = str(value).strip().lower().replace("_", " ")
+              if v in ("correct", "not outlier", "true", "valid", "yes"):
+                  return "correct"
+              if v in ("incorrect", "outlier", "false", "invalid", "no"):
+                  return "incorrect"
+              return None
+
+
+          def _bucket_entry(entry, bucket_map, agent_key, name, bucket, payload):
+              """Push `payload` into bucket_map[bucket][name], recording provenance."""
+              payload["agent"] = name
+              bucket_map[bucket][name] = payload
+
+
+          # ---------------------------------------------------------------------------
+          # Individual agent parsers
+          # Each returns: (bucket:'correct'|'incorrect', payload:dict)
+          # ---------------------------------------------------------------------------
+
+          def parse_buyer_viewed(data):
+              """Element [0]: reason / status / product_matched"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Buyer Viewed Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              status = data.get("status")
+              verdict = normalize_verdict(status)
+
+              payload = {
+                  "status": status,
+                  "reason": data.get("reason"),
+                  "product_matched": data.get("product_matched"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing 'status' value: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_description(data):
+              """Element [1]: term_match / description_audit{reason,status} / keyword_selection{error,reason,keywords}"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Description Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              audit = data.get("description_audit")
+              if not isinstance(audit, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing/malformed 'description_audit' block.",
+                      "term_match": data.get("term_match"),
+                      "keyword_selection": data.get("keyword_selection"),
+                  }
+
+              status = audit.get("status")
+              verdict = normalize_verdict(status)
+
+              keyword_selection = data.get("keyword_selection")
+              if not isinstance(keyword_selection, dict):
+                  keyword_selection = {}
+
+              payload = {
+                  "status": status,
+                  "reason": audit.get("reason"),
+                  "term_match": data.get("term_match"),
+                  "keyword_selection": {
+                      "error": keyword_selection.get("error"),
+                      "reason": keyword_selection.get("reason"),
+                      "keywords": keyword_selection.get("keywords"),
+                  },
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing description_audit.status: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_inter_isq(data):
+              """Element [2]: reason / status (score/confidence kept if present, for backward compat)"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Inter ISQ Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              status = data.get("status")
+              verdict = normalize_verdict(status)
+
+              payload = {
+                  "status": status,
+                  "reason": data.get("reason", data.get("reasoning")),
+                  "score": data.get("score"),
+                  "confidence": data.get("confidence"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing status: {status!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_sub_llm_agent(item):
+              """
+              Shared parser for the 3 sub-responses living inside element [3]
+              (title ISQ / title vs mcat / ISQ vs mcat agents).
+              Each item is normally: {cost, model, response:{reason, status, item_id?}, token_usage, response_time}
+              but can instead be: {error:{name, message, ...}}  (windmill/LLM failure)
+              """
+              if item is None:
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing sub-agent entry (expected element not present in list).",
+                  }
+
+              if not isinstance(item, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Sub-agent entry was not a dict.",
+                      "raw": item,
+                  }
+
+              # Case 1: explicit error block (e.g. JSONDecodeError from the LLM gateway)
+              if "error" in item and "response" not in item:
+                  err = item.get("error") or {}
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "LLM/agent call failed before producing a verdict.",
+                      "error_detail": {
+                          "name": err.get("name"),
+                          "message": err.get("message"),
+                          "step_id": err.get("step_id"),
+                      },
+                  }
+
+              response = item.get("response")
+              if not isinstance(response, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Missing/malformed 'response' block.",
+                      "raw": item,
+                  }
+
+              verdict = normalize_verdict(response.get("status"))
+              payload = {
+                  "status": response.get("status"),
+                  "reason": response.get("reason"),
+                  "item_id": response.get("item_id"),
+                  "model": item.get("model"),
+                  "cost": item.get("cost"),
+                  "response_time": item.get("response_time"),
+                  "token_usage": item.get("token_usage"),
+                  "error": verdict is None,
+              }
+              if verdict is None:
+                  payload["error_note"] = f"Unrecognized/missing response.status: {response.get('status')!r}"
+
+              bucket = verdict if verdict is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_retail(data):
+              """
+              Element [4]: reason / status
+              status is a classification ("Retail" / "Non-Retail"), not a correct/incorrect
+              verdict, so this agent is always filed under 'correct' by add() regardless
+              of what's returned here.
+              """
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Retail Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              classification = data.get("status")
+              payload = {
+                  "classification": classification,
+                  "reason": data.get("reason"),
+                  "error": classification is None,
+              }
+              if classification is None:
+                  payload["error_note"] = f"Unrecognized/missing 'status' value: {classification!r}"
+
+              bucket = "correct" if classification is not None else "incorrect"
+              return bucket, payload
+
+
+          def parse_profile_validity(data):
+              """Element [5]: valid / profile / reasons"""
+              if not isinstance(data, dict):
+                  return "incorrect", {
+                      "error": True,
+                      "error_note": "Expected a dict for Profile Validity Agent, got something else / missing.",
+                      "raw": data,
+                  }
+
+              valid = data.get("valid")
+              payload = {
+                  "valid": valid,
+                  "profile": data.get("profile"),
+                  "reasons": data.get("reasons"),
+              }
+              if valid is True:
+                  payload["error"] = False
+                  return "correct", payload
+              if valid is False:
+                  payload["error"] = False
+                  return "incorrect", payload
+
+              payload["error"] = True
+              payload["error_note"] = f"Unrecognized/missing 'valid' field: {valid!r}"
+              return "incorrect", payload
+
+
+          def parse_buyer_activity(data):
+              """
+              Element [6]: buyer_activity_fetch output -- ok / code / error / events / message / summary
+              Informational only (never a pass/fail verdict) -- always filed under
+              'correct' by add(); parsed defensively regardless.
+              """
+              if not isinstance(data, dict):
+                  return "correct", {
+                      "error": True,
+                      "error_note": "Expected a dict for Buyer Activity, got something else / missing.",
+                      "raw": data,
+                  }
+
+              summary = data.get("summary")
+              if not isinstance(summary, dict):
+                  summary = {}
+              events = data.get("events")
+
+              payload = {
+                  "ok": data.get("ok"),
+                  "code": data.get("code"),
+                  "message": data.get("message"),
+                  "glid": summary.get("glid"),
+                  "total_records": summary.get("total"),
+                  "bl_count": summary.get("bl_count"),
+                  "enq_count": summary.get("enq_count"),
+                  "range_from": summary.get("range_from"),
+                  "range_to": summary.get("range_to"),
+                  "top_city": summary.get("top_city"),
+                  "type_counts": summary.get("type_counts"),
+                  "events": events if isinstance(events, list) else [],
+                  "error": bool(data.get("error")) and data.get("ok") is not True,
+              }
+              return "correct", payload
+
+
+          def main(x):
+              """
+              Windmill entrypoint.
+              Accepts either a JSON string or an already-parsed list (defensive, since
+              upstream steps sometimes hand this off as a string and sometimes as a
+              native object).
+
+              Returns:
+                  {
+                      "correct":   { "<Agent Name>": {...}, ... },
+                      "incorrect": { "<Agent Name>": "<Agent Name>", ... },
+                  }
+              """
+              if isinstance(x, str):
+                  try:
+                      data = json.loads(x)
+                  except Exception as e:
+                      return {
+                          "correct": {},
+                          "incorrect": {
+                              "Input Parsing": {
+                                  "error": True,
+                                  "error_note": f"Failed to parse input JSON string: {e}",
+                                  "raw": x,
+                              }
+                          },
+                      }
+              else:
+                  data = x
+
+              if not isinstance(data, list):
+                  return {
+                      "correct": {},
+                      "incorrect": {
+                          "Input Parsing": {
+                              "error": True,
+                              "error_note": "Expected the input to be a JSON array of agent responses.",
+                              "raw": data,
+                          }
+                      },
+                  }
+
+              result = {"correct": {}, "incorrect": {}}
+
+              def add(agent_key, bucket, payload):
+                  if agent_key not in CORE_AGENTS:
+                      bucket = "correct"
+                  name = AGENT_NAMES[agent_key]
+                  # For the "incorrect" bucket we only want the agent's name, not the
+                  # full payload -- the detailed dict is still available in "correct"
+                  # for agents that pass, but a failing core agent just gets flagged
+                  # by name here.
+                  if bucket == "incorrect":
+                      result[bucket][name] = name
+                  else:
+                      result[bucket][name] = payload
+
+              # 1. Buyer Viewed Agent
+              bucket, payload = parse_buyer_viewed(_safe_index(data, 0))
+              add("buyer_viewed", bucket, payload)
+
+              # 2. Description Agent
+              bucket, payload = parse_description(_safe_index(data, 1))
+              add("description", bucket, payload)
+
+              # 3. Inter ISQ Agent
+              bucket, payload = parse_inter_isq(_safe_index(data, 2))
+              add("inter_isq", bucket, payload)
+
+              # 4-6. Title ISQ / Title vs MCAT / ISQ vs MCAT Agents (list of 3 sub-responses)
+              sub_list = _safe_index(data, 3)
+              sub_keys = ["title_isq", "title_vs_mcat", "isq_vs_mcat"]
+              for i, agent_key in enumerate(sub_keys):
+                  item = _safe_index(sub_list, i) if isinstance(sub_list, list) else None
+                  bucket, payload = parse_sub_llm_agent(item)
+                  add(agent_key, bucket, payload)
+
+              # 7. Retail Agent
+              bucket, payload = parse_retail(_safe_index(data, 4))
+              add("retail", bucket, payload)
+
+              # 8. Profile Validity Agent
+              bucket, payload = parse_profile_validity(_safe_index(data, 5))
+              add("profile_validity", bucket, payload)
+
+
+              return result
+        language: python3
+        input_transforms:
+          x:
+            expr: results.a
+            type: javascript
+      summary: Parsing
+    - id: y
+      value:
+        type: branchone
+        default:
+          - id: y2
+            value:
+              lock: |
+                # py: 3.12
+              type: rawscript
+              content: >-
+                def main():
+                    # Recheck skipped: 0, or 3+, of the 4 product-validation agents
+                    # were flagged incorrect, so this branch returns an empty result
+                    # so downstream steps see no overrides.
+                    return {"output": "[]"}
+              language: python3
+              input_transforms: {}
+            summary: Recheck skipped (relevant incorrect count not 1 or 2)
+        branches:
+          - expr: ([ "Title vs MCAT Agent" in (results.w && results.w.incorrect || {}),
+              "Inter ISQ Agent" in (results.w && results.w.incorrect || {}),
+              "Title ISQ Agent" in (results.w && results.w.incorrect || {}),
+              "ISQ vs MCAT Agent" in (results.w && results.w.incorrect || {})
+              ].filter(Boolean).length >= 1) && ([ "Title vs MCAT Agent" in
+              (results.w && results.w.incorrect || {}), "Inter ISQ Agent" in
+              (results.w && results.w.incorrect || {}), "Title ISQ Agent" in
+              (results.w && results.w.incorrect || {}), "ISQ vs MCAT Agent" in
+              (results.w && results.w.incorrect || {}) ].filter(Boolean).length
+              <= 2)
+            modules:
+              - id: y1
+                value:
+                  type: aiagent
+                  tools: []
+                  input_transforms:
+                    provider:
+                      type: static
+                      value:
+                        kind: customai
+                        model: deepseek/deepseek-v4-flash
+                        resource: $res:u/anuragupadhyay2/inspirational_customai
+                    output_type:
+                      type: static
+                      value: text
+                    user_message:
+                      expr: "`Agent: ${JSON.stringify(results.w.incorrect)}, Title:
+                        ${results.i.RESPONSE.DATA.ETO_OFR_TITLE}, MCAT:
+                        ${results.i.RESPONSE.DATA.PRIME_MCAT_NAME}, ISQs:
+                        ${results.i.RESPONSE.DATA.ENRICHMENTINFO}`"
+                      type: javascript
+                    system_prompt:
+                      type: static
+                      value: "# Check Agent — IndiaMART BuyLead Auditor\r
+
+                        \r
+
+                        `Agent` is a SELECTION list telling you which checks to
+                        run. Run ONLY the agents named in `Agent`, in that exact
+                        order. Do not run, mention, or output any agent absent
+                        from `Agent`.\r
+
+                        \r
+
+                        Input:\r
+
+                        {\"Title\": \"...\", \"MCAT\": \"...\", \"ISQs\": {...},
+                        \"Agent\": [...]}\r
+
+                        \r
+
+                        Output array length MUST equal input `Agent` length,
+                        same order, no additions/omissions.\r
+
+                        \r
+
+                        Global rules:\r
+
+                        * Ignore Probable Order Value / Probable Requirement
+                        Type for outlier calls — context only.\r
+
+                        * Buyer Filled Details / Additional Requirements =
+                        supplementary, not strict constraints.\r
+
+                        * Never infer missing info or buyer intent. Insufficient
+                        evidence → not_outlier.\r
+
+                        * outlier requires a clear, direct contradiction.
+                        Default to not_outlier when ambiguous.\r
+
+                        * Judge each agent independently, no carry-over.\r
+
+                        \r
+
+                        ## Definitions (apply ONLY those named in `Agent`)\r
+
+                        \r
+
+                        **Title vs MCAT Agent** — Identify the Title's core
+                        entity (product/instrument/service/troupe/agency, etc.)
+                        AND its target segment (baby/infant, kids, girls, boys,
+                        men, women, unisex). Compare both against MCAT.\r
+
+                        \r
+
+                        outlier if EITHER:\r
+
+                        1. **Entity-type mismatch** — Title's core entity is a
+                        different KIND of thing than MCAT, even if a keyword or
+                        generic word (Agency, Band, Company) is shared.\r
+
+                        \   - Title \"Puneri Dhol Tasha Pathak Musical Band\",
+                        MCAT \"Dhol\" → outlier (band/service vs. instrument).\r
+
+                        \   - Title \"Ola Party Diamond Agency\", MCAT
+                        \"Modeling Agencies\" → outlier.\r
+
+                        2. **Segment mismatch** — Title and MCAT name different
+                        target age/gender segments for the same product, even if
+                        the base product word matches. Baby/infant, kids, girls,
+                        boys, men, women, unisex are distinct unless identical
+                        or direct synonyms — do not treat one as a subset of
+                        another by default.\r
+
+                        \   - Title \"Baby Dresses\", MCAT \"Girls Casual
+                        Dresses\" → outlier (baby ≠ girls segment).\r
+
+                        \r
+
+                        not_outlier — Title is the same entity type AND same
+                        segment as MCAT, or a narrower style/subtype within both
+                        (e.g. Title \"PVC Pipe\", MCAT \"PVC Pipes\"; Title
+                        \"Girls Party Dresses\", MCAT \"Girls Casual Dresses\" —
+                        same segment, style variant).\r
+
+                        \r
+
+                        Ignore: quantity, size, brand, colour, packaging, order
+                        value. Shared keywords alone never establish coherence —
+                        always check entity type + segment.\r
+
+                        \r
+
+                        **Title ISQ Agent** — Compare Title vs ISQs (material,
+                        size, capacity, grade). outlier only if an ISQ directly
+                        contradicts Title's core identity/spec (e.g. Title
+                        \"Steel Tank\", ISQ Material: Plastic). Ignore
+                        Quantity/Order Value/Requirement Type. Never flag an ISQ
+                        that merely adds detail.\r
+
+                        \r
+
+                        **ISQ vs MCAT Agent** — Compare ISQs vs MCAT category.
+                        outlier only if ISQs as a whole describe a different,
+                        unrelated category than MCAT. Ignore Order
+                        Value/Requirement Type. Never flag a narrower
+                        variant/spec within MCAT.\r
+
+                        \r
+
+                        **Inter ISQ Agent** — Compare ISQs against each other.
+                        Check BOTH sub-rules below; outlier if either fires.\r
+
+                        \r
+
+                        1. **Variant contradiction** — Two ISQs are mutually
+                        exclusive, OR Quantity implies a single unit/piece while
+                        other ISQs assign it contradictory variant values (e.g.
+                        Qty: 1 pc, Material: Steel AND Plastic). Never flag
+                        legitimate co-existing variants or Quantity implying
+                        multiple units.\r
+
+                        \r
+
+                        2. **Package-quantity math** — A
+                        per-package/per-box/per-carton/per-unit quantity ISQ
+                        (e.g. \"Quantity per Package\", \"Pieces per Box\") vs a
+                        total/order quantity ISQ (e.g. \"Total Quantity\",
+                        \"Order Quantity\"). Apply this exact procedure, in
+                        order:\r
+
+                        \   a. Both fields must be present with explicit numeric
+                        values. If either is missing, blank, or non-numeric →
+                        skip this check, not_outlier.\r
+
+                        \   b. Compare units exactly as stated. Only proceed if
+                        the two ISQs use the same unit, or the ISQ set itself
+                        states an explicit conversion (e.g. \"1 box = 10 pcs\"
+                        given verbatim in the ISQs). If units differ and no
+                        explicit conversion is stated in the input → do NOT
+                        convert, do NOT assume, skip this check, not_outlier.\r
+
+                        \   c. Never invent, assume, or look up a conversion
+                        factor (e.g. do not assume 1 box = 12 pcs, 1 kg = X pcs,
+                        etc.) — only use a conversion if it is stated verbatim
+                        in the ISQs.\r
+
+                        \   d. With directly comparable numbers: outlier if
+                        per-package/per-unit quantity > total/order quantity.
+                        not_outlier if per-package/per-unit quantity ≤
+                        total/order quantity.\r
+
+                        \   - Example outlier: ISQ \"Quantity per Package: 150
+                        pcs\", \"Total Quantity: 100 pcs\" → outlier (150 > 100,
+                        same unit).\r
+
+                        \   - Example not_outlier: ISQ \"Quantity per Package:
+                        10 pcs\", \"Total Quantity: 100 pcs\" → not_outlier (10
+                        ≤ 100).\r
+
+                        \   - Example not_outlier (no conversion given): ISQ
+                        \"Quantity per Package: 5 kg\", \"Total Quantity: 100
+                        pcs\" → not_outlier (units differ, no stated conversion
+                        — do not guess).\r
+
+                        \r
+
+                        Ignore Order Value/Requirement Type throughout.\r
+
+                        \r
+
+                        Reasoning: one factual sentence per agent, citing only
+                        the compared fields (for Inter ISQ package-math outlier
+                        calls, state the two numeric values and units compared).
+                        No \"probably,\" \"seems,\" or references to other
+                        agents.\r
+
+                        \r
+
+                        Output — JSON array only, no markdown/extra text.
+                        Exactly these keys in order: `Agent`, `status`,
+                        `reason`. `status` is exactly \"outlier\" or
+                        \"not_outlier\".\r
+
+                        \r
+
+                        Example (Agent = [\"Title vs MCAT Agent\", \"Inter ISQ
+                        Agent\"]):\r
+
+                        [\r
+
+                        \  {\"Agent\": \"Title vs MCAT Agent\", \"status\":
+                        \"not_outlier\", \"reason\": \"...\"},\r
+
+                        \  {\"Agent\": \"Inter ISQ Agent\", \"status\":
+                        \"outlier\", \"reason\": \"...\"}\r
+
+                        ]\r
+
+                        \r
+
+                        Verify before finalizing: output length == input `Agent`
+                        length, order matches."
+                    streaming:
+                      type: static
+                      value: true
+                    memory:
+                      type: static
+                      value:
+                        kind: off
+                    output_schema:
+                      type: static
+                      value:
+                        type: object
+                        order:
+                          - results
+                        required:
+                          - results
+                        properties:
+                          results:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - Agent
+                                - Final Verdict
+                                - Reason
+                              properties:
+                                agent:
+                                  type: string
+                                  default: ""
+                                  description: ""
+                                reason:
+                                  type: string
+                                  default: ""
+                                  description: ""
+                                status:
+                                  enum:
+                                    - not_outlier
+                                    - outlier
+                                  type: string
+                                  default: ""
+                                  description: ""
+                              additionalProperties: false
+                            default: []
+                            description: ""
+                        additionalProperties: false
+                    user_attachments:
+                      type: static
+                      value: []
+                    max_completion_tokens:
+                      type: static
+                      value: null
+                    temperature:
+                      type: static
+                      value: null
+                    max_iterations:
+                      type: static
+                      value: 10
+                summary: Recheck-agent
+            summary: Run recheck only if exactly 1 or 2 of the 4 product-validation agents
+              (Title vs MCAT, Title ISQ, ISQ vs MCAT, Inter ISQ) are incorrect
+            parallel: true
+            skip_failure: true
+      summary: Recheck-agent
+    - id: wg
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: |-
+          def main(correct, incorrect, recheck_results):
+              """
+              correct:
+                  Dict from Parsing Script
+
+              incorrect:
+                  List[str]
+
+              recheck_results:
+                  List[dict] -> output["results"] from Recheck Agent
+
+              Returns:
+              {
+                  "Final_Verdict": "outlier" | "not_outlier",
+                  "Reason": "..."
+              }
+              """
+
+              PRODUCT_AGENTS = [
+                  "Title vs MCAT Agent",
+                  "ISQ vs MCAT Agent",
+                  "Title ISQ Agent",
+                  "Inter ISQ Agent"
+              ]
+
+              agent_status = {}
+
+              # ------------------------------------------
+              # 1. Read statuses from Parsing Script (Correct)
+              # ------------------------------------------
+              if isinstance(correct, dict):
+                  for agent in PRODUCT_AGENTS:
+                      obj = correct.get(agent)
+
+                      if isinstance(obj, dict):
+                          status = obj.get("status")
+
+                          if status:
+                              agent_status[agent] = status
+
+              # ------------------------------------------
+              # 2. Create lookup for Recheck Agent results
+              # ------------------------------------------
+              recheck_lookup = {}
+
+              if recheck_results:
+                  for item in recheck_results:
+                      if not isinstance(item, dict):
+                          continue
+
+                      name = item.get("agent")
+                      status = item.get("status")
+
+                      if name and status:
+                          recheck_lookup[name] = status
+
+              # ------------------------------------------
+              # 3. Override status for incorrect agents
+              # ------------------------------------------
+              if incorrect:
+                  for agent in incorrect:
+
+                      if agent not in PRODUCT_AGENTS:
+                          continue
+
+                      # Use Recheck result if available
+                      if agent in recheck_lookup:
+                          agent_status[agent] = recheck_lookup[agent]
+
+                      # If Recheck did not return anything,
+                      # keep it as outlier.
+                      else:
+                          agent_status[agent] = "outlier"
+
+              # ------------------------------------------
+              # 4. Final Decision
+              # ------------------------------------------
+              failed_agents = [
+                  agent
+                  for agent, status in agent_status.items()
+                  if status == "outlier"
+              ]
+
+              if failed_agents:
+                  return {
+                      "Final_Verdict": "outlier",
+                      "Reason": f"{', '.join(failed_agents)} returned outlier."
+                  }
+
+              return {
+                  "Final_Verdict": "not_outlier",
+                  "Reason": "All product validation agents are correct."
+              }
+        language: python3
+        input_transforms:
+          correct:
+            expr: results.w.correct
+            type: javascript
+          incorrect:
+            expr: results.w.incorrect
+            type: javascript
+          recheck_results:
+            expr: results.y.output.results
+            type: javascript
+      summary: Decision Script
+    - id: u
+      value:
+        lock: |
+          # py: 3.12
+        type: rawscript
+        content: >-
+          import json
+
+
+
+          def main(
+              offer_id,
+              correct,
+              recheck_results,
+              bl_profile_status,
+              bl_profile_reason,
+              buyer_activity_status,
+              buyer_activity_reason,
+              decision_verdict,
+              decision_reason
+          ):
+
+              # --------------------------------------------------
+              # Parse Parsing Script Output
+              # --------------------------------------------------
+              if isinstance(correct, str):
+                  try:
+                      correct = json.loads(correct)
+                  except Exception:
+                      correct = {}
+
+              # If the entire parser output is passed
+              if isinstance(correct, dict) and "correct" in correct:
+                  correct = correct["correct"]
+
+              if not isinstance(correct, dict):
+                  correct = {}
+
+              # --------------------------------------------------
+              # Parse Recheck Output
+              # --------------------------------------------------
+              if isinstance(recheck_results, str):
+                  try:
+                      recheck_results = json.loads(recheck_results)
+                  except Exception:
+                      recheck_results = []
+
+              # If wrapped inside {"results": [...]}
+              if isinstance(recheck_results, dict):
+                  recheck_results = recheck_results.get("results", [])
+
+              if recheck_results is None:
+                  recheck_results = []
+
+              # --------------------------------------------------
+              # Build Recheck Lookup
+              # --------------------------------------------------
+              recheck_lookup = {}
+
+              for item in recheck_results:
+
+                  if not isinstance(item, dict):
+                      continue
+
+                  agent = item.get("agent") or item.get("Agent")
+
+                  if not agent:
+                      continue
+
+                  recheck_lookup[agent] = {
+                      "status": item.get("status"),
+                      "reason": item.get("reason")
+                  }
+
+              # --------------------------------------------------
+              # Helper: flatten agent name -> key prefix
+              # --------------------------------------------------
+              def prefix(agent_name):
+                  return agent_name.replace(" ", "_")
+
+              # --------------------------------------------------
+              # Initialize Output (Order Preserved)
+              # --------------------------------------------------
+              output = {}
+
+              output["offer_id"] = offer_id
+              output["Decision Verdict"] = decision_verdict
+              output["Decision Reason"] = decision_reason
+
+              # --------------------------------------------------
+              # Retail Agent
+              # --------------------------------------------------
+              retail = correct.get("Retail Agent", {})
+              p = prefix("Retail Agent")
+
+              output[f"{p}_classification"] = retail.get("classification")
+              output[f"{p}_reason"] = retail.get("reason")
+
+              # --------------------------------------------------
+              # Description Agent
+              # --------------------------------------------------
+              description = correct.get("Description Agent", {})
+              p = prefix("Description Agent")
+
+              output[f"{p}_status"] = description.get("status")
+              output[f"{p}_reason"] = description.get("reason")
+
+              # --------------------------------------------------
+              # Product Validation Agents
+              # (Recheck takes precedence)
+              # --------------------------------------------------
+              PRODUCT_AGENTS = [
+                  "Title vs MCAT Agent",
+                  "Title ISQ Agent",
+                  "ISQ vs MCAT Agent",
+                  "Inter ISQ Agent"
+              ]
+
+              for agent in PRODUCT_AGENTS:
+
+                  p = prefix(agent)
+
+                  if agent in recheck_lookup:
+                      output[f"{p}_status"] = recheck_lookup[agent].get("status")
+                      output[f"{p}_reason"] = recheck_lookup[agent].get("reason")
+                      output[f"{p}_source"] = "recheck"
+                      continue
+
+                  obj = correct.get(agent, {})
+
+                  output[f"{p}_status"] = obj.get("status")
+                  output[f"{p}_reason"] = obj.get("reason")
+                  output[f"{p}_source"] = "parsing"
+
+              # --------------------------------------------------
+              # Buyer Viewed Agent (Original Parsing Output)
+              # --------------------------------------------------
+              buyer_viewed = correct.get("Buyer Viewed Agent", {})
+              p = prefix("Buyer Viewed Agent")
+
+              output[f"{p}_status"] = buyer_viewed.get("status")
+              output[f"{p}_reason"] = buyer_viewed.get("reason")
+
+              # --------------------------------------------------
+              # Buyer Viewed Agent vs CSL
+              # --------------------------------------------------
+              p = prefix("Buyer Viewed Agent vs CSL")
+
+              output[f"{p}_status"] = buyer_activity_status
+              output[f"{p}_reason"] = buyer_activity_reason
+
+              # --------------------------------------------------
+              # Profile Validity Agent
+              # --------------------------------------------------
+              profile = correct.get("Profile Validity Agent", {})
+              p = prefix("Profile Validity Agent")
+
+              output[f"{p}_valid"] = profile.get("valid")
+              output[f"{p}_reasons"] = profile.get("reasons")
+
+              # --------------------------------------------------
+              # BL Profile Agent
+              # --------------------------------------------------
+              p = prefix("BL Profile Agent")
+
+              output[f"{p}_status"] = bl_profile_status
+              output[f"{p}_reason"] = bl_profile_reason
+
+              return output
+        language: python3
+        input_transforms:
+          correct:
+            expr: results.w.correct
+            type: javascript
+          offer_id:
+            expr: flow_input.offer_id
+            type: javascript
+          decision_reason:
+            expr: results.wg.Reason
+            type: javascript
+          recheck_results:
+            expr: results.y.output
+            type: javascript
+          decision_verdict:
+            expr: results.wg.Final_Verdict
+            type: javascript
+          bl_profile_reason:
+            expr: results.wh.output.reasoning
+            type: javascript
+          bl_profile_status:
+            expr: results.wh.output.status
+            type: javascript
+          buyer_activity_reason:
+            expr: results.wi.reason
+            type: javascript
+          buyer_activity_status:
+            expr: results.wi.status
+            type: javascript
+      summary: Final_structured
+  groups: []
+schema:
+  $schema: https://json-schema.org/draft/2020-12/schema
+  properties:
+    offer_id:
+      default: null
+      description: ""
+      originalType: string
+      type: string
+  required:
+    - offer_id
+  type: object
+  order:
+    - offer_id
